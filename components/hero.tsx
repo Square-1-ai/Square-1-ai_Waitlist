@@ -2,21 +2,22 @@
 import { ChevronRight } from "lucide-react"
 import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect"
 import TextType from "@/components/ui/text-type"
+import BorderBeam from "@/components/border-beam"
 
 export default function Hero() {
   return (
-    <section className="relative pt-32 pb-16 md:pt-40 md:pb-24 px-4 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 overflow-hidden">
+    <section className="relative py-20 px-4 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 overflow-hidden">
       <BackgroundRippleEffect />
 
-      <div className="max-w-5xl mx-auto text-center">
-        {/* Background Elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-10 left-10 w-64 h-64 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-20"></div>
-          <div className="absolute top-40 right-20 w-72 h-72 bg-cyan-500 rounded-full mix-blend-screen filter blur-3xl opacity-20"></div>
-        </div>
+      {/* subtle stars/dots / decorative overlays */}
+      <div aria-hidden className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30 opacity-30" />
+        <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 w-[1200px] h-[1200px] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.02),transparent_40%)] opacity-30 rounded-full pointer-events-none" />
+      </div>
 
-        <div className="relative z-10 p-12 md:p-16">
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 text-balance leading-tight">
+      <div className="max-w-6xl mx-auto relative z-10">
+        <div className="relative z-10 p-12 md:p-16 text-center">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 text-balance leading-tight">
             Learn. Teach. Build the Future with{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
               Square 1 Ai
@@ -45,7 +46,7 @@ export default function Hero() {
             </a>
           </div>
 
-          <p className="text-sm text-blue-300 font-medium">
+          {/* <p className="text-sm text-blue-300 font-medium">
             <TextType
               text={["✨ Early access opens soon — be one of the first to join."]}
               typingSpeed={50}
@@ -53,7 +54,34 @@ export default function Hero() {
               showCursor={true}
               cursorCharacter="|"
             />
-          </p>
+          </p> */}
+        </div>
+
+        {/* Mock video / app screenshot card placed inside the same hero section */}
+        <div className="flex justify-center mt-12">
+          <div className="relative rounded-2xl bg-gradient-to-br from-[#0b1220] to-[#121212] border border-white/6 shadow-2xl w-full max-w-5xl overflow-hidden">
+              <div>
+                <div>
+                  <div className="h-80 md:h-150 rounded-lg bg-gradient-to-br from-[#0f1724] to-[#111800] flex items-center justify-center relative group overflow-hidden">
+                    {/* Animated border beam around the mock video area */}
+                    <BorderBeam
+                      size={100}
+                      duration={20}
+                      colorFrom="#172ad6ff"
+                      colorTo="#60a5fa"
+                      glowIntensity={3}
+                      beamBorderRadius={20}
+                      pauseOnHover
+                      opacity={1.9}
+                     className="-left-6 top-2"
+                    />
+                  </div>
+
+                  
+                </div>
+              </div>
+            
+          </div>
         </div>
       </div>
     </section>

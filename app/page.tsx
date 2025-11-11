@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import Hero from "@/components/hero"
-import VideoHero from "@/components/video-hero"
 import WhyJoinEarly from "@/components/why-join-early"
 import WaitlistForm from "@/components/waitlist-form"
 import Footer from "@/components/footer"
@@ -13,7 +12,6 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800">
       <Hero />
-      <VideoHero />
       <WhyJoinEarly />
       {!formSubmitted && <WaitlistForm onSubmit={() => setFormSubmitted(true)} />}
       {formSubmitted && (
