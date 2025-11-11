@@ -6,7 +6,7 @@ import BorderBeam from "@/components/border-beam"
 
 export default function Hero() {
   return (
-  <section id="why-join" className="relative py-16 md:py-24 px-4 bg-gradient-to-b from-slate-800 to-slate-900 overflow-hidden">
+  <section id="why-join" className="relative py-16 md:py-24 px-4 bg-gradient-to-b from-slate-900 to-slate-800 overflow-hidden">
       <BackgroundRippleEffect />
       
 
