@@ -19,7 +19,6 @@ import {
 import { Progress } from "@/components/ui/progress"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import StudentAnimation from "@/components/student-animation"
 
 export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void }) {
   const [step, setStep] = useState(1)
@@ -110,30 +109,20 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
 
   return (
     <section className="py-8 md:py-12 px-4 bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 min-h-screen">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[calc(100vh-8rem)]">
-          {/* Left Side - Animation */}
-          <div className="hidden lg:flex h-full min-h-[600px] items-center justify-center">
-            <div className="relative w-full h-full max-w-lg">
-              <StudentAnimation />
-            </div>
+      <div className="max-w-3xl mx-auto">
+        {/* Header */}
+        <div className="mb-8 text-center">
+          <div className="inline-flex items-center gap-2 mb-4">
+            <Sparkles className="w-6 h-6 text-blue-600" />
+            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Student Waitlist
+            </h2>
           </div>
+          <p className="text-muted-foreground mb-6">Step {step} of {totalSteps}</p>
+          <Progress value={getProgressPercentage()} className="h-2" />
+        </div>
 
-          {/* Right Side - Form */}
-          <div className="w-full">
-            {/* Header */}
-            <div className="mb-6">
-              <div className="inline-flex items-center gap-2 mb-3">
-                <Sparkles className="w-5 h-5 text-blue-600" />
-                <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Student Waitlist
-                </h2>
-              </div>
-              <p className="text-sm text-muted-foreground mb-4">Step {step} of {totalSteps}</p>
-              <Progress value={getProgressPercentage()} className="h-2" />
-            </div>
-
-            <Card className="border-2 shadow-xl backdrop-blur-sm bg-white/80">
+        <Card className="border-2 shadow-xl backdrop-blur-sm bg-white/80">
           <CardHeader className="pb-4">
             <CardTitle className="text-2xl">
               {step === 1 && "Basic Information"}
@@ -559,8 +548,6 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
             </form>
           </CardContent>
         </Card>
-          </div>
-        </div>
       </div>
     </section>
   )
