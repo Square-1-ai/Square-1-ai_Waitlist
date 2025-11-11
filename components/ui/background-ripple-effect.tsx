@@ -29,7 +29,9 @@ export const BackgroundRippleEffect = ({
       )}
     >
       <div className="relative h-full w-full overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 z-[2] h-full w-full overflow-hidden bg-gradient-to-b from-transparent via-transparent to-slate-900/60"></div>
+        {/* top and bottom gradient masks so the mesh softly fades at edges */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-28 z-[2] bg-gradient-to-b from-slate-900/60 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 z-[2] bg-gradient-to-t from-slate-900/60 to-transparent" />
         <DivGrid
           key={`base-${rippleKey}`}
           rows={rows}
