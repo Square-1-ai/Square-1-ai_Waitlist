@@ -32,9 +32,9 @@ export default function Hero() {
             </span>
           </h1>
 
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 max-w-2xl mx-auto text-balance leading-relaxed text-slate-200 px-2">
-            Join the next generation of AI-powered learning — whether you're a student eager to grow or a teacher ready
-            to inspire.
+          <p className="text-base sm:text-lg md:text-lg lg:text-lg mb-6 sm:mb-8 max-w-2xl mx-auto text-balance leading-relaxed text-slate-200 px-2">
+            Join The Next Generation Of AI-Powered Learning Whether You're A Student Eager To Grow Or A Teacher Ready
+            To Inspire.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-6 px-2">
@@ -83,7 +83,7 @@ export default function Hero() {
         <div className="mt-16 sm:mt-20 md:mt-24">
           <div className="text-center mb-12 sm:mb-16 px-2">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">Why Join Square 1 Ai Early?</h2>
-            <p className="text-base sm:text-lg text-blue-100 px-4">Get exclusive benefits and shape the future of AI learning</p>
+            <p className="text-base sm:text-lg text-blue-100 px-4">Get Exclusive Benefits And Shape The Future Of AI Learning</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 px-2">
