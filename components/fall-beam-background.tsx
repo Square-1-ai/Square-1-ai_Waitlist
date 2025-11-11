@@ -31,7 +31,7 @@ interface FallBeamBackgroundProps {
  */
 const FallBeamBackground: React.FC<FallBeamBackgroundProps> = ({
     className = '',
-    lineCount = 20,
+    lineCount = 100,
     displayText,
     // Note: Changed default to 'cyan-400' as per original comment suggestion
     beamColorClass = 'cyan-400', 
