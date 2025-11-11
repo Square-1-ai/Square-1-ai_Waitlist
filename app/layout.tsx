@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Inter_Tight } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import Navbar from '@/components/navbar'
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const interTight = Inter_Tight({ 
+  subsets: ["latin"],
+  variable: '--font-inter-tight',
+});
 
 export const metadata: Metadata = {
   title: 'v0 App',
@@ -37,6 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
@@ -46,6 +49,7 @@ export default function RootLayout({
         <header className="relative z-20">
           <Navbar />
         </header>
+
         {children}
         <Analytics />
       </body>
