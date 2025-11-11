@@ -19,6 +19,7 @@ import {
 import { Progress } from "@/components/ui/progress"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import StudentWaitlistAnimation from "@/components/student-waitlist-animation"
 
 export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void }) {
   const [step, setStep] = useState(1)
@@ -111,10 +112,10 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
     <section className="py-8 md:py-12 px-4 bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 min-h-screen">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[calc(100vh-8rem)]">
-          {/* Left Side - Reserved for future animations */}
+          {/* Left Side - Animations */}
           <div className="hidden lg:flex h-full min-h-[600px] items-center justify-center">
             <div className="relative w-full h-full max-w-lg">
-              {/* Placeholder for future animations */}
+              <StudentWaitlistAnimation />
             </div>
           </div>
 
