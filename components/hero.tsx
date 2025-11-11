@@ -1,19 +1,23 @@
 "use client"
 import { ChevronRight } from "lucide-react"
-import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect"
 import TextType from "@/components/ui/text-type"
 import BorderBeam from "@/components/border-beam"
+import FallBeamBackground from "@/components/fall-beam-background"
 
 export default function Hero() {
   return (
-  <section id="why-join" className="relative py-16 md:py-24 px-4 bg-gradient-to-b from-slate-900 to-slate-800 overflow-hidden">
-      <BackgroundRippleEffect />
+  <section id="why-join" className="relative py-16 md:py-24 px-4 bg-gradient-to-b from-slate-900 to-slate-800">
+      {/* Falling Beam Background Animation */}
+      <FallBeamBackground 
+        lineCount={25}
+        beamColorClass="cyan-400"
+        className="opacity-60"
+      />
       
-
       {/* subtle stars/dots / decorative overlays */}
       <div aria-hidden className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30 opacity-30" />
-        <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 w-[1200px] h-[1200px] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.02),transparent_40%)] opacity-30 rounded-full pointer-events-none" />
+        {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30 opacity-30" />
+        <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 w-[1200px] h-[1200px] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.02),transparent_40%)] opacity-30 rounded-full pointer-events-none" /> */}
       </div>
 
       <div className="max-w-6xl mx-auto relative z-10">
