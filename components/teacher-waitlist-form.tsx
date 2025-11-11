@@ -102,17 +102,27 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
 
   return (
     <section className="py-8 md:py-12 px-4 bg-gradient-to-br from-slate-50 via-cyan-50/30 to-blue-50/20 min-h-screen">
-      <div className="max-w-3xl mx-auto">
-        {/* Header */}
-        <div className="mb-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent mb-4">
-            Teacher Waitlist
-          </h2>
-          <p className="text-muted-foreground mb-6">Step {step} of {totalSteps}</p>
-          <Progress value={getProgressPercentage()} className="h-2" />
-        </div>
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[calc(100vh-8rem)]">
+          {/* Left Side - Reserved for future animations */}
+          <div className="hidden lg:flex h-full min-h-[600px] items-center justify-center">
+            <div className="relative w-full h-full max-w-lg">
+              {/* Placeholder for future animations */}
+            </div>
+          </div>
 
-        <Card className="border-2 shadow-xl backdrop-blur-sm bg-white/80">
+          {/* Right Side - Form */}
+          <div className="w-full">
+            {/* Header */}
+            <div className="mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-black mb-3">
+                Teacher Waitlist
+              </h2>
+              <p className="text-sm text-muted-foreground mb-4">Step {step} of {totalSteps}</p>
+              <Progress value={getProgressPercentage()} className="h-2" />
+            </div>
+
+            <Card className="border-2 shadow-xl backdrop-blur-sm bg-white/80">
           <CardHeader className="pb-4">
             <CardTitle className="text-2xl">
               {step === 1 && "Basic Information"}
@@ -510,7 +520,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
               {step === 4 && (
                 <div className="space-y-6 animate-fade-in text-center">
                   <div className="text-6xl mb-6">🎉</div>
-                  <h3 className="text-2xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent mb-4">
+                  <h3 className="text-2xl font-bold text-black mb-4">
                     You're All Set!
                   </h3>
                   <p className="text-muted-foreground mb-8">
@@ -535,7 +545,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
 
               {/* Navigation Buttons */}
               <Separator className="my-6" />
-              <div className="flex gap-4">
+              <div className="flex justify-between gap-4">
                 <Button
                   type="button"
                   variant="outline"
@@ -550,8 +560,9 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                 {step < totalSteps && (
                   <Button
                     type="button"
+                    variant="outline"
                     onClick={nextStep}
-                    className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700"
+                    className="flex items-center gap-2 ml-auto"
                   >
                     Next
                     <ChevronRight className="w-4 h-4" />
@@ -562,7 +573,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                   <Button
                     type="submit"
                     disabled={!formData.consent}
-                    className="flex-1 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 disabled:opacity-50"
+                    className="ml-auto bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 disabled:opacity-50"
                   >
                     Join the Waitlist!
                   </Button>
@@ -571,6 +582,8 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
             </form>
           </CardContent>
         </Card>
+          </div>
+        </div>
       </div>
     </section>
   )
