@@ -6,8 +6,9 @@ import BorderBeam from "@/components/border-beam"
 
 export default function Hero() {
   return (
-    <section className="relative py-20 px-4 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 overflow-hidden">
+  <section className="relative py-12 px-4 bg-gradient-to-br from-slate-800 via-blue-900 to-slate-900 overflow-hidden">
       <BackgroundRippleEffect />
+      
 
       {/* subtle stars/dots / decorative overlays */}
       <div aria-hidden className="absolute inset-0 pointer-events-none">
@@ -16,8 +17,11 @@ export default function Hero() {
       </div>
 
       <div className="max-w-6xl mx-auto relative z-10">
-        <div className="relative z-10 p-12 md:p-16 text-center">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 text-balance leading-tight">
+  <div className="relative z-10 p-6 md:p-8 text-center">
+          <h1
+            className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 text-balance leading-tight"
+            style={{ fontFamily: "'Inter Tight', 'Inter', 'Noto Sans JP', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial" }}
+          >
             Learn. Teach. Build the Future with{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
               Square 1 Ai
@@ -29,7 +33,7 @@ export default function Hero() {
             to inspire.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
             <a
               href="/student-waitlist"
               className="group px-8 py-4 bg-white text-blue-600 rounded-full font-bold text-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
@@ -58,11 +62,11 @@ export default function Hero() {
         </div>
 
         {/* Mock video / app screenshot card placed inside the same hero section */}
-        <div className="flex justify-center mt-12">
+        <div className="flex justify-center mt-6">
           <div className="relative rounded-2xl bg-gradient-to-br from-[#0b1220] to-[#121212] border border-white/6 shadow-2xl w-full max-w-5xl overflow-hidden">
               <div>
                 <div>
-                  <div className="h-80 md:h-150 rounded-lg bg-gradient-to-br from-[#0f1724] to-[#111800] flex items-center justify-center relative group overflow-hidden">
+                  <div className="h-100 md:h-150 rounded-lg bg-gradient-to-br from-[#0f1724] to-[#111800] flex items-center justify-center relative group overflow-hidden">
                     {/* Animated border beam around the mock video area */}
                     <BorderBeam
                       size={100}
