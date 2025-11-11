@@ -1,21 +1,37 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
-import { ChevronRight, ChevronLeft } from "lucide-react"
+import { ChevronRight, ChevronLeft, GraduationCap, Upload } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Progress } from "@/components/ui/progress"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
 
 export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void }) {
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
+    // Common Section
     fullName: "",
     email: "",
-    phone: "",
     country: "",
     city: "",
     internetConnection: "",
     devices: [] as string[],
     heardAbout: "",
+    // Teacher Profile
     subjects: "",
     teachingLevel: "",
     yearsExperience: "",
@@ -27,46 +43,39 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
     availabilityToStart: "",
     revenueSplit: "",
     paymentMethod: "",
-    teacherPreferences: [] as string[],
-    communityChoice: "",
-    notifyOnLive: false,
+    teachingSample: null as File | null,
+    earlyAccess: [] as string[],
     consent: false,
   })
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target
-    if (type === "checkbox") {
-      const checked = (e.target as HTMLInputElement).checked
-      setFormData((prev) => ({
-        ...prev,
-        [name]: checked,
-      }))
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }))
-    }
-  }
+  const totalSteps = 4
 
-  const handleDeviceChange = (device: string) => {
+  const handleInputChange = (name: string, value: string) => {
     setFormData((prev) => ({
       ...prev,
-      devices: prev.devices.includes(device) ? prev.devices.filter((d) => d !== device) : [...prev.devices, device],
+      [name]: value,
     }))
   }
 
-  const handlePreferenceChange = (pref: string) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null
     setFormData((prev) => ({
       ...prev,
-      teacherPreferences: prev.teacherPreferences.includes(pref)
-        ? prev.teacherPreferences.filter((p) => p !== pref)
-        : [...prev.teacherPreferences, pref],
+      teachingSample: file,
+    }))
+  }
+
+  const handleArrayChange = (name: "devices" | "earlyAccess", value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: prev[name].includes(value)
+        ? prev[name].filter((item) => item !== value)
+        : [...prev[name], value],
     }))
   }
 
   const nextStep = () => {
-    if (step < 4) setStep(step + 1)
+    if (step < totalSteps) setStep(step + 1)
   }
 
   const prevStep = () => {
@@ -81,443 +90,490 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
   }
 
   const getProgressPercentage = () => {
-    return (step / 4) * 100
+    return (step / totalSteps) * 100
   }
 
+  const earlyAccessOptions = [
+    "Teacher dashboard preview",
+    "AI Study Pack generator",
+    "Marketing tools for teachers",
+    "Revenue insights",
+  ]
+
   return (
-    <section className="py-16 md:py-24 px-4 bg-gradient-to-b from-white to-cyan-50 min-h-screen">
-      <div className="max-w-2xl mx-auto">
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-2">
-            <h2 className="text-2xl font-bold text-blue-900">Teacher Waitlist</h2>
-            <span className="text-sm font-medium text-blue-700">Step {step} of 4</span>
+    <section className="py-8 md:py-12 px-4 bg-gradient-to-br from-slate-50 via-cyan-50/30 to-blue-50/20 min-h-screen">
+      <div className="max-w-3xl mx-auto">
+        {/* Header */}
+        <div className="mb-8 text-center">
+          <div className="inline-flex items-center gap-2 mb-4">
+            <GraduationCap className="w-6 h-6 text-cyan-600" />
+            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
+              Teacher Waitlist
+            </h2>
           </div>
-          <div className="w-full bg-cyan-100 rounded-full h-2">
-            <div
-              className="bg-gradient-to-r from-cyan-500 to-cyan-600 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${getProgressPercentage()}%` }}
-            ></div>
-          </div>
+          <p className="text-muted-foreground mb-6">Step {step} of {totalSteps}</p>
+          <Progress value={getProgressPercentage()} className="h-2" />
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-8 shadow-lg">
-          {/* Step 1: Basic Info */}
-          {step === 1 && (
-            <div className="space-y-6 animate-fade-in">
-              <h3 className="text-xl font-bold text-blue-900 mb-4">Let's Start With Your Basic Info</h3>
-
-              <div>
-                <label className="block text-sm font-medium text-blue-900 mb-2">Full Name *</label>
-                <input
-                  type="text"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="Your full name"
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-blue-50"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-blue-900 mb-2">Email Address *</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="your@email.com"
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-blue-50"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-blue-900 mb-2">Phone / WhatsApp Number *</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="+1 (555) 123-4567"
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-blue-50"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-blue-900 mb-2">Country *</label>
-                  <input
-                    type="text"
-                    name="country"
-                    value={formData.country}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="Your country"
-                    className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-blue-50"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-blue-900 mb-2">City *</label>
-                  <input
-                    type="text"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="Your city"
-                    className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-blue-50"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-blue-900 mb-2">Internet Connection Quality *</label>
-                <select
-                  name="internetConnection"
-                  value={formData.internetConnection}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-blue-50"
-                >
-                  <option value="">Select your connection quality</option>
-                  <option value="strong">Strong (fiber or 4G/5G)</option>
-                  <option value="moderate">Moderate (3G or shared Wi-Fi)</option>
-                  <option value="weak">Weak (limited access)</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-blue-900 mb-3">Preferred Devices *</label>
-                <div className="space-y-2">
-                  {["Smartphone", "Laptop / Desktop", "Tablet"].map((device) => (
-                    <label key={device} className="flex items-center gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={formData.devices.includes(device)}
-                        onChange={() => handleDeviceChange(device)}
-                        className="w-5 h-5 rounded border-cyan-300 text-cyan-600 focus:ring-cyan-500"
+        <Card className="border-2 shadow-xl backdrop-blur-sm bg-white/80">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-2xl">
+              {step === 1 && "Basic Information"}
+              {step === 2 && "Teaching Experience"}
+              {step === 3 && "Business Details"}
+              {step === 4 && "Almost There!"}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Step 1: Common Section */}
+              {step === 1 && (
+                <div className="space-y-6 animate-fade-in">
+                  <div className="grid gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="fullName">Full Name *</Label>
+                      <Input
+                        id="fullName"
+                        type="text"
+                        placeholder="Enter your full name"
+                        value={formData.fullName}
+                        onChange={(e) => handleInputChange("fullName", e.target.value)}
+                        required
+                        className="h-11"
                       />
-                      <span className="text-blue-700">{device}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
+                    </div>
 
-              <div>
-                <label className="block text-sm font-medium text-blue-900 mb-2">
-                  How did you hear about Square 1 Ai? *
-                </label>
-                <select
-                  name="heardAbout"
-                  value={formData.heardAbout}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-blue-50"
-                >
-                  <option value="">Select an option</option>
-                  <option value="instagram">Instagram</option>
-                  <option value="tiktok">TikTok</option>
-                  <option value="youtube">YouTube</option>
-                  <option value="referral">Referral</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-            </div>
-          )}
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email Address *</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="your@email.com"
+                        value={formData.email}
+                        onChange={(e) => handleInputChange("email", e.target.value)}
+                        required
+                        className="h-11"
+                      />
+                    </div>
 
-          {/* Step 2: Teaching Experience */}
-          {step === 2 && (
-            <div className="space-y-6 animate-fade-in">
-              <h3 className="text-xl font-bold text-blue-900 mb-4">Tell us about your teaching experience</h3>
-
-              <div>
-                <label className="block text-sm font-medium text-blue-900 mb-2">Subjects or Topics You Teach *</label>
-                <input
-                  type="text"
-                  name="subjects"
-                  value={formData.subjects}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="e.g., Mathematics, Physics, Language Arts"
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-blue-50"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-blue-900 mb-2">Teaching Level *</label>
-                <select
-                  name="teachingLevel"
-                  value={formData.teachingLevel}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-blue-50"
-                >
-                  <option value="">Select a level</option>
-                  <option value="primary">Primary</option>
-                  <option value="secondary">Secondary</option>
-                  <option value="university">University</option>
-                  <option value="professional">Professional</option>
-                  <option value="corporate">Corporate</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-blue-900 mb-2">Years of Experience *</label>
-                <select
-                  name="yearsExperience"
-                  value={formData.yearsExperience}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-blue-50"
-                >
-                  <option value="">Select a range</option>
-                  <option value="0-2">0–2 years</option>
-                  <option value="3-5">3–5 years</option>
-                  <option value="6-10">6–10 years</option>
-                  <option value="10plus">10+ years</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-blue-900 mb-2">Class Type Preference *</label>
-                <select
-                  name="classTypePreference"
-                  value={formData.classTypePreference}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-blue-50"
-                >
-                  <option value="">Select an option</option>
-                  <option value="live">Live</option>
-                  <option value="recorded">Pre-recorded</option>
-                  <option value="both">Both</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-blue-900 mb-2">Have you taught online before? *</label>
-                <select
-                  name="taughtOnline"
-                  value={formData.taughtOnline}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-blue-50"
-                >
-                  <option value="">Select an option</option>
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-blue-900 mb-2">Platforms Used (if yes)</label>
-                <input
-                  type="text"
-                  name="platformsUsed"
-                  value={formData.platformsUsed}
-                  onChange={handleInputChange}
-                  placeholder="e.g., Zoom, Google Meet, Udemy"
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-blue-50"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-blue-900 mb-2">Countries/Curriculums Taught *</label>
-                <input
-                  type="text"
-                  name="curriculums"
-                  value={formData.curriculums}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="e.g., US, IB, IGCSE"
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-blue-50"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-blue-900 mb-2">
-                  Interested in Creating AI Study Packs? *
-                </label>
-                <select
-                  name="createStudyPacks"
-                  value={formData.createStudyPacks}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-blue-50"
-                >
-                  <option value="">Select an option</option>
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-                  <option value="maybe">Maybe later</option>
-                </select>
-              </div>
-            </div>
-          )}
-
-          {/* Step 3: Business Details */}
-          {step === 3 && (
-            <div className="space-y-6 animate-fade-in">
-              <h3 className="text-xl font-bold text-blue-900 mb-4">Business Details & Preferences</h3>
-
-              <div>
-                <label className="block text-sm font-medium text-blue-900 mb-2">Availability to Start *</label>
-                <select
-                  name="availabilityToStart"
-                  value={formData.availabilityToStart}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-blue-50"
-                >
-                  <option value="">Select an option</option>
-                  <option value="immediately">Immediately</option>
-                  <option value="month">Within a month</option>
-                  <option value="months">Within 3 months</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-blue-900 mb-2">Preferred Revenue Split *</label>
-                <select
-                  name="revenueSplit"
-                  value={formData.revenueSplit}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-blue-50"
-                >
-                  <option value="">Select an option</option>
-                  <option value="70/30">70/30</option>
-                  <option value="65/35">65/35</option>
-                  <option value="60/40">60/40</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-blue-900 mb-2">Preferred Payment Method *</label>
-                <input
-                  type="text"
-                  name="paymentMethod"
-                  value={formData.paymentMethod}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="e.g., Bank Transfer, PayPal, Crypto"
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-blue-50"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-blue-900 mb-3">Early Access Preferences</label>
-                <div className="space-y-2">
-                  {["Teacher Dashboard Preview", "AI Study Pack Generator", "Marketing Tools", "Revenue Insights"].map(
-                    (pref) => (
-                      <label key={pref} className="flex items-center gap-3 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={formData.teacherPreferences.includes(pref)}
-                          onChange={() => handlePreferenceChange(pref)}
-                          className="w-5 h-5 rounded border-cyan-300 text-cyan-600 focus:ring-cyan-500"
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="country">Country *</Label>
+                        <Input
+                          id="country"
+                          type="text"
+                          placeholder="Your country"
+                          value={formData.country}
+                          onChange={(e) => handleInputChange("country", e.target.value)}
+                          required
+                          className="h-11"
                         />
-                        <span className="text-blue-700">{pref}</span>
-                      </label>
-                    ),
-                  )}
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="city">City *</Label>
+                        <Input
+                          id="city"
+                          type="text"
+                          placeholder="Your city"
+                          value={formData.city}
+                          onChange={(e) => handleInputChange("city", e.target.value)}
+                          required
+                          className="h-11"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="internetConnection">Internet Connection Quality *</Label>
+                      <Select
+                        value={formData.internetConnection}
+                        onValueChange={(value) => handleInputChange("internetConnection", value)}
+                        required
+                      >
+                        <SelectTrigger id="internetConnection" className="h-11">
+                          <SelectValue placeholder="Select your connection quality" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="strong">Strong (fiber or 4G/5G)</SelectItem>
+                          <SelectItem value="moderate">Moderate (3G or shared Wi-Fi)</SelectItem>
+                          <SelectItem value="weak">Weak (limited access or unstable connection)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Preferred Device for Joining Square 1 Ai *</Label>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {["Smartphone", "Laptop / Desktop", "Tablet", "Shared school or community computer"].map(
+                          (device) => (
+                            <div key={device} className="flex items-center space-x-2">
+                              <Checkbox
+                                id={`device-${device}`}
+                                checked={formData.devices.includes(device)}
+                                onCheckedChange={() => handleArrayChange("devices", device)}
+                              />
+                              <Label
+                                htmlFor={`device-${device}`}
+                                className="text-sm font-normal cursor-pointer"
+                              >
+                                {device}
+                              </Label>
+                            </div>
+                          ),
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="heardAbout">How did you hear about Square 1 Ai? *</Label>
+                      <Select
+                        value={formData.heardAbout}
+                        onValueChange={(value) => handleInputChange("heardAbout", value)}
+                        required
+                      >
+                        <SelectTrigger id="heardAbout" className="h-11">
+                          <SelectValue placeholder="Select an option" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="instagram">Instagram</SelectItem>
+                          <SelectItem value="tiktok">TikTok</SelectItem>
+                          <SelectItem value="youtube">YouTube</SelectItem>
+                          <SelectItem value="referral">Referral</SelectItem>
+                          <SelectItem value="teacher">Teacher</SelectItem>
+                          <SelectItem value="school">School</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              <div>
-                <label className="block text-sm font-medium text-blue-900 mb-2">Join the Square 1 Ai Community *</label>
-                <select
-                  name="communityChoice"
-                  value={formData.communityChoice}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-blue-50"
+              {/* Step 2: Teaching Experience */}
+              {step === 2 && (
+                <div className="space-y-6 animate-fade-in">
+                  <div className="grid gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="subjects">Subjects or Topics You Teach *</Label>
+                      <Input
+                        id="subjects"
+                        type="text"
+                        placeholder="e.g., Physics, Economics, AI, English"
+                        value={formData.subjects}
+                        onChange={(e) => handleInputChange("subjects", e.target.value)}
+                        required
+                        className="h-11"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="teachingLevel">What level do you teach? *</Label>
+                      <Select
+                        value={formData.teachingLevel}
+                        onValueChange={(value) => handleInputChange("teachingLevel", value)}
+                        required
+                      >
+                        <SelectTrigger id="teachingLevel" className="h-11">
+                          <SelectValue placeholder="Select a level" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="primary">Primary</SelectItem>
+                          <SelectItem value="secondary">Secondary</SelectItem>
+                          <SelectItem value="university">University</SelectItem>
+                          <SelectItem value="professional">Professional</SelectItem>
+                          <SelectItem value="corporate">Corporate</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="yearsExperience">How many years of teaching experience do you have? *</Label>
+                      <Select
+                        value={formData.yearsExperience}
+                        onValueChange={(value) => handleInputChange("yearsExperience", value)}
+                        required
+                      >
+                        <SelectTrigger id="yearsExperience" className="h-11">
+                          <SelectValue placeholder="Select a range" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="0-2">0–2 years</SelectItem>
+                          <SelectItem value="3-5">3–5 years</SelectItem>
+                          <SelectItem value="6-10">6–10 years</SelectItem>
+                          <SelectItem value="10+">10+ years</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>What kind of classes are you open to teaching? *</Label>
+                      <RadioGroup
+                        value={formData.classTypePreference}
+                        onValueChange={(value) => handleInputChange("classTypePreference", value)}
+                        required
+                      >
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="live" id="live" />
+                          <Label htmlFor="live" className="font-normal cursor-pointer">
+                            Live classes (interactive)
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="recorded" id="recorded" />
+                          <Label htmlFor="recorded" className="font-normal cursor-pointer">
+                            Pre-recorded lessons
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="both" id="both" />
+                          <Label htmlFor="both" className="font-normal cursor-pointer">
+                            Both
+                          </Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="taughtOnline">Have you taught online before? *</Label>
+                      <Select
+                        value={formData.taughtOnline}
+                        onValueChange={(value) => handleInputChange("taughtOnline", value)}
+                        required
+                      >
+                        <SelectTrigger id="taughtOnline" className="h-11">
+                          <SelectValue placeholder="Select an option" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="yes">Yes</SelectItem>
+                          <SelectItem value="no">No</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {formData.taughtOnline === "yes" && (
+                      <div className="space-y-2">
+                        <Label htmlFor="platformsUsed">
+                          What platforms have you used for online teaching?
+                        </Label>
+                        <Input
+                          id="platformsUsed"
+                          type="text"
+                          placeholder="e.g., Zoom, Google Meet, Microsoft Teams, etc."
+                          value={formData.platformsUsed}
+                          onChange={(e) => handleInputChange("platformsUsed", e.target.value)}
+                          className="h-11"
+                        />
+                      </div>
+                    )}
+
+                    <div className="space-y-2">
+                      <Label htmlFor="curriculums">
+                        Which countries or curriculums have you taught under? *
+                      </Label>
+                      <Input
+                        id="curriculums"
+                        type="text"
+                        placeholder="e.g., US, IB, IGCSE, Sri Lanka"
+                        value={formData.curriculums}
+                        onChange={(e) => handleInputChange("curriculums", e.target.value)}
+                        required
+                        className="h-11"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Helps us tailor student matching
+                      </p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="createStudyPacks">
+                        Would you be interested in creating your own AI Study Pack content (notes, quizzes, etc.)? *
+                      </Label>
+                      <Select
+                        value={formData.createStudyPacks}
+                        onValueChange={(value) => handleInputChange("createStudyPacks", value)}
+                        required
+                      >
+                        <SelectTrigger id="createStudyPacks" className="h-11">
+                          <SelectValue placeholder="Select an option" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="yes">Yes</SelectItem>
+                          <SelectItem value="no">No</SelectItem>
+                          <SelectItem value="maybe">Maybe later</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 3: Business Details */}
+              {step === 3 && (
+                <div className="space-y-6 animate-fade-in">
+                  <div className="grid gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="availabilityToStart">When are you available to start teaching on Square 1 Ai? *</Label>
+                      <Select
+                        value={formData.availabilityToStart}
+                        onValueChange={(value) => handleInputChange("availabilityToStart", value)}
+                        required
+                      >
+                        <SelectTrigger id="availabilityToStart" className="h-11">
+                          <SelectValue placeholder="Select an option" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="immediately">Immediately</SelectItem>
+                          <SelectItem value="within-month">Within a month</SelectItem>
+                          <SelectItem value="within-3-months">Within 3 months</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="revenueSplit">What's your preferred teacher revenue split? *</Label>
+                      <Select
+                        value={formData.revenueSplit}
+                        onValueChange={(value) => handleInputChange("revenueSplit", value)}
+                        required
+                      >
+                        <SelectTrigger id="revenueSplit" className="h-11">
+                          <SelectValue placeholder="Select an option" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="70/30">70% Teacher / 30% Platform</SelectItem>
+                          <SelectItem value="65/35">65% Teacher / 35% Platform</SelectItem>
+                          <SelectItem value="60/40">60% Teacher / 40% Platform</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <p className="text-xs text-muted-foreground">
+                        Use this to gauge teacher expectations before finalizing pricing model.
+                      </p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="paymentMethod">What's your preferred payment method? *</Label>
+                      <Input
+                        id="paymentMethod"
+                        type="text"
+                        placeholder="e.g., Bank transfer, PayPal, etc."
+                        value={formData.paymentMethod}
+                        onChange={(e) => handleInputChange("paymentMethod", e.target.value)}
+                        required
+                        className="h-11"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="teachingSample">Please upload your teaching sample (Optional)</Label>
+                      <div className="flex items-center gap-4">
+                        <Input
+                          id="teachingSample"
+                          type="file"
+                          accept="video/*"
+                          onChange={handleFileChange}
+                          className="h-11 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
+                        />
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        A 2-minute video clip introducing yourself or teaching a topic (for vetting)
+                      </p>
+                      {formData.teachingSample && (
+                        <p className="text-sm text-green-600 flex items-center gap-2">
+                          <Upload className="w-4 h-4" />
+                          {formData.teachingSample.name}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Would you like to receive early access to: *</Label>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {earlyAccessOptions.map((option) => (
+                          <div key={option} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={`early-${option}`}
+                              checked={formData.earlyAccess.includes(option)}
+                              onCheckedChange={() => handleArrayChange("earlyAccess", option)}
+                            />
+                            <Label
+                              htmlFor={`early-${option}`}
+                              className="text-sm font-normal cursor-pointer"
+                            >
+                              {option}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 4: Consent */}
+              {step === 4 && (
+                <div className="space-y-6 animate-fade-in text-center">
+                  <div className="text-6xl mb-6">🎉</div>
+                  <h3 className="text-2xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent mb-4">
+                    You're All Set!
+                  </h3>
+                  <p className="text-muted-foreground mb-8">
+                    Thank you for joining the Square 1 Ai teacher waitlist. We're excited to partner with you. You'll
+                    receive early access updates and exclusive beta invites soon. Keep an eye on your inbox! 📧
+                  </p>
+                  <Separator />
+                  <div className="flex items-start space-x-3 p-4 bg-muted/50 rounded-lg">
+                    <Checkbox
+                      id="consent"
+                      checked={formData.consent}
+                      onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, consent: checked === true }))}
+                      required
+                      className="mt-1"
+                    />
+                    <Label htmlFor="consent" className="text-sm font-normal cursor-pointer leading-relaxed">
+                      I agree to receive updates, early access info, and beta invites from Square 1 Ai. *
+                    </Label>
+                  </div>
+                </div>
+              )}
+
+              {/* Navigation Buttons */}
+              <Separator className="my-6" />
+              <div className="flex gap-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={prevStep}
+                  disabled={step === 1}
+                  className="flex items-center gap-2"
                 >
-                  <option value="">Select an option</option>
-                  <option value="discord">Discord</option>
-                  <option value="slack">Slack</option>
-                  <option value="newsletter">Newsletter</option>
-                  <option value="all">All of the above</option>
-                </select>
+                  <ChevronLeft className="w-4 h-4" />
+                  Back
+                </Button>
+
+                {step < totalSteps && (
+                  <Button
+                    type="button"
+                    onClick={nextStep}
+                    className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700"
+                  >
+                    Next
+                    <ChevronRight className="w-4 h-4" />
+                  </Button>
+                )}
+
+                {step === totalSteps && (
+                  <Button
+                    type="submit"
+                    disabled={!formData.consent}
+                    className="flex-1 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 disabled:opacity-50"
+                  >
+                    Join the Waitlist!
+                  </Button>
+                )}
               </div>
-
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="notifyOnLive"
-                  checked={formData.notifyOnLive}
-                  onChange={handleInputChange}
-                  className="w-5 h-5 rounded border-cyan-300 text-cyan-600 focus:ring-cyan-500"
-                />
-                <span className="text-blue-700">Notify me when the platform goes live</span>
-              </label>
-
-              <div className="bg-cyan-50 p-4 rounded-lg">
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    name="consent"
-                    checked={formData.consent}
-                    onChange={handleInputChange}
-                    required
-                    className="w-5 h-5 rounded border-cyan-300 text-cyan-600 focus:ring-cyan-500 mt-1 flex-shrink-0"
-                  />
-                  <span className="text-blue-700 text-sm">
-                    I agree to receive updates, early access info, and beta invites from Square 1 Ai. *
-                  </span>
-                </label>
-              </div>
-            </div>
-          )}
-
-          {/* Step 4: Thank You Preview */}
-          {step === 4 && (
-            <div className="space-y-6 animate-fade-in text-center">
-              <div className="text-6xl mb-6">🎉</div>
-              <h3 className="text-2xl font-bold text-blue-900 mb-4">You're All Set!</h3>
-              <p className="text-blue-700 mb-6">
-                Thank you for joining the Square 1 Ai teacher waitlist. We're excited to partner with you. You'll
-                receive early access updates and exclusive beta invites soon. Keep an eye on your inbox! 📧
-              </p>
-              <p className="text-sm text-blue-600">Ready to submit?</p>
-            </div>
-          )}
-
-          {/* Navigation Buttons */}
-          <div className="flex gap-4 mt-8 pt-6 border-t border-blue-100">
-            <button
-              type="button"
-              onClick={prevStep}
-              disabled={step === 1}
-              className="flex items-center gap-2 px-6 py-3 border border-blue-300 text-blue-600 rounded-lg font-medium hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              <ChevronLeft className="w-4 h-4" />
-              Back
-            </button>
-
-            {step < 4 && (
-              <button
-                type="button"
-                onClick={nextStep}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-cyan-600 text-white rounded-lg font-medium hover:shadow-lg transition-all"
-              >
-                Next
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            )}
-
-            {step === 4 && (
-              <button
-                type="submit"
-                disabled={!formData.consent}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-cyan-500 to-cyan-600 text-white rounded-lg font-bold hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-              >
-                Join the Waitlist!
-              </button>
-            )}
-          </div>
-        </form>
+            </form>
+          </CardContent>
+        </Card>
       </div>
     </section>
   )
