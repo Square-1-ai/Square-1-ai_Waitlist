@@ -2,7 +2,8 @@
 
 import type React from "react"
 import { useState } from "react"
-import { ChevronRight, ChevronLeft, Upload } from "lucide-react"
+import { ChevronRight, ChevronLeft, Upload, ArrowLeft } from "lucide-react"
+import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -19,6 +20,8 @@ import {
 import { Progress } from "@/components/ui/progress"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import FallBeamBackground from "@/components/fall-beam-background"
+import TypingText from "@/components/ui/typing-text"
 
 export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void }) {
   const [step, setStep] = useState(1)
@@ -101,28 +104,37 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
   ]
 
   return (
-    <section className="py-8 md:py-12 px-4 bg-gradient-to-br from-slate-50 via-cyan-50/30 to-blue-50/20 min-h-screen">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[calc(100vh-8rem)]">
-          {/* Left Side - Reserved for future animations */}
-          <div className="hidden lg:flex h-full min-h-[600px] items-center justify-center">
-            <div className="relative w-full h-full max-w-lg">
-              {/* Placeholder for future animations */}
-            </div>
-          </div>
+    <section className="py-8 md:py-12 px-4 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800 min-h-screen relative overflow-hidden">
+      {/* Fall Beam Background */}
+      <FallBeamBackground 
+        className="opacity-30"
+        lineCount={100}
+        beamColorClass="cyan-400"
+      />
 
-          {/* Right Side - Form */}
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="max-w-2xl mx-auto">
+          {/* Back Button */}
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors mb-6 group"
+          >
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            <span className="text-sm font-medium">Back to Home</span>
+          </Link>
+          
+          {/* Form */}
           <div className="w-full">
             {/* Header */}
             <div className="mb-6">
-              <h2 className="text-2xl md:text-3xl font-bold text-black mb-3">
-                Teacher Waitlist
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+                <TypingText text="Become a Teacher of Square 1 Ai" typingSpeed={50} showCursor={false} />
               </h2>
               <p className="text-sm text-muted-foreground mb-4">Step {step} of {totalSteps}</p>
-              <Progress value={getProgressPercentage()} className="h-2" />
+              <Progress value={getProgressPercentage()} className="h-2 [&_[data-slot=progress-indicator]]:bg-cyan-400" />
             </div>
 
-            <Card className="border-2 shadow-xl backdrop-blur-sm bg-white/80">
+            <Card className="border-2 shadow-xl bg-white">
           <CardHeader className="pb-4">
             <CardTitle className="text-2xl">
               {step === 1 && "Basic Information"}
@@ -146,7 +158,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         value={formData.fullName}
                         onChange={(e) => handleInputChange("fullName", e.target.value)}
                         required
-                        className="h-11"
+                        className="h-11 border-black"
                       />
                     </div>
 
@@ -159,7 +171,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         value={formData.email}
                         onChange={(e) => handleInputChange("email", e.target.value)}
                         required
-                        className="h-11"
+                        className="h-11 border-black"
                       />
                     </div>
 
@@ -173,7 +185,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                           value={formData.country}
                           onChange={(e) => handleInputChange("country", e.target.value)}
                           required
-                          className="h-11"
+                          className="h-11 border-black"
                         />
                       </div>
                       <div className="space-y-2">
@@ -185,7 +197,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                           value={formData.city}
                           onChange={(e) => handleInputChange("city", e.target.value)}
                           required
-                          className="h-11"
+                          className="h-11 border-black"
                         />
                       </div>
                     </div>
@@ -197,7 +209,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("internetConnection", value)}
                         required
                       >
-                        <SelectTrigger id="internetConnection" className="h-11">
+                        <SelectTrigger id="internetConnection" className="h-11 border-black">
                           <SelectValue placeholder="Select your connection quality" />
                         </SelectTrigger>
                         <SelectContent>
@@ -238,7 +250,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("heardAbout", value)}
                         required
                       >
-                        <SelectTrigger id="heardAbout" className="h-11">
+                        <SelectTrigger id="heardAbout" className="h-11 border-black">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
                         <SelectContent>
@@ -269,7 +281,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         value={formData.subjects}
                         onChange={(e) => handleInputChange("subjects", e.target.value)}
                         required
-                        className="h-11"
+                        className="h-11 border-black"
                       />
                     </div>
 
@@ -280,7 +292,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("teachingLevel", value)}
                         required
                       >
-                        <SelectTrigger id="teachingLevel" className="h-11">
+                        <SelectTrigger id="teachingLevel" className="h-11 border-black">
                           <SelectValue placeholder="Select a level" />
                         </SelectTrigger>
                         <SelectContent>
@@ -300,7 +312,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("yearsExperience", value)}
                         required
                       >
-                        <SelectTrigger id="yearsExperience" className="h-11">
+                        <SelectTrigger id="yearsExperience" className="h-11 border-black">
                           <SelectValue placeholder="Select a range" />
                         </SelectTrigger>
                         <SelectContent>
@@ -347,7 +359,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("taughtOnline", value)}
                         required
                       >
-                        <SelectTrigger id="taughtOnline" className="h-11">
+                        <SelectTrigger id="taughtOnline" className="h-11 border-black">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
                         <SelectContent>
@@ -368,7 +380,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                           placeholder="e.g., Zoom, Google Meet, Microsoft Teams, etc."
                           value={formData.platformsUsed}
                           onChange={(e) => handleInputChange("platformsUsed", e.target.value)}
-                          className="h-11"
+                          className="h-11 border-black"
                         />
                       </div>
                     )}
@@ -384,7 +396,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         value={formData.curriculums}
                         onChange={(e) => handleInputChange("curriculums", e.target.value)}
                         required
-                        className="h-11"
+                        className="h-11 border-black"
                       />
                       <p className="text-xs text-muted-foreground">
                         Helps us tailor student matching
@@ -400,7 +412,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("createStudyPacks", value)}
                         required
                       >
-                        <SelectTrigger id="createStudyPacks" className="h-11">
+                        <SelectTrigger id="createStudyPacks" className="h-11 border-black">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
                         <SelectContent>
@@ -425,7 +437,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("availabilityToStart", value)}
                         required
                       >
-                        <SelectTrigger id="availabilityToStart" className="h-11">
+                        <SelectTrigger id="availabilityToStart" className="h-11 border-black">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
                         <SelectContent>
@@ -443,7 +455,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("revenueSplit", value)}
                         required
                       >
-                        <SelectTrigger id="revenueSplit" className="h-11">
+                        <SelectTrigger id="revenueSplit" className="h-11 border-black">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
                         <SelectContent>
@@ -466,7 +478,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         value={formData.paymentMethod}
                         onChange={(e) => handleInputChange("paymentMethod", e.target.value)}
                         required
-                        className="h-11"
+                        className="h-11 border-black"
                       />
                     </div>
 
@@ -520,7 +532,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
               {step === 4 && (
                 <div className="space-y-6 animate-fade-in text-center">
                   <div className="text-6xl mb-6">🎉</div>
-                  <h3 className="text-2xl font-bold text-black mb-4">
+                  <h3 className="text-2xl font-bold text-white mb-4">
                     You're All Set!
                   </h3>
                   <p className="text-muted-foreground mb-8">
