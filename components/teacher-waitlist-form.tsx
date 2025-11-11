@@ -19,7 +19,6 @@ import {
 import { Progress } from "@/components/ui/progress"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import TeacherWaitlistAnimation from "@/components/teacher-waitlist-animation"
 
 export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void }) {
   const [step, setStep] = useState(1)
@@ -104,20 +103,13 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
   return (
     <section className="py-8 md:py-12 px-4 bg-gradient-to-br from-slate-50 via-cyan-50/30 to-blue-50/20 min-h-screen">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[calc(100vh-8rem)]">
-          {/* Left Side - Animations */}
-          <div className="hidden lg:flex h-full min-h-[600px] items-center justify-center">
-            <div className="relative w-full h-full max-w-lg">
-              <TeacherWaitlistAnimation />
-            </div>
-          </div>
-
-          {/* Right Side - Form */}
+        <div className="max-w-2xl mx-auto">
+          {/* Form */}
           <div className="w-full">
             {/* Header */}
             <div className="mb-6">
               <h2 className="text-2xl md:text-3xl font-bold text-black mb-3">
-                Teacher Waitlist
+                Become a Teacher of Square 1 Ai
               </h2>
               <p className="text-sm text-muted-foreground mb-4">Step {step} of {totalSteps}</p>
               <Progress value={getProgressPercentage()} className="h-2" />
