@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState } from "react"
-import { ChevronRight, ChevronLeft, Sparkles } from "lucide-react"
+import { ChevronRight, ChevronLeft } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -112,12 +112,9 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="mb-8 text-center">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <Sparkles className="w-6 h-6 text-blue-600" />
-            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Student Waitlist
-            </h2>
-          </div>
+          <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+            Student Waitlist
+          </h2>
           <p className="text-muted-foreground mb-6">Step {step} of {totalSteps}</p>
           <Progress value={getProgressPercentage()} className="h-2" />
         </div>
