@@ -75,10 +75,31 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
     if (step > 1) setStep(step - 1)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (formData.consent) {
-      onSubmit()
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.consent) {
+      alert('Please accept the terms and conditions to continue.');
+      return;
+    }
+    
+    try {
+      const res = await fetch('/api/waitlist/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'student', data: formData }),
+      });
+      
+      const result = await res.json();
+      
+      if (res.ok) {
+        onSubmit();
+      } else {
+        // Show specific error message from server
+        alert(result.error || 'Submission failed. Please try again.');
+      }
+    } catch (err) {
+      console.error('Submission error:', err);
+      alert('Network error. Please check your connection and try again.');
     }
   }
 
