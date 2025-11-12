@@ -20,7 +20,6 @@ import {
 import { Progress } from "@/components/ui/progress"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import FallBeamBackground from "@/components/fall-beam-background"
 import TypingText from "@/components/ui/typing-text"
 
 export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void }) {
@@ -111,14 +110,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
   ]
 
   return (
-    <section className="py-8 md:py-12 px-4 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800 min-h-screen relative overflow-hidden">
-      {/* Fall Beam Background */}
-      <FallBeamBackground 
-        className="opacity-30"
-        lineCount={100}
-        beamColorClass="cyan-400"
-      />
-
+    <section className="py-8 md:py-12 px-4 bg-gradient-to-b from-slate-900 to-slate-800 min-h-screen relative overflow-hidden">
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="max-w-2xl mx-auto">
           {/* Back Button */}
@@ -141,9 +133,9 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
               <Progress value={getProgressPercentage()} className="h-2 [&_[data-slot=progress-indicator]]:bg-cyan-400" />
             </div>
 
-            <Card className="border-2 shadow-xl bg-white">
+            <Card className="border border-white/20 shadow-2xl bg-white/10 backdrop-blur-xl backdrop-saturate-150">
           <CardHeader className="pb-4">
-            <CardTitle className="text-2xl">
+            <CardTitle className="text-2xl text-white">
               {step === 1 && "Basic Information"}
               {step === 2 && "Student Profile"}
               {step === 3 && "Learning Preferences"}
@@ -157,7 +149,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                 <div className="space-y-6 animate-fade-in">
                   <div className="grid gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="fullName">Full Name *</Label>
+                      <Label htmlFor="fullName" className="text-white">Full Name <span className="text-red-500">*</span></Label>
                       <Input
                         id="fullName"
                         type="text"
@@ -165,12 +157,12 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         value={formData.fullName}
                         onChange={(e) => handleInputChange("fullName", e.target.value)}
                         required
-                        className="h-11 border-black"
+                        className="h-11 border-white/30 bg-white/20 text-white placeholder:text-white/60"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email Address *</Label>
+                      <Label htmlFor="email" className="text-white">Email Address <span className="text-red-500">*</span></Label>
                       <Input
                         id="email"
                         type="email"
@@ -178,13 +170,13 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         value={formData.email}
                         onChange={(e) => handleInputChange("email", e.target.value)}
                         required
-                        className="h-11 border-black"
+                        className="h-11 border-white/30 bg-white/20 text-white placeholder:text-white/60"
                       />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="country">Country *</Label>
+                        <Label htmlFor="country" className="text-white">Country <span className="text-red-500">*</span></Label>
                         <Input
                           id="country"
                           type="text"
@@ -192,11 +184,11 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                           value={formData.country}
                           onChange={(e) => handleInputChange("country", e.target.value)}
                           required
-                          className="h-11 border-black"
+                          className="h-11 border-white/30 bg-white/20 text-white placeholder:text-white/60"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="city">City *</Label>
+                        <Label htmlFor="city" className="text-white">City <span className="text-red-500">*</span></Label>
                         <Input
                           id="city"
                           type="text"
@@ -204,31 +196,31 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                           value={formData.city}
                           onChange={(e) => handleInputChange("city", e.target.value)}
                           required
-                          className="h-11 border-black"
+                          className="h-11 border-white/30 bg-white/20 text-white placeholder:text-white/60"
                         />
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="internetConnection">Internet Connection Quality *</Label>
+                      <Label htmlFor="internetConnection" className="text-white">Internet Connection Quality <span className="text-red-500">*</span></Label>
                       <Select
                         value={formData.internetConnection}
                         onValueChange={(value) => handleInputChange("internetConnection", value)}
                         required
                       >
-                        <SelectTrigger id="internetConnection" className="h-11 border-black">
+                        <SelectTrigger id="internetConnection" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
                           <SelectValue placeholder="Select your connection quality" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="strong">Strong (fiber or 4G/5G)</SelectItem>
-                          <SelectItem value="moderate">Moderate (3G or shared Wi-Fi)</SelectItem>
-                          <SelectItem value="weak">Weak (limited access or unstable connection)</SelectItem>
+                        <SelectContent className="bg-slate-800 border-white/30">
+                          <SelectItem value="strong" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Strong (fiber or 4G/5G)</SelectItem>
+                          <SelectItem value="moderate" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Moderate (3G or shared Wi-Fi)</SelectItem>
+                          <SelectItem value="weak" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Weak (limited access or unstable connection)</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
                     <div className="space-y-3">
-                      <Label>Preferred Device for Joining Square 1 Ai *</Label>
+                      <Label className="text-white">Preferred Device for Joining Square 1 Ai <span className="text-red-500">*</span></Label>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {["Smartphone", "Laptop / Desktop", "Tablet", "Shared school or community computer"].map(
                           (device) => (
@@ -237,10 +229,11 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                                 id={`device-${device}`}
                                 checked={formData.devices.includes(device)}
                                 onCheckedChange={() => handleArrayChange("devices", device)}
+                                className="border-white/30 data-[state=checked]:bg-white data-[state=checked]:text-purple-900"
                               />
                               <Label
                                 htmlFor={`device-${device}`}
-                                className="text-sm font-normal cursor-pointer"
+                                className="text-sm font-normal cursor-pointer text-white"
                               >
                                 {device}
                               </Label>
@@ -251,23 +244,23 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="heardAbout">How did you hear about Square 1 Ai? *</Label>
+                      <Label htmlFor="heardAbout" className="text-white">How did you hear about Square 1 Ai? <span className="text-red-500">*</span></Label>
                       <Select
                         value={formData.heardAbout}
                         onValueChange={(value) => handleInputChange("heardAbout", value)}
                         required
                       >
-                        <SelectTrigger id="heardAbout" className="h-11 border-black">
+                        <SelectTrigger id="heardAbout" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="instagram">Instagram</SelectItem>
-                          <SelectItem value="tiktok">TikTok</SelectItem>
-                          <SelectItem value="youtube">YouTube</SelectItem>
-                          <SelectItem value="referral">Referral</SelectItem>
-                          <SelectItem value="teacher">Teacher</SelectItem>
-                          <SelectItem value="school">School</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
+                        <SelectContent className="bg-slate-800 border-white/30">
+                          <SelectItem value="instagram" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Instagram</SelectItem>
+                          <SelectItem value="tiktok" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">TikTok</SelectItem>
+                          <SelectItem value="youtube" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">YouTube</SelectItem>
+                          <SelectItem value="referral" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Referral</SelectItem>
+                          <SelectItem value="teacher" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Teacher</SelectItem>
+                          <SelectItem value="school" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">School</SelectItem>
+                          <SelectItem value="other" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Other</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -280,27 +273,27 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                 <div className="space-y-6 animate-fade-in">
                   <div className="grid gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="educationLevel">What's your current level of education? *</Label>
+                      <Label htmlFor="educationLevel" className="text-white">What's your current level of education? <span className="text-red-500">*</span></Label>
                       <Select
                         value={formData.educationLevel}
                         onValueChange={(value) => handleInputChange("educationLevel", value)}
                         required
                       >
-                        <SelectTrigger id="educationLevel" className="h-11 border-black">
+                        <SelectTrigger id="educationLevel" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
                           <SelectValue placeholder="Select your level" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="primary">Primary (Grade 1–5)</SelectItem>
-                          <SelectItem value="secondary">Secondary (Grade 6–13 / O/L / A/L)</SelectItem>
-                          <SelectItem value="university">University Student</SelectItem>
-                          <SelectItem value="graduate">Graduate / Professional</SelectItem>
-                          <SelectItem value="working">Working Professional</SelectItem>
+                        <SelectContent className="bg-slate-800 border-white/30">
+                          <SelectItem value="primary" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Primary (Grade 1–5)</SelectItem>
+                          <SelectItem value="secondary" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Secondary (Grade 6–13 / O/L / A/L)</SelectItem>
+                          <SelectItem value="university" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">University Student</SelectItem>
+                          <SelectItem value="graduate" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Graduate / Professional</SelectItem>
+                          <SelectItem value="working" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Working Professional</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
                     <div className="space-y-3">
-                      <Label>Which subjects or areas are you most interested in learning? *</Label>
+                      <Label className="text-white">Which subjects or areas are you most interested in learning? <span className="text-red-500">*</span></Label>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {subjectOptions.map((subject) => (
                           <div key={subject} className="flex items-center space-x-2">
@@ -308,10 +301,11 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                               id={`subject-${subject}`}
                               checked={formData.subjects.includes(subject)}
                               onCheckedChange={() => handleArrayChange("subjects", subject)}
+                              className="border-white/30 data-[state=checked]:bg-white data-[state=checked]:text-purple-900"
                             />
                             <Label
                               htmlFor={`subject-${subject}`}
-                              className="text-sm font-normal cursor-pointer"
+                              className="text-sm font-normal cursor-pointer text-white"
                             >
                               {subject}
                             </Label>
@@ -321,27 +315,27 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                     </div>
 
                     <div className="space-y-3">
-                      <Label>Do you prefer: *</Label>
+                      <Label className="text-white">Do you prefer: <span className="text-red-500">*</span></Label>
                       <RadioGroup
                         value={formData.learningPreference}
                         onValueChange={(value) => handleInputChange("learningPreference", value)}
                         required
                       >
                         <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="live" id="live" />
-                          <Label htmlFor="live" className="font-normal cursor-pointer">
+                          <RadioGroupItem value="live" id="live" className="border-white/30 text-white" />
+                          <Label htmlFor="live" className="font-normal cursor-pointer text-white">
                             Live interactive classes
                           </Label>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="recorded" id="recorded" />
-                          <Label htmlFor="recorded" className="font-normal cursor-pointer">
+                          <RadioGroupItem value="recorded" id="recorded" className="border-white/30 text-white" />
+                          <Label htmlFor="recorded" className="font-normal cursor-pointer text-white">
                             Pre-recorded video lessons
                           </Label>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="both" id="both" />
-                          <Label htmlFor="both" className="font-normal cursor-pointer">
+                          <RadioGroupItem value="both" id="both" className="border-white/30 text-white" />
+                          <Label htmlFor="both" className="font-normal cursor-pointer text-white">
                             Both
                           </Label>
                         </div>
@@ -349,24 +343,24 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="takenOnlineCourses">Have you taken online courses before? *</Label>
+                      <Label htmlFor="takenOnlineCourses" className="text-white">Have you taken online courses before? <span className="text-red-500">*</span></Label>
                       <Select
                         value={formData.takenOnlineCourses}
                         onValueChange={(value) => handleInputChange("takenOnlineCourses", value)}
                         required
                       >
-                        <SelectTrigger id="takenOnlineCourses" className="h-11 border-black">
+                        <SelectTrigger id="takenOnlineCourses" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="yes">Yes</SelectItem>
-                          <SelectItem value="no">No</SelectItem>
+                        <SelectContent className="bg-slate-800 border-white/30">
+                          <SelectItem value="yes" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Yes</SelectItem>
+                          <SelectItem value="no" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">No</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
                     <div className="space-y-3">
-                      <Label>Why are you interested in joining Square 1 Ai? *</Label>
+                      <Label className="text-white">Why are you interested in joining Square 1 Ai? <span className="text-red-500">*</span></Label>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {whyInterestedOptions.map((option) => (
                           <div key={option} className="flex items-center space-x-2">
@@ -374,10 +368,11 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                               id={`why-${option}`}
                               checked={formData.whyInterested.includes(option)}
                               onCheckedChange={() => handleArrayChange("whyInterested", option)}
+                              className="border-white/30 data-[state=checked]:bg-white data-[state=checked]:text-purple-900"
                             />
                             <Label
                               htmlFor={`why-${option}`}
-                              className="text-sm font-normal cursor-pointer"
+                              className="text-sm font-normal cursor-pointer text-white"
                             >
                               {option}
                             </Label>
@@ -387,7 +382,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="motivation">What motivates you to learn? *</Label>
+                      <Label htmlFor="motivation" className="text-white">What motivates you to learn? <span className="text-red-500">*</span></Label>
                       <Textarea
                         id="motivation"
                         placeholder="Share what drives your learning journey..."
@@ -395,7 +390,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onChange={(e) => handleInputChange("motivation", e.target.value)}
                         required
                         rows={4}
-                        className="resize-none border-black"
+                        className="resize-none border-white/30 bg-white/20 text-white placeholder:text-white/60"
                       />
                     </div>
                   </div>
@@ -407,79 +402,79 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                 <div className="space-y-6 animate-fade-in">
                   <div className="grid gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="competitions">Would you like to join competitions or community challenges? *</Label>
+                      <Label htmlFor="competitions" className="text-white">Would you like to join competitions or community challenges? <span className="text-red-500">*</span></Label>
                       <Select
                         value={formData.competitions}
                         onValueChange={(value) => handleInputChange("competitions", value)}
                         required
                       >
-                        <SelectTrigger id="competitions" className="h-11 border-black">
+                        <SelectTrigger id="competitions" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="yes">Yes, absolutely</SelectItem>
-                          <SelectItem value="maybe">Maybe later</SelectItem>
-                          <SelectItem value="no">No</SelectItem>
+                        <SelectContent className="bg-slate-800 border-white/30">
+                          <SelectItem value="yes" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Yes, absolutely</SelectItem>
+                          <SelectItem value="maybe" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Maybe later</SelectItem>
+                          <SelectItem value="no" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">No</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="hoursPerWeek">How many hours per week do you plan to dedicate to learning? *</Label>
+                      <Label htmlFor="hoursPerWeek" className="text-white">How many hours per week do you plan to dedicate to learning? <span className="text-red-500">*</span></Label>
                       <Select
                         value={formData.hoursPerWeek}
                         onValueChange={(value) => handleInputChange("hoursPerWeek", value)}
                         required
                       >
-                        <SelectTrigger id="hoursPerWeek" className="h-11 border-black">
+                        <SelectTrigger id="hoursPerWeek" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
                           <SelectValue placeholder="Select hours per week" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="<3">Less than 3 hours</SelectItem>
-                          <SelectItem value="3-6">3–6 hours</SelectItem>
-                          <SelectItem value="6-10">6–10 hours</SelectItem>
-                          <SelectItem value="10+">10+ hours</SelectItem>
+                        <SelectContent className="bg-slate-800 border-white/30">
+                          <SelectItem value="<3" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Less than 3 hours</SelectItem>
+                          <SelectItem value="3-6" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">3–6 hours</SelectItem>
+                          <SelectItem value="6-10" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">6–10 hours</SelectItem>
+                          <SelectItem value="10+" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">10+ hours</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="willingToPay">How much would you roughly be willing to pay for monthly access? *</Label>
+                      <Label htmlFor="willingToPay" className="text-white">How much would you roughly be willing to pay for monthly access? <span className="text-red-500">*</span></Label>
                       <Select
                         value={formData.willingToPay}
                         onValueChange={(value) => handleInputChange("willingToPay", value)}
                         required
                       >
-                        <SelectTrigger id="willingToPay" className="h-11 border-black">
+                        <SelectTrigger id="willingToPay" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
                           <SelectValue placeholder="Select a range" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="free">Free only</SelectItem>
-                          <SelectItem value="under2500">Under LKR 2,500</SelectItem>
-                          <SelectItem value="2500-5000">LKR 2,500–5,000/month</SelectItem>
-                          <SelectItem value="5000-7500">LKR 5,000–7,500/month</SelectItem>
-                          <SelectItem value="above10000">Above LKR 10,000</SelectItem>
+                        <SelectContent className="bg-slate-800 border-white/30">
+                          <SelectItem value="free" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Free only</SelectItem>
+                          <SelectItem value="under2500" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Under LKR 2,500</SelectItem>
+                          <SelectItem value="2500-5000" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">LKR 2,500–5,000/month</SelectItem>
+                          <SelectItem value="5000-7500" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">LKR 5,000–7,500/month</SelectItem>
+                          <SelectItem value="above10000" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Above LKR 10,000</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="referralCode">Referral Code (Optional)</Label>
+                      <Label htmlFor="referralCode" className="text-white">Referral Code (Optional)</Label>
                       <Input
                         id="referralCode"
                         type="text"
                         placeholder="Enter referral code (Invite 10 friends and get 25% off!)"
                         value={formData.referralCode}
                         onChange={(e) => handleInputChange("referralCode", e.target.value)}
-                        className="h-11 border-black"
+                        className="h-11 border-white/30 bg-white/20 text-white placeholder:text-white/60"
                       />
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-white/70">
                         Invite 10 of your friends! Get 25% off when they join.
                       </p>
                     </div>
 
                     <div className="space-y-3">
-                      <Label>Would you like early access to: *</Label>
+                      <Label className="text-white">Would you like early access to: <span className="text-red-500">*</span></Label>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {earlyAccessOptions.map((option) => (
                           <div key={option} className="flex items-center space-x-2">
@@ -487,10 +482,11 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                               id={`early-${option}`}
                               checked={formData.earlyAccess.includes(option)}
                               onCheckedChange={() => handleArrayChange("earlyAccess", option)}
+                              className="border-white/30 data-[state=checked]:bg-white data-[state=checked]:text-purple-900"
                             />
                             <Label
                               htmlFor={`early-${option}`}
-                              className="text-sm font-normal cursor-pointer"
+                              className="text-sm font-normal cursor-pointer text-white"
                             >
                               {option}
                             </Label>
@@ -509,35 +505,35 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                   <h3 className="text-2xl font-bold text-white mb-4">
                     You're All Set!
                   </h3>
-                  <p className="text-muted-foreground mb-8">
+                  <p className="text-white/80 mb-8">
                     Thank you for joining the Square 1 Ai student waitlist. You'll receive early access updates and
                     exclusive beta invites soon. Keep an eye on your inbox! 📧
                   </p>
-                  <Separator />
-                  <div className="flex items-start space-x-3 p-4 bg-muted/50 rounded-lg">
+                  <Separator className="bg-white/20" />
+                  <div className="flex items-start space-x-3 p-4 bg-white/10 rounded-lg border border-white/20">
                     <Checkbox
                       id="consent"
                       checked={formData.consent}
                       onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, consent: checked === true }))}
                       required
-                      className="mt-1"
+                      className="mt-1 border-white/30 data-[state=checked]:bg-white data-[state=checked]:text-purple-900"
                     />
-                    <Label htmlFor="consent" className="text-sm font-normal cursor-pointer leading-relaxed">
-                      I agree to receive updates, early access info, and beta invites from Square 1 Ai. *
+                    <Label htmlFor="consent" className="text-sm font-normal cursor-pointer leading-relaxed text-white">
+                      I agree to receive updates, early access info, and beta invites from Square 1 Ai. <span className="text-red-500">*</span>
                     </Label>
                   </div>
                 </div>
               )}
 
               {/* Navigation Buttons */}
-              <Separator className="my-6" />
+              <Separator className="my-6 bg-white/20" />
               <div className="flex justify-between gap-4">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={prevStep}
                   disabled={step === 1}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 border-white/30 bg-white/10 text-white hover:bg-white hover:text-blue-900 transition-colors"
                 >
                   <ChevronLeft className="w-4 h-4" />
                   Back
@@ -548,7 +544,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                     type="button"
                     variant="outline"
                     onClick={nextStep}
-                    className="flex items-center gap-2 ml-auto"
+                    className="flex items-center gap-2 ml-auto border-white/30 bg-white/10 text-white hover:bg-white hover:text-blue-900 transition-colors"
                   >
                     Next
                     <ChevronRight className="w-4 h-4" />
@@ -559,7 +555,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                   <Button
                     type="submit"
                     disabled={!formData.consent}
-                    className="ml-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:opacity-50"
+                    className="ml-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 text-white"
                   >
                     Join the Waitlist!
                   </Button>
