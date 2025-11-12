@@ -65,7 +65,7 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-6 lg:gap-8">
-          <Link href="/link1" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110`}>
+          <Link href="/about" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110`}>
             About
           </Link>
           <Link href="/link2" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110`}>
@@ -94,7 +94,7 @@ export default function Navbar() {
         <div className={`md:hidden absolute top-full left-0 right-0 ${mobileMenuBg} backdrop-blur-lg border-b ${borderColor}`}>
           <div className="flex flex-col px-4 py-4 space-y-4">
             <Link 
-              href="/link1" 
+              href="/about" 
               className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors`}
               onClick={() => setIsMenuOpen(false)}
             >

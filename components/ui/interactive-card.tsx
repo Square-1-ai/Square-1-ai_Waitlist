@@ -16,6 +16,7 @@ interface InteractiveCardProps {
   transitionDuration?: number
   transitionEasing?: string
   tailwindBgClass?: string
+  compact?: boolean
 }
 
 export const InteractiveCard = ({
@@ -30,6 +31,7 @@ export const InteractiveCard = ({
   transitionDuration = 0.3,
   transitionEasing = "easeInOut",
   tailwindBgClass = "bg-white",
+  compact = false,
 }: InteractiveCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null)
   const [isHovered, setIsHovered] = useState(false)
@@ -98,7 +100,8 @@ export const InteractiveCard = ({
         {/* Content */}
         <div
           className={cn(
-            "relative z-10 w-full h-full p-8",
+            "relative z-10 w-full h-full",
+            compact ? "p-6" : "p-8",
             tailwindBgClass,
             "text-foreground"
           )}
@@ -108,16 +111,24 @@ export const InteractiveCard = ({
         >
           {number && (
             <motion.div
-              className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center mb-6"
+              className={cn(
+                "bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center",
+                compact ? "w-10 h-10 mb-4" : "w-12 h-12 mb-6"
+              )}
               whileHover={{ rotate: 360, scale: 1.1 }}
               transition={{ duration: 0.6 }}
             >
-              <span className="text-2xl font-bold text-white">{number}</span>
+              <span className={cn("font-bold text-white", compact ? "text-xl" : "text-2xl")}>
+                {number}
+              </span>
             </motion.div>
           )}
 
           {title && (
-            <h3 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-blue-600 transition-colors">
+            <h3 className={cn(
+              "font-bold text-slate-900 group-hover:text-blue-600 transition-colors",
+              compact ? "text-xl mb-3" : "text-2xl mb-4"
+            )}>
               {title}
             </h3>
           )}

@@ -158,19 +158,30 @@ export function ScrollReveal({
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
       >
-        {splitText.map((item) =>
-          item.isSpace ? (
+        {splitText.map((item) => {
+          // Strip punctuation to check if word matches Square 1 Ai
+          const wordWithoutPunctuation = item.value.replace(/[.,!?;:()\[\]{}'"]/g, '')
+          const isSquare1Ai = wordWithoutPunctuation === "Square" || 
+                             wordWithoutPunctuation === "1" || 
+                             wordWithoutPunctuation === "Ai" ||
+                             wordWithoutPunctuation === "AI"
+          
+          return item.isSpace ? (
             <span key={`space-${item.originalIndex}`}>{item.value}</span>
           ) : (
             <motion.span
               key={`word-${item.originalIndex}`}
-              className="inline-block"
+              className={`inline-block ${
+                isSquare1Ai
+                  ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400"
+                  : ""
+              }`}
               variants={wordVariants}
             >
               {item.value}
             </motion.span>
           )
-        )}
+        })}
       </MotionComponent>
     </motion.div>
   )
