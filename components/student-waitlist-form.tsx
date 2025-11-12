@@ -208,7 +208,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("internetConnection", value)}
                         required
                       >
-                        <SelectTrigger id="internetConnection" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60">
+                        <SelectTrigger id="internetConnection" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
                           <SelectValue placeholder="Select your connection quality" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
@@ -250,7 +250,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("heardAbout", value)}
                         required
                       >
-                        <SelectTrigger id="heardAbout" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60">
+                        <SelectTrigger id="heardAbout" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
@@ -279,7 +279,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("educationLevel", value)}
                         required
                       >
-                        <SelectTrigger id="educationLevel" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60">
+                        <SelectTrigger id="educationLevel" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
                           <SelectValue placeholder="Select your level" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
@@ -349,7 +349,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("takenOnlineCourses", value)}
                         required
                       >
-                        <SelectTrigger id="takenOnlineCourses" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60">
+                        <SelectTrigger id="takenOnlineCourses" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
@@ -408,7 +408,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("competitions", value)}
                         required
                       >
-                        <SelectTrigger id="competitions" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60">
+                        <SelectTrigger id="competitions" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
@@ -426,7 +426,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("hoursPerWeek", value)}
                         required
                       >
-                        <SelectTrigger id="hoursPerWeek" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60">
+                        <SelectTrigger id="hoursPerWeek" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
                           <SelectValue placeholder="Select hours per week" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
@@ -445,7 +445,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("willingToPay", value)}
                         required
                       >
-                        <SelectTrigger id="willingToPay" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60">
+                        <SelectTrigger id="willingToPay" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
                           <SelectValue placeholder="Select a range" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
