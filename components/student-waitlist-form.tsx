@@ -208,7 +208,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("internetConnection", value)}
                         required
                       >
-                        <SelectTrigger id="internetConnection" className="h-11 border-white/30 bg-white/20 text-white">
+                        <SelectTrigger id="internetConnection" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60">
                           <SelectValue placeholder="Select your connection quality" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
@@ -250,7 +250,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("heardAbout", value)}
                         required
                       >
-                        <SelectTrigger id="heardAbout" className="h-11 border-white/30 bg-white/20 text-white">
+                        <SelectTrigger id="heardAbout" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
@@ -279,7 +279,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("educationLevel", value)}
                         required
                       >
-                        <SelectTrigger id="educationLevel" className="h-11 border-white/30 bg-white/20 text-white">
+                        <SelectTrigger id="educationLevel" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60">
                           <SelectValue placeholder="Select your level" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
@@ -349,7 +349,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("takenOnlineCourses", value)}
                         required
                       >
-                        <SelectTrigger id="takenOnlineCourses" className="h-11 border-white/30 bg-white/20 text-white">
+                        <SelectTrigger id="takenOnlineCourses" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
@@ -408,7 +408,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("competitions", value)}
                         required
                       >
-                        <SelectTrigger id="competitions" className="h-11 border-white/30 bg-white/20 text-white">
+                        <SelectTrigger id="competitions" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
@@ -426,7 +426,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("hoursPerWeek", value)}
                         required
                       >
-                        <SelectTrigger id="hoursPerWeek" className="h-11 border-white/30 bg-white/20 text-white">
+                        <SelectTrigger id="hoursPerWeek" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60">
                           <SelectValue placeholder="Select hours per week" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
@@ -445,7 +445,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("willingToPay", value)}
                         required
                       >
-                        <SelectTrigger id="willingToPay" className="h-11 border-white/30 bg-white/20 text-white">
+                        <SelectTrigger id="willingToPay" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60">
                           <SelectValue placeholder="Select a range" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
@@ -533,7 +533,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                   variant="outline"
                   onClick={prevStep}
                   disabled={step === 1}
-                  className="flex items-center gap-2 border-white/30 bg-white/10 text-white hover:bg-white/20"
+                  className="flex items-center gap-2 border-white/30 bg-white/10 text-white hover:bg-white hover:text-blue-900 transition-colors"
                 >
                   <ChevronLeft className="w-4 h-4" />
                   Back
@@ -544,7 +544,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                     type="button"
                     variant="outline"
                     onClick={nextStep}
-                    className="flex items-center gap-2 ml-auto border-white/30 bg-white/10 text-white hover:bg-white/20"
+                    className="flex items-center gap-2 ml-auto border-white/30 bg-white/10 text-white hover:bg-white hover:text-blue-900 transition-colors"
                   >
                     Next
                     <ChevronRight className="w-4 h-4" />
