@@ -2,26 +2,35 @@
 import { ChevronRight } from "lucide-react"
 import Image from "next/image"
 import TextType from "@/components/ui/text-type"
-import FallBeamBackground from "@/components/fall-beam-background"
+import { cn } from "@/lib/utils"
+
 
 export default function Hero() {
   return (
-  <section id="why-join" className="relative pt-24 sm:pt-28 md:pt-32 pb-16 md:pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-900 to-slate-800">
-      {/* Falling Beam Background Animation */}
-      <FallBeamBackground 
-        lineCount={25}
-        beamColorClass="cyan-400"
-        className="opacity-60"
-      />
-      
-      {/* subtle stars/dots / decorative overlays */}
-      <div aria-hidden className="absolute inset-0 pointer-events-none">
-        {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30 opacity-30" />
-        <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 w-[1200px] h-[1200px] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.02),transparent_40%)] opacity-30 rounded-full pointer-events-none" /> */}
-      </div>
+    <>
+      {/* Hero Section */}
+      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-16 md:pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-900 to-slate-800">
+        {/* Grid Background Effect */}
+        <div
+          className={cn(
+            "absolute inset-0",
+            "[background-size:40px_40px]",
+            "dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]",
+            "[background-image:linear-gradient(to_right,rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.1)_1px,transparent_1px)]"
+          )}
+        />
+        
+        {/* Blurred mesh gradients in 4 corners */}
+        <div className="absolute top-10 left-0 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute top-10 right-0 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-10 left-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-10 right-0 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        
+        {/* Radial gradient overlay for faded look */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-slate-900 to-slate-800 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
-  <div className="relative z-10 px-4 sm:px-6 md:px-8 text-center">
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="relative z-10 px-4 sm:px-6 md:px-8 text-center">
           <h1
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 text-balance leading-tight px-2"
             style={{ fontFamily: "'Inter Tight', 'Inter', 'Noto Sans JP', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial" }}
@@ -65,22 +74,26 @@ export default function Hero() {
           </p> */}
         </div>
 
-        {/* Hero Image */}
-        <div className="flex justify-center mt-6 sm:mt-8 md:mt-10 px-2">
-          <div className="relative rounded-xl sm:rounded-2xl w-full max-w-5xl overflow-hidden shadow-2xl">
-            <Image 
-              src="/Hero.png" 
-              alt="Square 1 Ai Platform Preview" 
-              width={1200} 
-              height={675}
-              className="w-full h-auto object-contain rounded-xl sm:rounded-2xl"
-              priority
-            />
+          {/* Hero Image */}
+          <div className="flex justify-center mt-6 sm:mt-8 md:mt-10 px-2">
+            <div className="relative rounded-xl sm:rounded-2xl w-full max-w-5xl overflow-hidden shadow-2xl">
+              <Image 
+                src="/Hero.png" 
+                alt="Square 1 Ai Platform Preview" 
+                width={1200} 
+                height={675}
+                className="w-full h-auto object-contain rounded-xl sm:rounded-2xl"
+                priority
+              />
+            </div>
           </div>
         </div>
+      </section>
 
-        {/* Why Join Early Section */}
-        <div className="mt-16 sm:mt-20 md:mt-24">
+      {/* Why Join Early Section - Separate Section */}
+      <section id="why-join" className="relative py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-800 to-slate-900">
+        <div className="max-w-7xl mx-auto">
+        <div className="mt-0">
           <div className="text-center mb-12 sm:mb-16 px-2">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">Why Join Square 1 Ai Early?</h2>
             <p className="text-base sm:text-lg text-blue-100 px-4">Get Exclusive Benefits And Shape The Future Of AI Learning</p>
@@ -140,7 +153,8 @@ export default function Hero() {
             ))}
           </div>
         </div>
-      </div>
-    </section>
+        </div>
+      </section>
+    </>
   )
 }
