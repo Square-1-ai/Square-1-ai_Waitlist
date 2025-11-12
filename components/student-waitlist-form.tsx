@@ -211,10 +211,10 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         <SelectTrigger id="internetConnection" className="h-11 border-white/30 bg-white/20 text-white">
                           <SelectValue placeholder="Select your connection quality" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="strong">Strong (fiber or 4G/5G)</SelectItem>
-                          <SelectItem value="moderate">Moderate (3G or shared Wi-Fi)</SelectItem>
-                          <SelectItem value="weak">Weak (limited access or unstable connection)</SelectItem>
+                        <SelectContent className="bg-slate-800 border-white/30">
+                          <SelectItem value="strong" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Strong (fiber or 4G/5G)</SelectItem>
+                          <SelectItem value="moderate" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Moderate (3G or shared Wi-Fi)</SelectItem>
+                          <SelectItem value="weak" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Weak (limited access or unstable connection)</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -253,14 +253,14 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         <SelectTrigger id="heardAbout" className="h-11 border-white/30 bg-white/20 text-white">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="instagram">Instagram</SelectItem>
-                          <SelectItem value="tiktok">TikTok</SelectItem>
-                          <SelectItem value="youtube">YouTube</SelectItem>
-                          <SelectItem value="referral">Referral</SelectItem>
-                          <SelectItem value="teacher">Teacher</SelectItem>
-                          <SelectItem value="school">School</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
+                        <SelectContent className="bg-slate-800 border-white/30">
+                          <SelectItem value="instagram" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Instagram</SelectItem>
+                          <SelectItem value="tiktok" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">TikTok</SelectItem>
+                          <SelectItem value="youtube" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">YouTube</SelectItem>
+                          <SelectItem value="referral" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Referral</SelectItem>
+                          <SelectItem value="teacher" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Teacher</SelectItem>
+                          <SelectItem value="school" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">School</SelectItem>
+                          <SelectItem value="other" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Other</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -282,12 +282,12 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         <SelectTrigger id="educationLevel" className="h-11 border-white/30 bg-white/20 text-white">
                           <SelectValue placeholder="Select your level" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="primary">Primary (Grade 1–5)</SelectItem>
-                          <SelectItem value="secondary">Secondary (Grade 6–13 / O/L / A/L)</SelectItem>
-                          <SelectItem value="university">University Student</SelectItem>
-                          <SelectItem value="graduate">Graduate / Professional</SelectItem>
-                          <SelectItem value="working">Working Professional</SelectItem>
+                        <SelectContent className="bg-slate-800 border-white/30">
+                          <SelectItem value="primary" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Primary (Grade 1–5)</SelectItem>
+                          <SelectItem value="secondary" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Secondary (Grade 6–13 / O/L / A/L)</SelectItem>
+                          <SelectItem value="university" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">University Student</SelectItem>
+                          <SelectItem value="graduate" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Graduate / Professional</SelectItem>
+                          <SelectItem value="working" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Working Professional</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -352,9 +352,9 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         <SelectTrigger id="takenOnlineCourses" className="h-11 border-white/30 bg-white/20 text-white">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="yes">Yes</SelectItem>
-                          <SelectItem value="no">No</SelectItem>
+                        <SelectContent className="bg-slate-800 border-white/30">
+                          <SelectItem value="yes" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Yes</SelectItem>
+                          <SelectItem value="no" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">No</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -411,10 +411,10 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         <SelectTrigger id="competitions" className="h-11 border-white/30 bg-white/20 text-white">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="yes">Yes, absolutely</SelectItem>
-                          <SelectItem value="maybe">Maybe later</SelectItem>
-                          <SelectItem value="no">No</SelectItem>
+                        <SelectContent className="bg-slate-800 border-white/30">
+                          <SelectItem value="yes" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Yes, absolutely</SelectItem>
+                          <SelectItem value="maybe" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Maybe later</SelectItem>
+                          <SelectItem value="no" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">No</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -429,11 +429,11 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         <SelectTrigger id="hoursPerWeek" className="h-11 border-white/30 bg-white/20 text-white">
                           <SelectValue placeholder="Select hours per week" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="<3">Less than 3 hours</SelectItem>
-                          <SelectItem value="3-6">3–6 hours</SelectItem>
-                          <SelectItem value="6-10">6–10 hours</SelectItem>
-                          <SelectItem value="10+">10+ hours</SelectItem>
+                        <SelectContent className="bg-slate-800 border-white/30">
+                          <SelectItem value="<3" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Less than 3 hours</SelectItem>
+                          <SelectItem value="3-6" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">3–6 hours</SelectItem>
+                          <SelectItem value="6-10" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">6–10 hours</SelectItem>
+                          <SelectItem value="10+" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">10+ hours</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -448,12 +448,12 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         <SelectTrigger id="willingToPay" className="h-11 border-white/30 bg-white/20 text-white">
                           <SelectValue placeholder="Select a range" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="free">Free only</SelectItem>
-                          <SelectItem value="under2500">Under LKR 2,500</SelectItem>
-                          <SelectItem value="2500-5000">LKR 2,500–5,000/month</SelectItem>
-                          <SelectItem value="5000-7500">LKR 5,000–7,500/month</SelectItem>
-                          <SelectItem value="above10000">Above LKR 10,000</SelectItem>
+                        <SelectContent className="bg-slate-800 border-white/30">
+                          <SelectItem value="free" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Free only</SelectItem>
+                          <SelectItem value="under2500" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Under LKR 2,500</SelectItem>
+                          <SelectItem value="2500-5000" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">LKR 2,500–5,000/month</SelectItem>
+                          <SelectItem value="5000-7500" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">LKR 5,000–7,500/month</SelectItem>
+                          <SelectItem value="above10000" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Above LKR 10,000</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>

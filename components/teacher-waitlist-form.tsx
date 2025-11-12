@@ -209,13 +209,13 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("internetConnection", value)}
                         required
                       >
-                        <SelectTrigger id="internetConnection" className="h-11 border-black">
+                        <SelectTrigger id="internetConnection" className="h-11 border-black text-gray-900">
                           <SelectValue placeholder="Select your connection quality" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="strong">Strong (fiber or 4G/5G)</SelectItem>
-                          <SelectItem value="moderate">Moderate (3G or shared Wi-Fi)</SelectItem>
-                          <SelectItem value="weak">Weak (limited access or unstable connection)</SelectItem>
+                        <SelectContent className="bg-white border-gray-300">
+                          <SelectItem value="strong" className="hover:bg-gray-100 focus:bg-gray-100">Strong (fiber or 4G/5G)</SelectItem>
+                          <SelectItem value="moderate" className="hover:bg-gray-100 focus:bg-gray-100">Moderate (3G or shared Wi-Fi)</SelectItem>
+                          <SelectItem value="weak" className="hover:bg-gray-100 focus:bg-gray-100">Weak (limited access or unstable connection)</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -250,17 +250,17 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("heardAbout", value)}
                         required
                       >
-                        <SelectTrigger id="heardAbout" className="h-11 border-black">
+                        <SelectTrigger id="heardAbout" className="h-11 border-black text-gray-900">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="instagram">Instagram</SelectItem>
-                          <SelectItem value="tiktok">TikTok</SelectItem>
-                          <SelectItem value="youtube">YouTube</SelectItem>
-                          <SelectItem value="referral">Referral</SelectItem>
-                          <SelectItem value="teacher">Teacher</SelectItem>
-                          <SelectItem value="school">School</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
+                        <SelectContent className="bg-white border-gray-300">
+                          <SelectItem value="instagram" className="hover:bg-gray-100 focus:bg-gray-100">Instagram</SelectItem>
+                          <SelectItem value="tiktok" className="hover:bg-gray-100 focus:bg-gray-100">TikTok</SelectItem>
+                          <SelectItem value="youtube" className="hover:bg-gray-100 focus:bg-gray-100">YouTube</SelectItem>
+                          <SelectItem value="referral" className="hover:bg-gray-100 focus:bg-gray-100">Referral</SelectItem>
+                          <SelectItem value="teacher" className="hover:bg-gray-100 focus:bg-gray-100">Teacher</SelectItem>
+                          <SelectItem value="school" className="hover:bg-gray-100 focus:bg-gray-100">School</SelectItem>
+                          <SelectItem value="other" className="hover:bg-gray-100 focus:bg-gray-100">Other</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -292,15 +292,15 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("teachingLevel", value)}
                         required
                       >
-                        <SelectTrigger id="teachingLevel" className="h-11 border-black">
+                        <SelectTrigger id="teachingLevel" className="h-11 border-black text-gray-900">
                           <SelectValue placeholder="Select a level" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="primary">Primary</SelectItem>
-                          <SelectItem value="secondary">Secondary</SelectItem>
-                          <SelectItem value="university">University</SelectItem>
-                          <SelectItem value="professional">Professional</SelectItem>
-                          <SelectItem value="corporate">Corporate</SelectItem>
+                        <SelectContent className="bg-white border-gray-300">
+                          <SelectItem value="primary" className="hover:bg-gray-100 focus:bg-gray-100">Primary</SelectItem>
+                          <SelectItem value="secondary" className="hover:bg-gray-100 focus:bg-gray-100">Secondary</SelectItem>
+                          <SelectItem value="university" className="hover:bg-gray-100 focus:bg-gray-100">University</SelectItem>
+                          <SelectItem value="professional" className="hover:bg-gray-100 focus:bg-gray-100">Professional</SelectItem>
+                          <SelectItem value="corporate" className="hover:bg-gray-100 focus:bg-gray-100">Corporate</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -312,14 +312,14 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("yearsExperience", value)}
                         required
                       >
-                        <SelectTrigger id="yearsExperience" className="h-11 border-black">
+                        <SelectTrigger id="yearsExperience" className="h-11 border-black text-gray-900">
                           <SelectValue placeholder="Select a range" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="0-2">0–2 years</SelectItem>
-                          <SelectItem value="3-5">3–5 years</SelectItem>
-                          <SelectItem value="6-10">6–10 years</SelectItem>
-                          <SelectItem value="10+">10+ years</SelectItem>
+                        <SelectContent className="bg-white border-gray-300">
+                          <SelectItem value="0-2" className="hover:bg-gray-100 focus:bg-gray-100">0–2 years</SelectItem>
+                          <SelectItem value="3-5" className="hover:bg-gray-100 focus:bg-gray-100">3–5 years</SelectItem>
+                          <SelectItem value="6-10" className="hover:bg-gray-100 focus:bg-gray-100">6–10 years</SelectItem>
+                          <SelectItem value="10+" className="hover:bg-gray-100 focus:bg-gray-100">10+ years</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -359,12 +359,12 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("taughtOnline", value)}
                         required
                       >
-                        <SelectTrigger id="taughtOnline" className="h-11 border-black">
+                        <SelectTrigger id="taughtOnline" className="h-11 border-black text-gray-900">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="yes">Yes</SelectItem>
-                          <SelectItem value="no">No</SelectItem>
+                        <SelectContent className="bg-white border-gray-300">
+                          <SelectItem value="yes" className="hover:bg-gray-100 focus:bg-gray-100">Yes</SelectItem>
+                          <SelectItem value="no" className="hover:bg-gray-100 focus:bg-gray-100">No</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -412,13 +412,13 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("createStudyPacks", value)}
                         required
                       >
-                        <SelectTrigger id="createStudyPacks" className="h-11 border-black">
+                        <SelectTrigger id="createStudyPacks" className="h-11 border-black text-gray-900">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="yes">Yes</SelectItem>
-                          <SelectItem value="no">No</SelectItem>
-                          <SelectItem value="maybe">Maybe later</SelectItem>
+                        <SelectContent className="bg-white border-gray-300">
+                          <SelectItem value="yes" className="hover:bg-gray-100 focus:bg-gray-100">Yes</SelectItem>
+                          <SelectItem value="no" className="hover:bg-gray-100 focus:bg-gray-100">No</SelectItem>
+                          <SelectItem value="maybe" className="hover:bg-gray-100 focus:bg-gray-100">Maybe later</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -437,13 +437,13 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("availabilityToStart", value)}
                         required
                       >
-                        <SelectTrigger id="availabilityToStart" className="h-11 border-black">
+                        <SelectTrigger id="availabilityToStart" className="h-11 border-black text-gray-900">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="immediately">Immediately</SelectItem>
-                          <SelectItem value="within-month">Within a month</SelectItem>
-                          <SelectItem value="within-3-months">Within 3 months</SelectItem>
+                        <SelectContent className="bg-white border-gray-300">
+                          <SelectItem value="immediately" className="hover:bg-gray-100 focus:bg-gray-100">Immediately</SelectItem>
+                          <SelectItem value="within-month" className="hover:bg-gray-100 focus:bg-gray-100">Within a month</SelectItem>
+                          <SelectItem value="within-3-months" className="hover:bg-gray-100 focus:bg-gray-100">Within 3 months</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -455,13 +455,13 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("revenueSplit", value)}
                         required
                       >
-                        <SelectTrigger id="revenueSplit" className="h-11 border-black">
+                        <SelectTrigger id="revenueSplit" className="h-11 border-black text-gray-900">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="70/30">70% Teacher / 30% Platform</SelectItem>
-                          <SelectItem value="65/35">65% Teacher / 35% Platform</SelectItem>
-                          <SelectItem value="60/40">60% Teacher / 40% Platform</SelectItem>
+                        <SelectContent className="bg-white border-gray-300">
+                          <SelectItem value="70/30" className="hover:bg-gray-100 focus:bg-gray-100">70% Teacher / 30% Platform</SelectItem>
+                          <SelectItem value="65/35" className="hover:bg-gray-100 focus:bg-gray-100">65% Teacher / 35% Platform</SelectItem>
+                          <SelectItem value="60/40" className="hover:bg-gray-100 focus:bg-gray-100">60% Teacher / 40% Platform</SelectItem>
                         </SelectContent>
                       </Select>
                       <p className="text-xs text-muted-foreground">
@@ -563,7 +563,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                   variant="outline"
                   onClick={prevStep}
                   disabled={step === 1}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 hover:bg-white hover:text-blue-900 transition-colors"
                 >
                   <ChevronLeft className="w-4 h-4" />
                   Back
@@ -574,7 +574,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                     type="button"
                     variant="outline"
                     onClick={nextStep}
-                    className="flex items-center gap-2 ml-auto"
+                    className="flex items-center gap-2 ml-auto hover:bg-white hover:text-blue-900 transition-colors"
                   >
                     Next
                     <ChevronRight className="w-4 h-4" />
