@@ -108,7 +108,7 @@ export default function Navbar() {
           <Link href="/about" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110`}>
             About
           </Link>
-          <Link href="/link2" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110`}>
+          <Link href="/feedback" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110`}>
             Feedback
           </Link>
           <Link href="/link3" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110`}>
@@ -141,7 +141,7 @@ export default function Navbar() {
               About
             </Link>
             <Link 
-              href="/link2" 
+              href="/feedback" 
               className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors`}
               onClick={() => setIsMenuOpen(false)}
             >
