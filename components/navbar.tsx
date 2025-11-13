@@ -13,30 +13,70 @@ export default function Navbar() {
       // Get the navbar height
       const navbarHeight = 100
       
-      // Check if we're in the white section (About Us section)
-      // Adjust these values based on your actual section positions
-      const scrollPosition = window.scrollY + navbarHeight
+      // Get all sections
+      const allSections = document.querySelectorAll('section')
       
-      // Get the about section element
-      const aboutSection = document.querySelector('section.bg-white')
+      let isOverAnyLightSection = false
       
-      if (aboutSection) {
-        const rect = aboutSection.getBoundingClientRect()
-        const aboutTop = window.scrollY + rect.top
-        const aboutBottom = aboutTop + rect.height
+      // Check each section to see if it's light or dark
+      allSections.forEach((section) => {
+        const className = section.className || ''
         
-        // Check if navbar is over the white section
-        setIsOverWhite(scrollPosition > aboutTop && scrollPosition < aboutBottom)
-      }
+        // Check if section has dark background (slate-900, slate-800, etc.)
+        const isDarkSection = className.includes('slate-900') || 
+                              className.includes('slate-800') ||
+                              (className.includes('from-slate-900') && className.includes('to-slate-900'))
+        
+        // If it's not a dark section, check if it's a light section
+        if (!isDarkSection) {
+          const isLightSection = className.includes('bg-white') ||
+                                className.includes('blue-50') ||
+                                className.includes('slate-50') ||
+                                className.includes('cyan-50')
+          
+          if (isLightSection) {
+            const rect = section.getBoundingClientRect()
+            // getBoundingClientRect() returns position relative to viewport
+            // Check if the navbar area (0 to navbarHeight from top of viewport) overlaps with section
+            const sectionTop = rect.top
+            const sectionBottom = rect.bottom
+            
+            // Navbar is over section if the section intersects with the top portion of viewport (navbar area)
+            // Section intersects navbar if:
+            // - Section starts at or above the navbar bottom (sectionTop <= navbarHeight)
+            // - Section extends to or below the viewport top (sectionBottom >= 0)
+            if (sectionTop <= navbarHeight && sectionBottom >= 0) {
+              isOverAnyLightSection = true
+            }
+          }
+        }
+      })
+      
+      setIsOverWhite(isOverAnyLightSection)
     }
 
     // Initial check
     handleScroll()
     
-    // Add scroll listener
-    window.addEventListener('scroll', handleScroll)
+    // Add scroll listener with throttling for better performance
+    let ticking = false
+    const scrollHandler = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll()
+          ticking = false
+        })
+        ticking = true
+      }
+    }
     
-    return () => window.removeEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', scrollHandler, { passive: true })
+    window.addEventListener('resize', handleScroll, { passive: true })
+    
+    return () => {
+      window.removeEventListener('scroll', scrollHandler)
+      window.removeEventListener('resize', handleScroll)
+    }
   }, [])
 
   const textColor = isOverWhite ? 'text-slate-900' : 'text-white'
