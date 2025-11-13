@@ -45,7 +45,7 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Image - Left */}
             <Image 
-              src="/Black.png" 
+              src="/Gradient.png" 
               alt="What We Are" 
               width={500}
               height={350}
