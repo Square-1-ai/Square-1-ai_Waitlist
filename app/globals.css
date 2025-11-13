@@ -195,3 +195,13 @@
 .animate-particle {
   animation: particle linear infinite;
 }
+
+/* Hide scrollbar for auto-scrolling sections */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
