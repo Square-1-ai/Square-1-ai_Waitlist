@@ -42,6 +42,63 @@ function validateTeacher(data: any): { valid: boolean; error?: string } {
 }
 
 export async function POST(req: NextRequest) {
+    // Table creation SQLs (copied from migration script)
+    const studentTableSQL = `
+    CREATE TABLE IF NOT EXISTS students (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      full_name VARCHAR(100) NOT NULL,
+      email VARCHAR(100) UNIQUE NOT NULL,
+      country VARCHAR(100),
+      city VARCHAR(100),
+      internet_connection VARCHAR(100),
+      devices TEXT,
+      heard_about VARCHAR(100),
+      education_level VARCHAR(100),
+      subjects TEXT,
+      learning_preference VARCHAR(100),
+      taken_online_courses VARCHAR(100),
+      why_interested TEXT,
+      motivation TEXT,
+      competitions TEXT,
+      hours_per_week VARCHAR(50),
+      willing_to_pay VARCHAR(50),
+      referral_code VARCHAR(100),
+      early_access TEXT,
+      consent BOOLEAN,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      INDEX idx_email (email),
+      INDEX idx_created_at (created_at)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    `;
+
+    const teacherTableSQL = `
+    CREATE TABLE IF NOT EXISTS teachers (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      full_name VARCHAR(100) NOT NULL,
+      email VARCHAR(100) UNIQUE NOT NULL,
+      country VARCHAR(100),
+      city VARCHAR(100),
+      internet_connection VARCHAR(100),
+      devices TEXT,
+      heard_about VARCHAR(100),
+      subjects VARCHAR(200),
+      teaching_level VARCHAR(100),
+      years_experience VARCHAR(50),
+      class_type_preference VARCHAR(100),
+      taught_online VARCHAR(100),
+      platforms_used VARCHAR(200),
+      curriculums VARCHAR(200),
+      create_study_packs VARCHAR(100),
+      availability_to_start VARCHAR(100),
+      revenue_split VARCHAR(100),
+      payment_method VARCHAR(100),
+      early_access TEXT,
+      consent BOOLEAN,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      INDEX idx_email (email),
+      INDEX idx_created_at (created_at)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    `;
   try {
     // Parse request body
     const body = await req.json();
@@ -71,6 +128,8 @@ export async function POST(req: NextRequest) {
     const sanitizedEmail = sanitizeString(data.email).toLowerCase();
 
     if (type === 'student') {
+      // Ensure students table exists
+      await query(studentTableSQL);
       // Insert student data
       await query(
         `INSERT INTO students (
@@ -102,6 +161,8 @@ export async function POST(req: NextRequest) {
         ]
       );
     } else {
+      // Ensure teachers table exists
+      await query(teacherTableSQL);
       // Insert teacher data
       await query(
         `INSERT INTO teachers (
@@ -109,8 +170,8 @@ export async function POST(req: NextRequest) {
           heard_about, subjects, teaching_level, years_experience, 
           class_type_preference, taught_online, platforms_used, curriculums, 
           create_study_packs, availability_to_start, revenue_split, 
-          payment_method, teaching_sample, early_access, consent
-        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+          payment_method, early_access, consent
+        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
         [
           sanitizeString(data.fullName),
           sanitizedEmail,
@@ -130,7 +191,6 @@ export async function POST(req: NextRequest) {
           sanitizeString(data.availabilityToStart),
           sanitizeString(data.revenueSplit),
           sanitizeString(data.paymentMethod),
-          sanitizeString(data.teachingSample),
           JSON.stringify(data.earlyAccess || []),
           !!data.consent
         ]
