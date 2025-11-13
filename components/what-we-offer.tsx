@@ -9,7 +9,7 @@ export default function WhatWeOffer() {
       icon: "🤖",
       title: "AI Powered Learning",
       subtitle: "Personalized education for every learner.",
-      image: "/about_pics/AB_1.png",
+      image: "../1-min.jpg",
       description: "Empowered by intelligent AI companions, our platform adapts to each student's goals, pace, and strengths. Whether you're learning for school, university, or professional growth, AI ensures your study experience is optimized for success.",
       keyFeatures: [
         "Smart Study Packs — automatically generate notes, quizzes, podcasts, and mind maps.",
@@ -20,8 +20,8 @@ export default function WhatWeOffer() {
     {
       icon: "💻",
       title: "Live & On Demand Courses",
-      subtitle: "Learn anything, anytime — your way.",
-      image: "/about_pics/AB_2.png",
+      subtitle: "Learn anything, anytime  your way.",
+      image: "../2-min.jpg",
       description: "Access an ever-expanding library of interactive lessons covering school subjects, university disciplines, and professional certifications. Each class includes an AI Study Pack summarizing lectures, key insights, and practice material.",
       keyFeatures: [
         "K–12: Math, Science, English, ICT, Arts, Business, and more.",
@@ -33,8 +33,8 @@ export default function WhatWeOffer() {
     {
       icon: "🏆",
       title: "Competitions & Challenges",
-      subtitle: "Learn by doing — and get recognized for it.",
-      image: "/about_pics/AB_3.png",
+      subtitle: "Learn by doing and get recognized for it.",
+      image: "../3-min.jpg",
       description: "A global Kaggle-style hub where learners solve real-world challenges, compete for prizes, and build their portfolios.",
       keyFeatures: [
         "Weekly and monthly challenges in AI, Finance, Sustainability, Engineering, and Arts.",
@@ -46,7 +46,7 @@ export default function WhatWeOffer() {
       icon: "🧩",
       title: "Circle  The Learning Network",
       subtitle: "Your LinkedIn for learners and innovators.",
-      image: "/about_pics/AB_4.png",
+      image: "../4-min.jpg",
       description: "Build a verified learner profile to showcase your skills, courses, and achievements. Connect with peers, mentors, and employers in a vibrant learning ecosystem.",
       keyFeatures: [
         "Display your learning journey and project portfolio.",
@@ -59,7 +59,7 @@ export default function WhatWeOffer() {
       icon: "🧑‍🏫",
       title: "Mentorship & Collaboration",
       subtitle: "Guided growth through human + AI mentorship.",
-      image: "/about_pics/AB_5.png",
+      image: "../5-min.jpg",
       description: "Access a mentor marketplace with certified teachers and industry experts ready to guide you. Combine live mentorship sessions with the power of AI study assistance.",
       keyFeatures: [
         "One-on-one or group mentorship via built-in video calls and schedules.",
@@ -71,7 +71,7 @@ export default function WhatWeOffer() {
       icon: "🚀",
       title: "Career & Startup Launchpad",
       subtitle: "Transform learning into life-changing opportunities.",
-      image: "/about_pics/AB_6.png",
+      image: "../6-min.jpg",
       description: "From internships to startup incubation, we bridge the gap between education and employment.",
       keyFeatures: [
         "Career Hub for internships, placements, and partnerships.",
@@ -83,8 +83,8 @@ export default function WhatWeOffer() {
     {
       icon: "🌐",
       title: "Community & Open-Source Projects",
-      subtitle: "Learn, build, and impact — together.",
-      image: "/about_pics/AB_7.png",
+      subtitle: "Learn, build, and impact together.",
+      image: "../7-min.jpg",
       description: "Collaborate on open-source projects across global domains like AI, HealthTech, AgriTech, Finance, and Arts.",
       keyFeatures: [
         "Work with peers worldwide on real projects.",
@@ -196,29 +196,10 @@ export default function WhatWeOffer() {
                 </div>
 
                 {/* Hover Description Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 opacity-0 group-hover:opacity-100 transition-all duration-500 overflow-y-auto p-8 flex flex-col justify-center">
-                  <h3 className="text-2xl font-bold text-blue-400 mb-4">
-                    {feature.title}
-                  </h3>
-                  <p className="text-gray-200 text-sm leading-relaxed mb-4">
+                <div className="absolute inset-0 bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 opacity-0 group-hover:opacity-100 transition-all duration-500 overflow-y-auto p-8 flex flex-col justify-center">
+                  <p className="text-gray-200 text-base leading-relaxed">
                     {feature.description}
                   </p>
-                  <div className="mt-2">
-                    <p className="text-white font-semibold mb-3 text-xs uppercase tracking-wide">
-                      Key Features:
-                    </p>
-                    <ul className="space-y-2">
-                      {feature.keyFeatures.map((item, idx) => (
-                        <li
-                          key={idx}
-                          className="text-gray-300 text-xs leading-relaxed flex items-start"
-                        >
-                          <span className="text-blue-400 mr-2 mt-0.5 flex-shrink-0">•</span>
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
                 </div>
 
                 {/* Hover Gradient Overlay */}
