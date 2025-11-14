@@ -44,16 +44,18 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Image - Left */}
-            <Image 
-              src="/Gradient.png" 
-              alt="What We Are" 
-              width={500}
-              height={350}
-              className="w-full h-auto max-w-md"
-            />
+            <div className="order-2 md:order-1">
+              <Image 
+                src="/Gradient.png" 
+                alt="What We Are" 
+                width={500}
+                height={350}
+                className="w-full h-auto max-w-md"
+              />
+            </div>
             
             {/* Text Content - Right */}
-            <div>
+            <div className="order-1 md:order-2">
               <ScrollReveal
                 as="h2"
                 size="lg"
@@ -113,7 +115,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Text Content - Left */}
-            <div>
+            <div className="order-1">
               <ScrollReveal
                 as="h2"
                 size="lg"
@@ -166,13 +168,15 @@ export default function AboutPage() {
             </div>
 
             {/* Image - Right */}
-            <Image 
-              src="/about_pics/our-vision.png" 
-              alt="Our Vision" 
-              width={500}
-              height={350}
-              className="w-full h-auto max-w-md"
-            />
+            <div className="order-2">
+              <Image 
+                src="/about_pics/our-vision.png" 
+                alt="Our Vision" 
+                width={500}
+                height={350}
+                className="w-full h-auto max-w-md"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -182,16 +186,18 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Image - Left */}
-            <Image 
-              src="/about_pics/our-mission.png" 
-              alt="Our Mission" 
-              width={500}
-              height={350}
-              className="w-full h-auto max-w-md"
-            />
+            <div className="order-2 md:order-1">
+              <Image 
+                src="/about_pics/our-mission.png" 
+                alt="Our Mission" 
+                width={500}
+                height={350}
+                className="w-full h-auto max-w-md"
+              />
+            </div>
             
             {/* Text Content - Right */}
-            <div>
+            <div className="order-1 md:order-2">
               <ScrollReveal
                 as="h2"
                 size="lg"
@@ -239,7 +245,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Text Content - Left */}
-            <div>
+            <div className="order-1">
               <ScrollReveal
                 as="h2"
                 size="lg"
@@ -292,13 +298,15 @@ export default function AboutPage() {
             </div>
 
             {/* Image - Right */}
-            <Image 
-              src="/about_pics/how-it-works.png" 
-              alt="How It Works" 
-              width={500}
-              height={350}
-              className="w-full h-auto max-w-md ml-8"
-            />
+            <div className="order-2">
+              <Image 
+                src="/about_pics/how-it-works.png" 
+                alt="How It Works" 
+                width={500}
+                height={350}
+                className="w-full h-auto max-w-md md:ml-8"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -308,16 +316,18 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Image - Left */}
-            <Image 
-              src="/about_pics/why-it-matters.png" 
-              alt="Why It Matters" 
-              width={500}
-              height={350}
-              className="w-full h-auto max-w-md"
-            />
+            <div className="order-2 md:order-1">
+              <Image 
+                src="/about_pics/why-it-matters.png" 
+                alt="Why It Matters" 
+                width={500}
+                height={350}
+                className="w-full h-auto max-w-md"
+              />
+            </div>
             
             {/* Text Content - Right */}
-            <div>
+            <div className="order-1 md:order-2">
               <ScrollReveal
                 as="h2"
                 size="lg"
@@ -365,7 +375,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Text Content - Left */}
-            <div>
+            <div className="order-1">
               <ScrollReveal
                 as="h2"
                 size="lg"
@@ -443,13 +453,15 @@ export default function AboutPage() {
             </div>
 
             {/* Image - Right */}
-            <Image 
-              src="/about_pics/personalization.png" 
-              alt="AI-First Personalization" 
-              width={500}
-              height={350}
-              className="w-full h-auto max-w-md ml-8"
-            />
+            <div className="order-2">
+              <Image 
+                src="/about_pics/personalization.png" 
+                alt="AI-First Personalization" 
+                width={500}
+                height={350}
+                className="w-full h-auto max-w-md md:ml-8"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -459,16 +471,18 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Image - Left */}
-            <Image 
-              src="/about_pics/ecosystem.png" 
-              alt="Beyond Learning A Launchpad" 
-              width={500}
-              height={350}
-              className="w-full h-auto max-w-md"
-            />
+            <div className="order-2 md:order-1">
+              <Image 
+                src="/about_pics/ecosystem.png" 
+                alt="Beyond Learning A Launchpad" 
+                width={500}
+                height={350}
+                className="w-full h-auto max-w-md"
+              />
+            </div>
             
             {/* Text Content - Right */}
-            <div>
+            <div className="order-1 md:order-2">
               <ScrollReveal
                 as="h2"
                 size="lg"
