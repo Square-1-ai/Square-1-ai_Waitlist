@@ -111,8 +111,8 @@ export default function Navbar() {
           <Link href="/link2" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110`}>
             Feedback
           </Link>
-          <Link href="/link3" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110`}>
-            Community
+          <Link href="/courses" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110`}>
+            Courses
           </Link>
           <Link href="/link4" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110`}>
             Waitlist
@@ -148,11 +148,11 @@ export default function Navbar() {
               Feedback
             </Link>
             <Link 
-              href="/link3" 
+              href="/courses" 
               className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors`}
               onClick={() => setIsMenuOpen(false)}
             >
-              Community
+              Courses
             </Link>
             <Link 
               href="/link4" 
