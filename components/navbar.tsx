@@ -58,23 +58,11 @@ export default function Navbar() {
     // Initial check
     handleScroll()
     
-    // Add scroll listener with throttling for better performance
-    let ticking = false
-    const scrollHandler = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          handleScroll()
-          ticking = false
-        })
-        ticking = true
-      }
-    }
-    
-    window.addEventListener('scroll', scrollHandler, { passive: true })
+    window.addEventListener('scroll', handleScroll, { passive: true })
     window.addEventListener('resize', handleScroll, { passive: true })
     
     return () => {
-      window.removeEventListener('scroll', scrollHandler)
+      window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('resize', handleScroll)
     }
   }, [])
