@@ -23,8 +23,18 @@ import { Separator } from "@/components/ui/separator"
 import FallBeamBackground from "@/components/fall-beam-background"
 import TypingText from "@/components/ui/typing-text"
 
-export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data:any) => void }) {
+export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any, errorType?: string) => void }) {
   const [step, setStep] = useState(1)
+  
+  // Extract ref_id from URL on component mount
+  const getRefIdFromUrl = () => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('ref_id') || '';
+    }
+    return '';
+  };
+  
   const [formData, setFormData] = useState({
     // Common Sectionon
     fullName: "",
@@ -44,7 +54,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data:any)
     competitions: "",
     hoursPerWeek: "",
     willingToPay: "",
-    referralCode: "",
+    referralCode: getRefIdFromUrl(),
     earlyAccess: [] as string[],
     consent: false,
   })
@@ -67,7 +77,30 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data:any)
     }))
   }
 
-  const nextStep = () => {
+  const nextStep = async () => {
+    // On step 1, check if email is already registered
+    if (step === 1 && formData.email) {
+      try {
+        // Check if email already exists using lightweight check endpoint
+        const checkRes = await fetch('/api/waitlist/check-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: formData.email, type: 'student' }),
+        });
+        const result = await checkRes.json();
+        
+        if (checkRes.ok && result.exists) {
+          // Email already registered, go to thank you page
+          alert('This email is already registered. Redirecting to your referral info...');
+          onSubmit(formData, 'duplicate');
+          return;
+        }
+      } catch (err) {
+        // If check fails, proceed normally
+        console.error('Email check error:', err);
+      }
+    }
+    
     if (step < totalSteps) setStep(step + 1)
   }
 
@@ -93,6 +126,9 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data:any)
       
       if (res.ok) {
         onSubmit(formData);
+      } else if (result.error && result.error.includes('already registered')) {
+        // Pass errorType to parent for duplicate
+        onSubmit(formData, 'duplicate');
       } else {
         // Show specific error message from server
         alert(result.error || 'Submission failed. Please try again.');
@@ -144,7 +180,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data:any)
         <div className="max-w-2xl mx-auto">
           {/* Back Button */}
           <Link
-            href="/"
+            href={`/${formData.referralCode ? `?ref_id=${formData.referralCode}` : ''}`}
             className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors mb-6 group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />

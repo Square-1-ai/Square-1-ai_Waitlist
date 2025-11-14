@@ -29,15 +29,23 @@ type WaitlistResults = {
 export default function StudentWaitlistPage() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [studentEmail, setStudentEmail] = useState("");
+  const [referralCode, setReferralCode] = useState("");
   const [waitlistResults, setWaitlistResults] = useState<WaitlistResults>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [copySuccess, setCopySuccess] = useState("");
 
   // Called after local form submit
-  const handleFormSubmit = (email:any) => {
-    setStudentEmail(email);
+  // Accepts formData and errorType (for duplicate)
+  const handleFormSubmit = (formData: any, errorType?: string) => {
+    setStudentEmail(formData.email);
+    setReferralCode(formData.referralCode || '');
     setFormSubmitted(true);
+    if (errorType === 'duplicate') {
+      setError('This email is already registered on the waitlist. Showing your referral info.');
+    } else {
+      setError("");
+    }
   };
 
   // Call GetWaitlist API after form submit
@@ -48,14 +56,17 @@ export default function StudentWaitlistPage() {
       setError("");
       try {
         // POST signup
-        const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+
+        const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+        const referralLink = referralCode ? `${baseUrl}/?ref_id=${referralCode}` : baseUrl;
+        
         const postRes = await fetch(`${BASE_API_URL}signup`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             email: studentEmail,
             waitlist_id: WAITLIST_ID,
-            referral_link: currentUrl,
+            referral_link: referralLink,
           }),
         });
         const postData = await postRes.json();
@@ -93,7 +104,7 @@ export default function StudentWaitlistPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {!formSubmitted && <StudentWaitlistForm onSubmit={(data:any) => handleFormSubmit(data.email)} />}
+      {!formSubmitted && <StudentWaitlistForm onSubmit={handleFormSubmit} />}
       {formSubmitted && (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-cyan-50 px-4">
           <div className="text-center max-w-md animate-fade-in">
