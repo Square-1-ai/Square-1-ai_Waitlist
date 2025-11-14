@@ -102,9 +102,6 @@ export default function Navbar() {
           <Link href="/courses" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110`}>
             Courses
           </Link>
-          <Link href="/link4" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110`}>
-            Waitlist
-          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -141,13 +138,6 @@ export default function Navbar() {
               onClick={() => setIsMenuOpen(false)}
             >
               Courses
-            </Link>
-            <Link 
-              href="/link4" 
-              className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors`}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Waitlist
             </Link>
           </div>
         </div>
