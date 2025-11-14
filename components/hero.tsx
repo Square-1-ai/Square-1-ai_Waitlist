@@ -2,10 +2,17 @@
 import { ChevronRight, Shield, Brain, Users2, GraduationCap, Route } from "lucide-react"
 import Image from "next/image"
 import TextType from "@/components/ui/text-type"
+import FallBeamBackground from "@/components/fall-beam-background"
+import { useSearchParams } from 'next/navigation'
 import { cn } from "@/lib/utils"
 
 
 export default function Hero() {
+  // Get ref_id from URL params
+  const searchParams = useSearchParams();
+  const refId = searchParams.get('ref_id');
+  const refParam = refId ? `?ref_id=${refId}` : '';
+
   return (
     <>
       {/* Hero Section */}
@@ -48,14 +55,14 @@ export default function Hero() {
 
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-6 px-2">
             <a
-              href="/student-waitlist"
+              href={`/student-waitlist${refParam}`}
               className="group px-6 sm:px-8 py-3 sm:py-4 bg-white text-blue-600 rounded-full font-bold text-base sm:text-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto"
             >
               Join as Student
               <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
             </a>
             <a
-              href="/teacher-waitlist"
+              href={`/teacher-waitlist${refParam}`}
               className="group px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-bold text-base sm:text-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto"
             >
               Join as Teacher

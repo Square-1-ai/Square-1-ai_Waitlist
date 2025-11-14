@@ -33,21 +33,20 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
     internetConnection: "",
     devices: [] as string[],
     heardAbout: "",
-    // Teacher Profile
-    subjects: "",
-    teachingLevel: "",
-    yearsExperience: "",
-    classTypePreference: "",
-    taughtOnline: "",
-    platformsUsed: "",
-    curriculums: "",
-    createStudyPacks: "",
-    availabilityToStart: "",
-    revenueSplit: "",
-    paymentMethod: "",
-    teachingSample: null as File | null,
-    earlyAccess: [] as string[],
-    consent: false,
+  // Teacher Profile
+  subjects: "",
+  teachingLevel: "",
+  yearsExperience: "",
+  classTypePreference: "",
+  taughtOnline: "",
+  platformsUsed: "",
+  curriculums: "",
+  createStudyPacks: "",
+  availabilityToStart: "",
+  revenueSplit: "",
+  paymentMethod: "",
+  earlyAccess: [] as string[],
+  consent: false,
   })
 
   const totalSteps = 4
@@ -59,35 +58,48 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
     }))
   }
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null
-    setFormData((prev) => ({
-      ...prev,
-      teachingSample: file,
-    }))
-  }
+  // Helper to toggle array fields (devices, earlyAccess)
+  const handleArrayChange = (field: string, value: string) => {
+    setFormData((prev: typeof formData) => {
+      const arr = Array.isArray(prev[field as keyof typeof prev]) ? prev[field as keyof typeof prev] as string[] : [];
+      return {
+        ...prev,
+        [field]: arr.includes(value)
+          ? arr.filter((v) => v !== value)
+          : [...arr, value],
+      };
+    });
+  };
 
-  const handleArrayChange = (name: "devices" | "earlyAccess", value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: prev[name].includes(value)
-        ? prev[name].filter((item) => item !== value)
-        : [...prev[name], value],
-    }))
-  }
+  // Navigation helpers for multi-step form
+  const nextStep = () => setStep((s: number) => Math.min(s + 1, totalSteps));
+  const prevStep = () => setStep((s: number) => Math.max(s - 1, 1));
 
-  const nextStep = () => {
-    if (step < totalSteps) setStep(step + 1)
-  }
-
-  const prevStep = () => {
-    if (step > 1) setStep(step - 1)
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (formData.consent) {
-      onSubmit()
+  {/* Video upload removed */}
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.consent) {
+      alert('Please accept the terms and conditions to continue.');
+      return;
+    }
+    
+    try {
+      const res = await fetch('/api/waitlist/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'teacher', data: formData }),
+      });
+      
+      const result = await res.json();
+      
+      if (res.ok) {
+        onSubmit();
+      } else {
+        alert(result.error || 'Submission failed. Please try again.');
+      }
+    } catch (err) {
+      console.error('Submission error:', err);
+      alert('Network error. Please check your connection and try again.');
     }
   }
 
