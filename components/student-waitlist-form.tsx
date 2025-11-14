@@ -23,10 +23,10 @@ import { Separator } from "@/components/ui/separator"
 import FallBeamBackground from "@/components/fall-beam-background"
 import TypingText from "@/components/ui/typing-text"
 
-export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void }) {
+export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data:any) => void }) {
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
-    // Common Section
+    // Common Sectionon
     fullName: "",
     email: "",
     country: "",
@@ -92,7 +92,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
       const result = await res.json();
       
       if (res.ok) {
-        onSubmit();
+        onSubmit(formData);
       } else {
         // Show specific error message from server
         alert(result.error || 'Submission failed. Please try again.');
