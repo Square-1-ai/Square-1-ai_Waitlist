@@ -195,3 +195,39 @@
 .animate-particle {
   animation: particle linear infinite;
 }
+
+/* Hide scrollbar for auto-scrolling sections */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Animated Gradient Border for Course Cards */
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0turn;
+}
+
+@keyframes border-spin {
+  to {
+    --border-angle: 1turn;
+  }
+}
+
+.animated-gradient-border {
+  position: relative;
+  border: 2px solid transparent;
+  background: 
+    linear-gradient(white, white) padding-box,
+    conic-gradient(from var(--border-angle), #3b82f6, #8b5cf6, #ec4899, #f59e0b, #3b82f6) border-box;
+  animation: border-spin 3s linear infinite;
+}
+
+.animated-gradient-border:hover {
+  animation-duration: 1.5s;
+}
