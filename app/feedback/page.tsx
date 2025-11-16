@@ -27,50 +27,44 @@ export default function FeedbackPage() {
     {
       id: 1,
       name: "Sarah Johnson",
-      rating: 5,
-      category: "UI/UX Feedback",
-      message: "The interface is incredibly intuitive! The AI-powered learning features are exactly what students need. Looking forward to the full launch!",
-      date: "2 days ago"
+      country: "United States",
+      flag: "🇺🇸",
+      message: "The interface is incredibly intuitive! The AI-powered learning features are exactly what students need. Looking forward to the full launch!"
     },
     {
       id: 2,
       name: "Michael Chen",
-      rating: 5,
-      category: "Feature Request",
-      message: "Love the concept! Would be great to see more collaborative features for group study sessions. The platform has huge potential.",
-      date: "5 days ago"
+      country: "Canada",
+      flag: "🇨🇦",
+      message: "Love the concept! Would be great to see more collaborative features for group study sessions. The platform has huge potential."
     },
     {
       id: 3,
       name: "Emily Rodriguez",
-      rating: 4,
-      category: "General Feedback",
-      message: "Really impressed with the personalized learning paths. The AI study packs are a game-changer for exam preparation!",
-      date: "1 week ago"
+      country: "Spain",
+      flag: "🇪🇸",
+      message: "Really impressed with the personalized learning paths. The AI study packs are a game-changer for exam preparation!"
     },
     {
       id: 4,
       name: "David Park",
-      rating: 5,
-      category: "Content Suggestion",
-      message: "As a teacher, I'm excited about the tools for educators. The ability to create custom AI-powered content will revolutionize how we teach.",
-      date: "1 week ago"
+      country: "South Korea",
+      flag: "🇰🇷",
+      message: "As a teacher, I'm excited about the tools for educators. The ability to create custom AI-powered content will revolutionize how we teach."
     },
     {
       id: 5,
       name: "Jessica Williams",
-      rating: 5,
-      category: "General Feedback",
-      message: "Amazing platform! The AI tutoring is like having a personal mentor available 24/7. This will change education forever.",
-      date: "2 weeks ago"
+      country: "United Kingdom",
+      flag: "🇬🇧",
+      message: "Amazing platform! The AI tutoring is like having a personal mentor available 24/7. This will change education forever."
     },
     {
       id: 6,
       name: "Alex Thompson",
-      rating: 4,
-      category: "Feature Request",
-      message: "The competition features are fantastic for motivation. Would love to see more team challenges and collaborative projects!",
-      date: "2 weeks ago"
+      country: "Australia",
+      flag: "🇦🇺",
+      message: "The competition features are fantastic for motivation. Would love to see more team challenges and collaborative projects!"
     }
   ]
 
@@ -127,21 +121,9 @@ export default function FeedbackPage() {
                 <Dialog key={feedback.id}>
                   <DialogTrigger asChild>
                     <button className="bg-slate-800 backdrop-blur-sm rounded-xl border border-slate-700 p-6 hover:border-blue-500/50 transition-all duration-300 mr-4 w-[400px] flex-shrink-0 cursor-pointer text-left">
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <h3 className="text-lg font-semibold text-white">{feedback.name}</h3>
-                          <p className="text-sm text-slate-400">{feedback.date}</p>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          {Array.from({ length: feedback.rating }).map((_, i) => (
-                            <span key={i} className="text-yellow-400">⭐</span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="mb-3">
-                        <span className="inline-block px-3 py-1 bg-blue-500/20 text-blue-300 text-xs font-medium rounded-full">
-                          {feedback.category}
-                        </span>
+                      <div className="mb-4">
+                        <h3 className="text-lg font-semibold text-white">{feedback.name}</h3>
+                        <p className="text-sm text-blue-400">{feedback.country}</p>
                       </div>
                       <p className="text-slate-300 text-sm leading-relaxed whitespace-normal">
                         {feedback.message}
@@ -202,21 +184,9 @@ export default function FeedbackPage() {
                 <Dialog key={feedback.id}>
                   <DialogTrigger asChild>
                     <button className="bg-slate-800 backdrop-blur-sm rounded-xl border border-slate-700 p-6 hover:border-blue-500/50 transition-all duration-300 mr-4 w-[400px] flex-shrink-0 cursor-pointer text-left">
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <h3 className="text-lg font-semibold text-white">{feedback.name}</h3>
-                          <p className="text-sm text-slate-400">{feedback.date}</p>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          {Array.from({ length: feedback.rating }).map((_, i) => (
-                            <span key={i} className="text-yellow-400">⭐</span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="mb-3">
-                        <span className="inline-block px-3 py-1 bg-blue-500/20 text-blue-300 text-xs font-medium rounded-full">
-                          {feedback.category}
-                        </span>
+                      <div className="mb-4">
+                        <h3 className="text-lg font-semibold text-white">{feedback.name}</h3>
+                        <p className="text-sm text-blue-400">{feedback.country}</p>
                       </div>
                       <p className="text-slate-300 text-sm leading-relaxed whitespace-normal">
                         {feedback.message}
@@ -277,21 +247,9 @@ export default function FeedbackPage() {
                 <Dialog key={feedback.id}>
                   <DialogTrigger asChild>
                     <button className="bg-slate-800 backdrop-blur-sm rounded-xl border border-slate-700 p-6 hover:border-blue-500/50 transition-all duration-300 mr-4 w-[400px] flex-shrink-0 cursor-pointer text-left">
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <h3 className="text-lg font-semibold text-white">{feedback.name}</h3>
-                          <p className="text-sm text-slate-400">{feedback.date}</p>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          {Array.from({ length: feedback.rating }).map((_, i) => (
-                            <span key={i} className="text-yellow-400">⭐</span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="mb-3">
-                        <span className="inline-block px-3 py-1 bg-blue-500/20 text-blue-300 text-xs font-medium rounded-full">
-                          {feedback.category}
-                        </span>
+                      <div className="mb-4">
+                        <h3 className="text-lg font-semibold text-white">{feedback.name}</h3>
+                        <p className="text-sm text-blue-400">{feedback.country}</p>
                       </div>
                       <p className="text-slate-300 text-sm leading-relaxed whitespace-normal">
                         {feedback.message}
