@@ -61,7 +61,7 @@ export default function AboutPage() {
                 size="lg"
                 align="left"
                 variant="default"
-                textClassName="text-slate-900 mb-8 font-bold"
+                textClassName="text-blue-900 mb-4 font-bold"
                 containerClassName="mb-8"
                 enableBlur={true}
                 baseOpacity={0.1}
@@ -121,7 +121,7 @@ export default function AboutPage() {
                 size="lg"
                 align="left"
                 variant="default"
-                textClassName="text-slate-900 mb-8 font-bold"
+                textClassName="text-blue-900 mb-4 font-bold"
                 containerClassName="mb-8"
                 enableBlur={true}
                 baseOpacity={0.1}
@@ -134,7 +134,7 @@ export default function AboutPage() {
                 size="sm"
                 align="left"
                 variant="default"
-                textClassName="text-slate-700 leading-relaxed mb-6"
+                textClassName="text-blue-900 mb-4 font-bold"
                 containerClassName="mb-6"
                 enableBlur={true}
                 baseOpacity={0.1}
@@ -203,7 +203,7 @@ export default function AboutPage() {
                 size="lg"
                 align="left"
                 variant="default"
-                textClassName="text-slate-900 mb-8 font-bold"
+                textClassName="text-blue-900 mb-4 font-bold"
                 containerClassName="mb-8"
                 enableBlur={true}
                 baseOpacity={0.1}
@@ -251,7 +251,7 @@ export default function AboutPage() {
                 size="lg"
                 align="left"
                 variant="default"
-                textClassName="text-slate-900 mb-8 font-bold"
+                textClassName="text-blue-900 mb-4 font-bold"
                 containerClassName="mb-8"
                 enableBlur={true}
                 baseOpacity={0.1}
@@ -333,7 +333,7 @@ export default function AboutPage() {
                 size="lg"
                 align="left"
                 variant="default"
-                textClassName="text-slate-900 mb-8 font-bold"
+                textClassName="text-blue-900 mb-4 font-bold"
                 containerClassName="mb-8"
                 enableBlur={true}
                 baseOpacity={0.1}
@@ -381,7 +381,7 @@ export default function AboutPage() {
                 size="lg"
                 align="left"
                 variant="default"
-                textClassName="text-slate-900 mb-8 font-bold"
+                textClassName="text-blue-900 mb-4 font-bold"
                 containerClassName="mb-8"
                 enableBlur={true}
                 baseOpacity={0.1}
@@ -488,7 +488,7 @@ export default function AboutPage() {
                 size="lg"
                 align="left"
                 variant="default"
-                textClassName="text-slate-900 mb-8 font-bold"
+                textClassName="text-blue-900 mb-4 font-bold"
                 containerClassName="mb-8"
                 enableBlur={true}
                 baseOpacity={0.1}
