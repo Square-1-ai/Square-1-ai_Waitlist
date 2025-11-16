@@ -1,12 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import { BookOpen, Trophy, Users, Briefcase, Rocket, GraduationCap, Languages, Award, Building2, X } from "lucide-react"
+import { BookOpen, Trophy, Users, Briefcase, Rocket, GraduationCap, Languages, Award, Building2, ChevronDown, ChevronUp } from "lucide-react"
 import Footer from "@/components/footer"
 import Image from "next/image"
 
 export default function CoursesPage() {
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(null)
+  const [expandedCategory, setExpandedCategory] = useState<number | null>(null)
   const ecosystemItems = [
     {
       icon: BookOpen,
@@ -96,36 +96,76 @@ export default function CoursesPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="space-y-4">
             {courseCategories.map((category, index) => {
               const Icon = category.icon
+              const isExpanded = expandedCategory === index
               return (
                 <div
                   key={index}
-                  className="relative bg-white rounded-xl p-6 hover:scale-105 transition-transform duration-300 flex flex-col overflow-hidden animated-gradient-border"
+                  className="relative rounded-xl overflow-hidden transition-all duration-300 group"
                 >
+                  {/* Glass effect background */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${category.bgColor} opacity-10`}></div>
+                  <div className="absolute inset-0 bg-white/5 backdrop-blur-xl"></div>
+                  <div className={`absolute inset-0 border ${category.border} rounded-xl`}></div>
                   
-                  <div className="flex items-center gap-4 mb-6 flex-1">
-                    {/* Icon/Image on the left */}
-                    <div className="flex-shrink-0">
-                      <Icon className="w-12 h-12 text-blue-600" />
-                    </div>
-                    
-                    {/* Title on the right */}
-                    <div className="flex-1">
-                      <h3 className="text-lg md:text-xl font-bold text-slate-900 leading-tight">
-                        {category.displayTitle}
-                      </h3>
-                    </div>
-                  </div>
+                  <div className="relative">
+                    {/* Header - Clickable */}
+                    <button
+                      onClick={() => setExpandedCategory(isExpanded ? null : index)}
+                      className="w-full p-6 flex items-center justify-between hover:bg-white/10 transition-all duration-300"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 rounded-lg bg-white shadow-lg">
+                          <Icon className="w-8 h-8 text-blue-600" />
+                        </div>
+                        <h3 className="text-xl md:text-2xl font-bold text-white text-left">
+                          {category.displayTitle}
+                        </h3>
+                      </div>
+                      <div className="flex-shrink-0 p-2 rounded-lg bg-white/5">
+                        {isExpanded ? (
+                          <ChevronUp className="w-6 h-6 text-white" />
+                        ) : (
+                          <ChevronDown className="w-6 h-6 text-white" />
+                        )}
+                      </div>
+                    </button>
 
-                  {/* View all Courses Button */}
-                  <button
-                    onClick={() => setSelectedCategory(index)}
-                    className="w-full bg-slate-100 text-slate-900 font-semibold py-3 px-4 rounded-lg hover:bg-slate-200 transition-colors text-sm md:text-base border border-blue-300"
-                  >
-                    View all Courses
-                  </button>
+                    {/* Dropdown Content */}
+                    {isExpanded && (
+                      <div className="px-6 pb-6">
+                        <div className="bg-white/5 backdrop-blur-md rounded-lg p-6 border border-white/10">
+                          <div className="space-y-6">
+                            {category.items.map((item, itemIndex) => {
+                              const subtitle = 'subtitle' in item ? (item as { subtitle?: string }).subtitle : undefined
+                              return (
+                                <div key={itemIndex}>
+                                  {subtitle && (
+                                    <h4 className="text-lg font-semibold text-white mb-3 border-b border-white/20 pb-2">
+                                      {subtitle}
+                                    </h4>
+                                  )}
+                                  <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                    {item.courses.map((course, courseIndex) => (
+                                      <li
+                                        key={courseIndex}
+                                        className="text-blue-900 text-sm md:text-base flex items-start gap-2 py-2 px-3 rounded-md bg-white hover:bg-white/90 transition-colors shadow-sm"
+                                      >
+                                        <span className="text-blue-600 mt-1.5 flex-shrink-0">•</span>
+                                        <span>{course}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )
             })}
@@ -140,75 +180,6 @@ export default function CoursesPage() {
         </div>
       </section>
 
-      {/* Course Details Modal */}
-      {selectedCategory !== null && (() => {
-        const category = courseCategories[selectedCategory]
-        const Icon = category.icon
-        return (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <div className="bg-slate-900 rounded-xl border border-slate-700 max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-              {/* Modal Header */}
-              <div className={`${category.bgColor} p-6 flex items-center justify-between`}>
-                <div className="flex items-center gap-4">
-                  <div className={`p-3 rounded-lg bg-white/10 backdrop-blur-sm ${category.iconBg}`}>
-                    <Icon className="w-8 h-8 text-white" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-white">
-                    {category.displayTitle}
-                  </h2>
-                </div>
-                <button
-                  onClick={() => setSelectedCategory(null)}
-                  className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors"
-                  aria-label="Close"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-
-              {/* Modal Content */}
-              <div className="flex-1 overflow-y-auto p-6">
-                <div className="space-y-6">
-                  {category.items.map((item, itemIndex) => {
-                    const subtitle = 'subtitle' in item ? (item as { subtitle?: string }).subtitle : undefined
-                    return (
-                      <div key={itemIndex}>
-                        {subtitle && (
-                          <h3 className="text-lg font-semibold text-white mb-3">
-                            {subtitle}
-                          </h3>
-                        )}
-                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                          {item.courses.map((course, courseIndex) => (
-                            <li
-                              key={courseIndex}
-                              className="text-slate-300 text-sm md:text-base flex items-start gap-2"
-                            >
-                              <span className="text-slate-500 mt-1.5 flex-shrink-0">•</span>
-                              <span>{course}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-
-              {/* Modal Footer */}
-              <div className="p-6 border-t border-slate-700">
-                <button
-                  onClick={() => setSelectedCategory(null)}
-                  className="w-full bg-white text-slate-900 font-semibold py-3 px-4 rounded-lg hover:bg-slate-100 transition-colors"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        )
-      })()}
-
       <Footer />
     </div>
   )
@@ -219,7 +190,7 @@ const courseCategories = [
     title: "🟦 1. School (K–12) Courses",
     displayTitle: "School (K–12) Courses",
     icon: GraduationCap,
-    bgColor: "bg-gradient-to-br from-blue-700 to-blue-900",
+    bgColor: "bg-gradient-to-br from-blue-600 to-blue-800",
     iconBg: "bg-blue-500/20",
     gradient: "from-blue-600/20 to-cyan-600/20",
     border: "border-blue-400/40",
@@ -281,10 +252,10 @@ const courseCategories = [
     title: "🟩 2. University & Higher Education Courses",
     displayTitle: "University & Higher Education Courses",
     icon: BookOpen,
-    bgColor: "bg-gradient-to-br from-purple-700 to-purple-900",
-    iconBg: "bg-purple-500/20",
-    gradient: "from-green-600/20 to-emerald-600/20",
-    border: "border-green-400/40",
+    bgColor: "bg-gradient-to-br from-blue-600 to-blue-800",
+    iconBg: "bg-blue-500/20",
+    gradient: "from-blue-600/20 to-cyan-600/20",
+    border: "border-blue-400/40",
     items: [
       {
         subtitle: "Computer Science & Engineering",
@@ -357,10 +328,10 @@ const courseCategories = [
     title: "🟨 3. Languages & Test Prep",
     displayTitle: "Languages & Test Prep",
     icon: Languages,
-    bgColor: "bg-gradient-to-br from-green-700 to-green-900",
-    iconBg: "bg-green-500/20",
-    gradient: "from-yellow-600/20 to-amber-600/20",
-    border: "border-yellow-400/40",
+    bgColor: "bg-gradient-to-br from-blue-600 to-blue-800",
+    iconBg: "bg-blue-500/20",
+    gradient: "from-blue-600/20 to-cyan-600/20",
+    border: "border-blue-400/40",
     items: [
       {
         subtitle: "Language Courses",
@@ -404,10 +375,10 @@ const courseCategories = [
     title: "🟥 4. Professional Qualifications",
     displayTitle: "Professional Qualifications",
     icon: Award,
-    bgColor: "bg-gradient-to-br from-red-700 to-red-900",
-    iconBg: "bg-red-500/20",
-    gradient: "from-red-600/20 to-rose-600/20",
-    border: "border-red-400/40",
+    bgColor: "bg-gradient-to-br from-blue-600 to-blue-800",
+    iconBg: "bg-blue-500/20",
+    gradient: "from-blue-600/20 to-cyan-600/20",
+    border: "border-blue-400/40",
     items: [
       {
         courses: [
@@ -431,10 +402,10 @@ const courseCategories = [
     title: "🟧 5. Specialized Learning Programs",
     displayTitle: "Specialized Learning Programs",
     icon: Rocket,
-    bgColor: "bg-gradient-to-br from-orange-700 to-orange-900",
-    iconBg: "bg-orange-500/20",
-    gradient: "from-orange-600/20 to-red-600/20",
-    border: "border-orange-400/40",
+    bgColor: "bg-gradient-to-br from-blue-600 to-blue-800",
+    iconBg: "bg-blue-500/20",
+    gradient: "from-blue-600/20 to-cyan-600/20",
+    border: "border-blue-400/40",
     items: [
       {
         subtitle: "Technology & AI",
@@ -477,10 +448,10 @@ const courseCategories = [
     title: "🟫 6. Corporate & Workforce Training",
     displayTitle: "Corporate & Workforce Training",
     icon: Building2,
-    bgColor: "bg-gradient-to-br from-indigo-700 to-indigo-900",
-    iconBg: "bg-indigo-500/20",
-    gradient: "from-amber-600/20 to-yellow-600/20",
-    border: "border-amber-400/40",
+    bgColor: "bg-gradient-to-br from-blue-600 to-blue-800",
+    iconBg: "bg-blue-500/20",
+    gradient: "from-blue-600/20 to-cyan-600/20",
+    border: "border-blue-400/40",
     items: [
       {
         courses: [

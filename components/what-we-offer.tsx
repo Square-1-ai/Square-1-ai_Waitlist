@@ -103,7 +103,7 @@ export default function WhatWeOffer() {
     let animationFrameId: number
     let scrollPosition = 0
     let isPaused = false
-    const scrollSpeed = 0.5 // pixels per frame
+    const scrollSpeed = 2.0 // pixels per frame
 
     const animate = () => {
       if (!isPaused && scrollContainer) {
