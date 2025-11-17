@@ -8,7 +8,7 @@ import TextType from "@/components/ui/text-type"
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-blue-50">
       {/* Hero Section */}
       <section className="pt-24 sm:pt-28 md:pt-32 pb-12 md:pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
         <div className="max-w-4xl mx-auto text-center">
@@ -40,7 +40,7 @@ export default function AboutPage() {
       </section>
 
       {/* What We Are - Image Left, Text Right */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-blue-50">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Image - Left */}
@@ -111,7 +111,7 @@ export default function AboutPage() {
       </section>
 
       {/* Our Vision - Text Left, Image Right */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-cyan-50">
+      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-blue-50">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Text Content - Left */}
@@ -134,7 +134,7 @@ export default function AboutPage() {
                 size="sm"
                 align="left"
                 variant="default"
-                textClassName="text-blue-900 mb-4 font-bold"
+                textClassName="text-slate-700 leading-relaxed mb-6"
                 containerClassName="mb-6"
                 enableBlur={true}
                 baseOpacity={0.1}
@@ -182,7 +182,7 @@ export default function AboutPage() {
       </section>
 
       {/* Our Mission - Image Left, Text Right */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-blue-50">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Image - Left */}
@@ -241,7 +241,7 @@ export default function AboutPage() {
       </section>
 
       {/* How It Works - Text Left, Image Right */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 to-blue-50">
+      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-blue-50">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Text Content - Left */}
@@ -312,7 +312,7 @@ export default function AboutPage() {
       </section>
 
       {/* Why It Matters - Image Left, Text Right */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-blue-50">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Image - Left */}
@@ -371,7 +371,7 @@ export default function AboutPage() {
       </section>
 
       {/* AI-First Personalization - Text Left, Image Right */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-cyan-50">
+      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-blue-50">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Text Content - Left */}
@@ -467,7 +467,7 @@ export default function AboutPage() {
       </section>
 
       {/* Beyond Learning A Launchpad - Image Left, Text Right */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-blue-50">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Image - Left */}
@@ -512,7 +512,7 @@ export default function AboutPage() {
               
               <div className="space-y-6">
                 <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-6 border-l-4 border-blue-600">
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">Circle: the LinkedIn for Learners</h3>
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">Circle: the Powerhouse for Learners</h3>
                   <p className="text-slate-700 leading-relaxed">
                     Share achievements, join communities, and connect with employers.
                   </p>
@@ -607,7 +607,7 @@ export default function AboutPage() {
       </section>
 
       {/* Tagline Section */}
-      <section className="py-12 md:py-16 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-12 md:py-16 px-4 sm:px-6 lg:px-8 bg-blue-50">
         <div className="max-w-4xl mx-auto text-center">
           <div className="flex justify-center mb-4">
             <Image 
