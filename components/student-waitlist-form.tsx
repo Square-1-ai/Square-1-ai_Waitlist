@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState } from "react"
-import { ChevronRight, ChevronLeft, ArrowLeft } from "lucide-react"
+import { ChevronRight, ChevronLeft, ArrowLeft, AlertCircle, CheckCircle2 } from "lucide-react"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -21,9 +21,14 @@ import { Progress } from "@/components/ui/progress"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import TypingText from "@/components/ui/typing-text"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void }) {
   const [step, setStep] = useState(1)
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [submitSuccess, setSubmitSuccess] = useState(false)
   const [formData, setFormData] = useState({
     // Common Section
     fullName: "",
@@ -50,11 +55,94 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
 
   const totalSteps = 4
 
+  // Validation functions
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
+  const validateStep = (stepNumber: number): boolean => {
+    const newErrors: Record<string, string> = {}
+
+    if (stepNumber === 1) {
+      if (!formData.fullName.trim()) {
+        newErrors.fullName = "Full name is required"
+      }
+      if (!formData.email.trim()) {
+        newErrors.email = "Email is required"
+      } else if (!validateEmail(formData.email)) {
+        newErrors.email = "Please enter a valid email address"
+      }
+      if (!formData.country.trim()) {
+        newErrors.country = "Country is required"
+      }
+      if (!formData.city.trim()) {
+        newErrors.city = "City is required"
+      }
+      if (!formData.internetConnection) {
+        newErrors.internetConnection = "Internet connection quality is required"
+      }
+      if (formData.devices.length === 0) {
+        newErrors.devices = "Please select at least one device"
+      }
+      if (!formData.heardAbout) {
+        newErrors.heardAbout = "Please select how you heard about us"
+      }
+    } else if (stepNumber === 2) {
+      if (!formData.educationLevel) {
+        newErrors.educationLevel = "Education level is required"
+      }
+      if (formData.subjects.length === 0) {
+        newErrors.subjects = "Please select at least one subject"
+      }
+      if (!formData.learningPreference) {
+        newErrors.learningPreference = "Please select a learning preference"
+      }
+      if (!formData.takenOnlineCourses) {
+        newErrors.takenOnlineCourses = "Please select an option"
+      }
+      if (formData.whyInterested.length === 0) {
+        newErrors.whyInterested = "Please select at least one reason"
+      }
+      if (!formData.motivation.trim()) {
+        newErrors.motivation = "Please share what motivates you to learn"
+      }
+    } else if (stepNumber === 3) {
+      if (!formData.competitions) {
+        newErrors.competitions = "Please select an option"
+      }
+      if (!formData.hoursPerWeek) {
+        newErrors.hoursPerWeek = "Please select hours per week"
+      }
+      if (!formData.willingToPay) {
+        newErrors.willingToPay = "Please select a payment range"
+      }
+      if (formData.earlyAccess.length === 0) {
+        newErrors.earlyAccess = "Please select at least one early access option"
+      }
+    } else if (stepNumber === 4) {
+      if (!formData.consent) {
+        newErrors.consent = "Please agree to the terms to continue"
+      }
+    }
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
   const handleInputChange = (name: string, value: string) => {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }))
+    // Clear error for this field when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev }
+        delete newErrors[name]
+        return newErrors
+      })
+    }
   }
 
   const handleArrayChange = (name: "devices" | "subjects" | "whyInterested" | "earlyAccess", value: string) => {
@@ -64,20 +152,69 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
         ? prev[name].filter((item) => item !== value)
         : [...prev[name], value],
     }))
+    // Clear error for this field when user makes a selection
+    if (errors[name]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev }
+        delete newErrors[name]
+        return newErrors
+      })
+    }
   }
 
   const nextStep = () => {
-    if (step < totalSteps) setStep(step + 1)
+    if (validateStep(step)) {
+      if (step < totalSteps) {
+        setStep(step + 1)
+        setErrors({})
+      }
+    }
   }
 
   const prevStep = () => {
-    if (step > 1) setStep(step - 1)
+    if (step > 1) {
+      setStep(step - 1)
+      setErrors({})
+    }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (formData.consent) {
+    setSubmitError(null)
+
+    // Validate all steps before submission
+    for (let i = 1; i <= totalSteps; i++) {
+      if (!validateStep(i)) {
+        setStep(i)
+        setSubmitError("Please complete all required fields before submitting")
+        return
+      }
+    }
+
+    if (!formData.consent) {
+      setErrors({ consent: "Please agree to the terms to continue" })
+      setSubmitError("Please agree to the terms to continue")
+      return
+    }
+
+    setIsSubmitting(true)
+    setSubmitError(null)
+
+    try {
+      // Simulate API call - replace with actual API endpoint
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+      
+      // Call the onSubmit callback
       onSubmit()
+      setSubmitSuccess(true)
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : "Failed to submit form. Please try again."
+      )
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -144,6 +281,24 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Success/Error Alerts */}
+              {submitSuccess && (
+                <Alert className="bg-green-500/20 border-green-500/50 text-white">
+                  <CheckCircle2 className="h-4 w-4 text-green-400" />
+                  <AlertDescription className="text-white">
+                    Successfully joined the waitlist! We'll be in touch soon.
+                  </AlertDescription>
+                </Alert>
+              )}
+              {submitError && (
+                <Alert variant="destructive" className="bg-red-500/20 border-red-500/50">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription className="text-red-200">
+                    {submitError}
+                  </AlertDescription>
+                </Alert>
+              )}
+              
               {/* Step 1: Common Section */}
               {step === 1 && (
                 <div className="space-y-6 animate-fade-in">
@@ -157,8 +312,16 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         value={formData.fullName}
                         onChange={(e) => handleInputChange("fullName", e.target.value)}
                         required
-                        className="h-11 border-white/30 bg-white/20 text-white placeholder:text-white/60"
+                        className={`h-11 border-white/30 bg-white/20 text-white placeholder:text-white/60 ${
+                          errors.fullName ? "border-red-500" : ""
+                        }`}
                       />
+                      {errors.fullName && (
+                        <p className="text-sm text-red-400 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          {errors.fullName}
+                        </p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -170,8 +333,16 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         value={formData.email}
                         onChange={(e) => handleInputChange("email", e.target.value)}
                         required
-                        className="h-11 border-white/30 bg-white/20 text-white placeholder:text-white/60"
+                        className={`h-11 border-white/30 bg-white/20 text-white placeholder:text-white/60 ${
+                          errors.email ? "border-red-500" : ""
+                        }`}
                       />
+                      {errors.email && (
+                        <p className="text-sm text-red-400 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          {errors.email}
+                        </p>
+                      )}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -184,8 +355,16 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                           value={formData.country}
                           onChange={(e) => handleInputChange("country", e.target.value)}
                           required
-                          className="h-11 border-white/30 bg-white/20 text-white placeholder:text-white/60"
+                          className={`h-11 border-white/30 bg-white/20 text-white placeholder:text-white/60 ${
+                            errors.country ? "border-red-500" : ""
+                          }`}
                         />
+                        {errors.country && (
+                          <p className="text-sm text-red-400 flex items-center gap-1">
+                            <AlertCircle className="w-4 h-4" />
+                            {errors.country}
+                          </p>
+                        )}
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="city" className="text-white">City <span className="text-red-500">*</span></Label>
@@ -196,8 +375,16 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                           value={formData.city}
                           onChange={(e) => handleInputChange("city", e.target.value)}
                           required
-                          className="h-11 border-white/30 bg-white/20 text-white placeholder:text-white/60"
+                          className={`h-11 border-white/30 bg-white/20 text-white placeholder:text-white/60 ${
+                            errors.city ? "border-red-500" : ""
+                          }`}
                         />
+                        {errors.city && (
+                          <p className="text-sm text-red-400 flex items-center gap-1">
+                            <AlertCircle className="w-4 h-4" />
+                            {errors.city}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -208,7 +395,9 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("internetConnection", value)}
                         required
                       >
-                        <SelectTrigger id="internetConnection" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
+                        <SelectTrigger id="internetConnection" className={`h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100 ${
+                          errors.internetConnection ? "border-red-500" : ""
+                        }`}>
                           <SelectValue placeholder="Select your connection quality" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
@@ -217,6 +406,12 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                           <SelectItem value="weak" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Weak (limited access or unstable connection)</SelectItem>
                         </SelectContent>
                       </Select>
+                      {errors.internetConnection && (
+                        <p className="text-sm text-red-400 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          {errors.internetConnection}
+                        </p>
+                      )}
                     </div>
 
                     <div className="space-y-3">
@@ -241,6 +436,12 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                           ),
                         )}
                       </div>
+                      {errors.devices && (
+                        <p className="text-sm text-red-400 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          {errors.devices}
+                        </p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -250,7 +451,9 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("heardAbout", value)}
                         required
                       >
-                        <SelectTrigger id="heardAbout" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
+                        <SelectTrigger id="heardAbout" className={`h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100 ${
+                          errors.heardAbout ? "border-red-500" : ""
+                        }`}>
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
@@ -263,6 +466,12 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                           <SelectItem value="other" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Other</SelectItem>
                         </SelectContent>
                       </Select>
+                      {errors.heardAbout && (
+                        <p className="text-sm text-red-400 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          {errors.heardAbout}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -279,7 +488,9 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("educationLevel", value)}
                         required
                       >
-                        <SelectTrigger id="educationLevel" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
+                        <SelectTrigger id="educationLevel" className={`h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100 ${
+                          errors.educationLevel ? "border-red-500" : ""
+                        }`}>
                           <SelectValue placeholder="Select your level" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
@@ -290,6 +501,12 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                           <SelectItem value="working" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Working Professional</SelectItem>
                         </SelectContent>
                       </Select>
+                      {errors.educationLevel && (
+                        <p className="text-sm text-red-400 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          {errors.educationLevel}
+                        </p>
+                      )}
                     </div>
 
                     <div className="space-y-3">
@@ -312,6 +529,12 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                           </div>
                         ))}
                       </div>
+                      {errors.subjects && (
+                        <p className="text-sm text-red-400 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          {errors.subjects}
+                        </p>
+                      )}
                     </div>
 
                     <div className="space-y-3">
@@ -340,6 +563,12 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                           </Label>
                         </div>
                       </RadioGroup>
+                      {errors.learningPreference && (
+                        <p className="text-sm text-red-400 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          {errors.learningPreference}
+                        </p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -349,7 +578,9 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("takenOnlineCourses", value)}
                         required
                       >
-                        <SelectTrigger id="takenOnlineCourses" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
+                        <SelectTrigger id="takenOnlineCourses" className={`h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100 ${
+                          errors.takenOnlineCourses ? "border-red-500" : ""
+                        }`}>
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
@@ -357,6 +588,12 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                           <SelectItem value="no" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">No</SelectItem>
                         </SelectContent>
                       </Select>
+                      {errors.takenOnlineCourses && (
+                        <p className="text-sm text-red-400 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          {errors.takenOnlineCourses}
+                        </p>
+                      )}
                     </div>
 
                     <div className="space-y-3">
@@ -379,6 +616,12 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                           </div>
                         ))}
                       </div>
+                      {errors.whyInterested && (
+                        <p className="text-sm text-red-400 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          {errors.whyInterested}
+                        </p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -390,8 +633,16 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onChange={(e) => handleInputChange("motivation", e.target.value)}
                         required
                         rows={4}
-                        className="resize-none border-white/30 bg-white/20 text-white placeholder:text-white/60"
+                        className={`resize-none border-white/30 bg-white/20 text-white placeholder:text-white/60 ${
+                          errors.motivation ? "border-red-500" : ""
+                        }`}
                       />
+                      {errors.motivation && (
+                        <p className="text-sm text-red-400 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          {errors.motivation}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -408,7 +659,9 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("competitions", value)}
                         required
                       >
-                        <SelectTrigger id="competitions" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
+                        <SelectTrigger id="competitions" className={`h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100 ${
+                          errors.competitions ? "border-red-500" : ""
+                        }`}>
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
@@ -417,6 +670,12 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                           <SelectItem value="no" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">No</SelectItem>
                         </SelectContent>
                       </Select>
+                      {errors.competitions && (
+                        <p className="text-sm text-red-400 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          {errors.competitions}
+                        </p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -426,7 +685,9 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("hoursPerWeek", value)}
                         required
                       >
-                        <SelectTrigger id="hoursPerWeek" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
+                        <SelectTrigger id="hoursPerWeek" className={`h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100 ${
+                          errors.hoursPerWeek ? "border-red-500" : ""
+                        }`}>
                           <SelectValue placeholder="Select hours per week" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
@@ -436,6 +697,12 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                           <SelectItem value="10+" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">10+ hours</SelectItem>
                         </SelectContent>
                       </Select>
+                      {errors.hoursPerWeek && (
+                        <p className="text-sm text-red-400 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          {errors.hoursPerWeek}
+                        </p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -445,7 +712,9 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                         onValueChange={(value) => handleInputChange("willingToPay", value)}
                         required
                       >
-                        <SelectTrigger id="willingToPay" className="h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100">
+                        <SelectTrigger id="willingToPay" className={`h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100 ${
+                          errors.willingToPay ? "border-red-500" : ""
+                        }`}>
                           <SelectValue placeholder="Select a range" />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-white/30">
@@ -456,6 +725,12 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                           <SelectItem value="above10000" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Above LKR 10,000</SelectItem>
                         </SelectContent>
                       </Select>
+                      {errors.willingToPay && (
+                        <p className="text-sm text-red-400 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          {errors.willingToPay}
+                        </p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -493,6 +768,12 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                           </div>
                         ))}
                       </div>
+                      {errors.earlyAccess && (
+                        <p className="text-sm text-red-400 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          {errors.earlyAccess}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -514,7 +795,16 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                     <Checkbox
                       id="consent"
                       checked={formData.consent}
-                      onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, consent: checked === true }))}
+                      onCheckedChange={(checked) => {
+                        setFormData((prev) => ({ ...prev, consent: checked === true }))
+                        if (errors.consent) {
+                          setErrors((prev) => {
+                            const newErrors = { ...prev }
+                            delete newErrors.consent
+                            return newErrors
+                          })
+                        }
+                      }}
                       required
                       className="mt-1 border-white/30 data-[state=checked]:bg-white data-[state=checked]:text-purple-900"
                     />
@@ -522,6 +812,12 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                       I agree to receive updates, early access info, and beta invites from Square 1 Ai. <span className="text-red-500">*</span>
                     </Label>
                   </div>
+                  {errors.consent && (
+                    <p className="text-sm text-red-400 flex items-center gap-1">
+                      <AlertCircle className="w-4 h-4" />
+                      {errors.consent}
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -554,10 +850,10 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: () => void
                 {step === totalSteps && (
                   <Button
                     type="submit"
-                    disabled={!formData.consent}
+                    disabled={!formData.consent || isSubmitting}
                     className="ml-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 text-white"
                   >
-                    Join the Waitlist!
+                    {isSubmitting ? "Submitting..." : "Join the Waitlist!"}
                   </Button>
                 )}
               </div>
