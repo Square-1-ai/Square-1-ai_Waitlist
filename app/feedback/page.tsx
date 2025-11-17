@@ -3,70 +3,18 @@
 import { useState } from "react"
 import { ChevronRight } from "lucide-react"
 import Footer from "@/components/footer"
-import { ThreeDScrollTriggerContainer, ThreeDScrollTriggerRow } from "@/components/ui/three-d-scroll-trigger"
-import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 
 export default function FeedbackPage() {
   const [formData, setFormData] = useState({
     name: "",
     country: "",
     message: "",
+    aiToolsExpectation: "",
+    learningProgressTracking: "",
+    courseTypes: "",
+    favoriteCourses: "",
   })
   const [submitted, setSubmitted] = useState(false)
-  
-  // Sample feedback data - Replace with actual data from your backend
-  const existingFeedback = [
-    {
-      id: 1,
-      name: "Sarah Johnson",
-      country: "United States",
-      flag: "🇺🇸",
-      message: "The interface is incredibly intuitive! The AI-powered learning features are exactly what students need. Looking forward to the full launch!"
-    },
-    {
-      id: 2,
-      name: "Michael Chen",
-      country: "Canada",
-      flag: "🇨🇦",
-      message: "Love the concept! Would be great to see more collaborative features for group study sessions. The platform has huge potential."
-    },
-    {
-      id: 3,
-      name: "Emily Rodriguez",
-      country: "Spain",
-      flag: "🇪🇸",
-      message: "Really impressed with the personalized learning paths. The AI study packs are a game-changer for exam preparation!"
-    },
-    {
-      id: 4,
-      name: "David Park",
-      country: "South Korea",
-      flag: "🇰🇷",
-      message: "As a teacher, I'm excited about the tools for educators. The ability to create custom AI-powered content will revolutionize how we teach."
-    },
-    {
-      id: 5,
-      name: "Jessica Williams",
-      country: "United Kingdom",
-      flag: "🇬🇧",
-      message: "Amazing platform! The AI tutoring is like having a personal mentor available 24/7. This will change education forever."
-    },
-    {
-      id: 6,
-      name: "Alex Thompson",
-      country: "Australia",
-      flag: "🇦🇺",
-      message: "The competition features are fantastic for motivation. Would love to see more team challenges and collaborative projects!"
-    }
-  ]
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -88,6 +36,10 @@ export default function FeedbackPage() {
         name: "",
         country: "",
         message: "",
+        aiToolsExpectation: "",
+        learningProgressTracking: "",
+        courseTypes: "",
+        favoriteCourses: "",
       })
     }, 3000)
   }
@@ -106,206 +58,6 @@ export default function FeedbackPage() {
           <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto">
             Help us improve Square 1 Ai by sharing your thoughts, suggestions, and experiences.
           </p>
-        </div>
-      </section>
-
-      {/* Existing Feedback Section */}
-      <section className="relative pb-8 md:pb-12 px-4 sm:px-6 lg:px-8">
-        <div className="w-full mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 text-center">
-            What Others Are Saying
-          </h2>
-          <ThreeDScrollTriggerContainer>
-            <ThreeDScrollTriggerRow baseVelocity={2} direction={1} className="mb-4">
-              {existingFeedback.slice(0, 2).map((feedback) => (
-                <Dialog key={feedback.id}>
-                  <DialogTrigger asChild>
-                    <button className="bg-slate-800 backdrop-blur-sm rounded-xl border border-slate-700 p-6 hover:border-blue-500/50 transition-all duration-300 mr-4 w-[400px] flex-shrink-0 cursor-pointer text-left">
-                      <div className="mb-4">
-                        <h3 className="text-lg font-semibold text-white">{feedback.name}</h3>
-                        <p className="text-sm text-blue-400">{feedback.country}</p>
-                      </div>
-                      <p className="text-slate-300 text-sm leading-relaxed whitespace-normal">
-                        {feedback.message}
-                      </p>
-                    </button>
-                  </DialogTrigger>
-                  <DialogContent className="bg-slate-900 border-slate-700">
-                    <DialogHeader>
-                      <DialogTitle className="text-white">Send us your feedback</DialogTitle>
-                      <DialogDescription className="text-slate-400">
-                        Help us improve Square 1 Ai by sharing your thoughts and suggestions.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      <div>
-                        <input
-                          type="text"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          placeholder="Your name"
-                        />
-                      </div>
-                      <div>
-                        <input
-                          type="text"
-                          name="country"
-                          value={formData.country}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          placeholder="Your country"
-                        />
-                      </div>
-                      <div>
-                        <textarea
-                          name="message"
-                          value={formData.message}
-                          onChange={handleChange}
-                          required
-                          rows={4}
-                          className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                          placeholder="Share your thoughts, suggestions, or concerns..."
-                        />
-                      </div>
-                      <Button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
-                        Send Feedback
-                      </Button>
-                    </form>
-                  </DialogContent>
-                </Dialog>
-              ))}
-            </ThreeDScrollTriggerRow>
-            <ThreeDScrollTriggerRow baseVelocity={2} direction={-1} className="mb-4">
-              {existingFeedback.slice(2, 4).map((feedback) => (
-                <Dialog key={feedback.id}>
-                  <DialogTrigger asChild>
-                    <button className="bg-slate-800 backdrop-blur-sm rounded-xl border border-slate-700 p-6 hover:border-blue-500/50 transition-all duration-300 mr-4 w-[400px] flex-shrink-0 cursor-pointer text-left">
-                      <div className="mb-4">
-                        <h3 className="text-lg font-semibold text-white">{feedback.name}</h3>
-                        <p className="text-sm text-blue-400">{feedback.country}</p>
-                      </div>
-                      <p className="text-slate-300 text-sm leading-relaxed whitespace-normal">
-                        {feedback.message}
-                      </p>
-                    </button>
-                  </DialogTrigger>
-                  <DialogContent className="bg-slate-900 border-slate-700">
-                    <DialogHeader>
-                      <DialogTitle className="text-white">Send us your feedback</DialogTitle>
-                      <DialogDescription className="text-slate-400">
-                        Help us improve Square 1 Ai by sharing your thoughts and suggestions.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      <div>
-                        <input
-                          type="text"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          placeholder="Your name"
-                        />
-                      </div>
-                      <div>
-                        <input
-                          type="text"
-                          name="country"
-                          value={formData.country}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          placeholder="Your country"
-                        />
-                      </div>
-                      <div>
-                        <textarea
-                          name="message"
-                          value={formData.message}
-                          onChange={handleChange}
-                          required
-                          rows={4}
-                          className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                          placeholder="Share your thoughts, suggestions, or concerns..."
-                        />
-                      </div>
-                      <Button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
-                        Send Feedback
-                      </Button>
-                    </form>
-                  </DialogContent>
-                </Dialog>
-              ))}
-            </ThreeDScrollTriggerRow>
-            <ThreeDScrollTriggerRow baseVelocity={2} direction={1}>
-              {existingFeedback.slice(4).map((feedback) => (
-                <Dialog key={feedback.id}>
-                  <DialogTrigger asChild>
-                    <button className="bg-slate-800 backdrop-blur-sm rounded-xl border border-slate-700 p-6 hover:border-blue-500/50 transition-all duration-300 mr-4 w-[400px] flex-shrink-0 cursor-pointer text-left">
-                      <div className="mb-4">
-                        <h3 className="text-lg font-semibold text-white">{feedback.name}</h3>
-                        <p className="text-sm text-blue-400">{feedback.country}</p>
-                      </div>
-                      <p className="text-slate-300 text-sm leading-relaxed whitespace-normal">
-                        {feedback.message}
-                      </p>
-                    </button>
-                  </DialogTrigger>
-                  <DialogContent className="bg-slate-900 border-slate-700">
-                    <DialogHeader>
-                      <DialogTitle className="text-white">Send us your feedback</DialogTitle>
-                      <DialogDescription className="text-slate-400">
-                        Help us improve Square 1 Ai by sharing your thoughts and suggestions.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      <div>
-                        <input
-                          type="text"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          placeholder="Your name"
-                        />
-                      </div>
-                      <div>
-                        <input
-                          type="text"
-                          name="country"
-                          value={formData.country}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          placeholder="Your country"
-                        />
-                      </div>
-                      <div>
-                        <textarea
-                          name="message"
-                          value={formData.message}
-                          onChange={handleChange}
-                          required
-                          rows={4}
-                          className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                          placeholder="Share your thoughts, suggestions, or concerns..."
-                        />
-                      </div>
-                      <Button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
-                        Send Feedback
-                      </Button>
-                    </form>
-                  </DialogContent>
-                </Dialog>
-              ))}
-            </ThreeDScrollTriggerRow>
-          </ThreeDScrollTriggerContainer>
         </div>
       </section>
 
@@ -388,6 +140,70 @@ export default function FeedbackPage() {
                     rows={6}
                     className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
                     placeholder="Share your thoughts, suggestions, or concerns..."
+                  />
+                </div>
+
+                {/* AI Tools Expectation Field */}
+                <div>
+                  <label htmlFor="aiToolsExpectation" className="block text-white font-semibold mb-2">
+                    How do you expect AI tools to make your learning experience easier?
+                  </label>
+                  <textarea
+                    id="aiToolsExpectation"
+                    name="aiToolsExpectation"
+                    value={formData.aiToolsExpectation}
+                    onChange={handleChange}
+                    rows={4}
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                    placeholder="Share your expectations about AI tools in learning..."
+                  />
+                </div>
+
+                {/* Learning Progress Tracking Field */}
+                <div>
+                  <label htmlFor="learningProgressTracking" className="block text-white font-semibold mb-2">
+                    How would you like to track and monitor your learning progress?
+                  </label>
+                  <textarea
+                    id="learningProgressTracking"
+                    name="learningProgressTracking"
+                    value={formData.learningProgressTracking}
+                    onChange={handleChange}
+                    rows={4}
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                    placeholder="Describe how you'd like to track your learning progress..."
+                  />
+                </div>
+
+                {/* Course Types Field */}
+                <div>
+                  <label htmlFor="courseTypes" className="block text-white font-semibold mb-2">
+                    What types of courses are you interested in?
+                  </label>
+                  <textarea
+                    id="courseTypes"
+                    name="courseTypes"
+                    value={formData.courseTypes}
+                    onChange={handleChange}
+                    rows={4}
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                    placeholder="Tell us about the types of courses you're interested in..."
+                  />
+                </div>
+
+                {/* Favorite Courses Field */}
+                <div>
+                  <label htmlFor="favoriteCourses" className="block text-white font-semibold mb-2">
+                    Which specific courses or topics do you enjoy the most?
+                  </label>
+                  <textarea
+                    id="favoriteCourses"
+                    name="favoriteCourses"
+                    value={formData.favoriteCourses}
+                    onChange={handleChange}
+                    rows={4}
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                    placeholder="Share your favorite courses or topics..."
                   />
                 </div>
 
