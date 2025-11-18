@@ -16,7 +16,15 @@ import {
   MessageCircle,
   Sparkles,
   CheckCircle2,
-  ChevronRight
+  ChevronRight,
+  Calendar,
+  Upload,
+  UserCheck,
+  MessageSquare,
+  FileCheck,
+  BarChart3,
+  FolderKanban,
+  Star
 } from "lucide-react"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { cn } from "@/lib/utils"
@@ -65,14 +73,14 @@ export default function TeacherWaitlistPage() {
   ]
 
   const dashboardFeatures = [
-    "Schedule classes",
-    "Upload videos",
-    "Track attendance",
-    "Engage with students",
-    "Review assignments",
-    "View earnings",
-    "Manage course content",
-    "Monitor feedback and performance"
+    { icon: Calendar, title: "Schedule classes" },
+    { icon: Upload, title: "Upload videos" },
+    { icon: UserCheck, title: "Track attendance" },
+    { icon: MessageSquare, title: "Engage with students" },
+    { icon: FileCheck, title: "Review assignments" },
+    { icon: DollarSign, title: "View earnings" },
+    { icon: FolderKanban, title: "Manage course content" },
+    { icon: Star, title: "Monitor feedback and performance" }
   ]
 
   const earningMethods = [
@@ -226,7 +234,7 @@ export default function TeacherWaitlistPage() {
             {whoCanTeach.map((item, index) => (
               <div 
                 key={index}
-                className="flex items-center gap-3 p-4 bg-slate-800/50 border border-slate-700/50 rounded-lg"
+                className={`flex items-center gap-3 p-4 bg-slate-800/50 border border-slate-700/50 rounded-lg ${index === 4 ? 'md:col-span-2 md:max-w-2xl md:mx-auto' : ''}`}
               >
                 <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
                 <span className="text-slate-200 text-lg">{item}</span>
@@ -236,7 +244,7 @@ export default function TeacherWaitlistPage() {
           
           <div className="text-center p-8 bg-gradient-to-r from-blue-600/10 to-cyan-600/10 border border-blue-500/20 rounded-xl">
             <p className="text-xl text-blue-300 font-semibold">
-              If you have experience and passion — you can teach here.
+              If you have experience and passion you can teach here.
             </p>
           </div>
         </div>
@@ -269,7 +277,7 @@ export default function TeacherWaitlistPage() {
           
           <div className="text-center p-8 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl">
             <p className="text-2xl text-white font-bold">
-              👉 Your course. Your style. Your global classroom.
+               Your course. Your style. Your global classroom.
             </p>
           </div>
         </div>
@@ -293,8 +301,8 @@ export default function TeacherWaitlistPage() {
                 key={index}
                 className="p-4 bg-slate-800/50 border border-slate-700/50 rounded-lg hover:border-blue-500/50 transition-colors text-center"
               >
-                <Layout className="w-8 h-8 text-cyan-400 mx-auto mb-3" />
-                <span className="text-slate-200">{feature}</span>
+                <feature.icon className="w-8 h-8 text-cyan-400 mx-auto mb-3" />
+                <span className="text-slate-200">{feature.title}</span>
               </div>
             ))}
           </div>
@@ -329,7 +337,7 @@ export default function TeacherWaitlistPage() {
           
           <div className="text-center p-6 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-xl">
             <p className="text-lg text-blue-900 font-semibold">
-              💼 Competitive earnings with transparent revenue split.
+               Competitive earnings with transparent revenue split.
             </p>
           </div>
         </div>
@@ -358,7 +366,7 @@ export default function TeacherWaitlistPage() {
           
           <div className="text-center p-8 bg-gradient-to-r from-blue-600/10 to-cyan-600/10 border border-blue-500/20 rounded-xl">
             <p className="text-xl text-blue-300 font-semibold">
-              You teach the world — we support you.
+              You teach the world  we support you.
             </p>
           </div>
         </div>
@@ -374,74 +382,13 @@ export default function TeacherWaitlistPage() {
             Join thousands of educators building the future of learning.
           </p>
           
-          {!formSubmitted ? (
-            <div className="max-w-md mx-auto p-8 bg-slate-800/50 border border-slate-700/50 rounded-2xl backdrop-blur-sm">
-              <h3 className="text-2xl font-bold text-white mb-6">Apply to Teach on Square 1 Ai</h3>
-              <form 
-                onSubmit={(e) => {
-                  e.preventDefault()
-                  setFormSubmitted(true)
-                }}
-                className="space-y-4"
-              >
-                <input
-                  type="text"
-                  placeholder="Full Name"
-                  required
-                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-blue-500"
-                />
-                <input
-                  type="email"
-                  placeholder="Email Address"
-                  required
-                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-blue-500"
-                />
-                <input
-                  type="tel"
-                  placeholder="Phone Number"
-                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-blue-500"
-                />
-                <select
-                  required
-                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
-                >
-                  <option value="">Select Teaching Area</option>
-                  <option value="school">School (K-12)</option>
-                  <option value="university">University</option>
-                  <option value="professional">Professional/Certification</option>
-                  <option value="tech">Tech & Programming</option>
-                  <option value="business">Business & Finance</option>
-                  <option value="other">Other</option>
-                </select>
-                <textarea
-                  placeholder="Tell us about your teaching experience..."
-                  rows={4}
-                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-blue-500"
-                ></textarea>
-                <button
-                  type="submit"
-                  className="w-full py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-lg font-bold text-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
-                >
-                  Apply to Teach
-                </button>
-              </form>
-            </div>
-          ) : (
-            <div className="max-w-md mx-auto p-8 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl animate-fade-in">
-              <div className="text-6xl mb-6">🎉</div>
-              <h3 className="text-3xl font-bold text-blue-900 mb-4">Thank You for Applying!</h3>
-              <p className="text-lg text-blue-700 mb-8">
-                Welcome to the Square 1 Ai teacher community! We're excited to partner with you. You'll receive early
-                access updates and exclusive beta invites soon. Keep an eye on your inbox! 📧
-              </p>
-              <a
-                href="/"
-                className="inline-block px-8 py-3 bg-cyan-600 text-white rounded-full font-medium hover:bg-cyan-700 transition-colors"
-              >
-                Back to Home
-              </a>
-            </div>
-          )}
+          <a
+            href="/teacher-waitlist-form"
+            className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-full font-bold text-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+          >
+            Apply to Teach on Square 1 Ai
+            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </a>
         </div>
       </section>
 
