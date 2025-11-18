@@ -24,7 +24,15 @@ import {
   FileCheck,
   BarChart3,
   FolderKanban,
-  Star
+  Star,
+  GraduationCap,
+  Building2,
+  Languages,
+  FileText,
+  Code,
+  Briefcase,
+  Palette,
+  Lightbulb
 } from "lucide-react"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { cn } from "@/lib/utils"
@@ -62,14 +70,14 @@ export default function TeacherWaitlistPage() {
   ]
 
   const subjects = [
-    "School subjects (1–13)",
-    "University courses",
-    "Languages",
-    "Professional certifications (CFA, ACCA, PMP, Cloud)",
-    "Tech courses (AI, ML, Data Science, Cybersecurity)",
-    "Business & Finance",
-    "Arts, Law, Medicine",
-    "Soft skills & career skills"
+    { icon: GraduationCap, title: "School subjects (1–13)" },
+    { icon: Building2, title: "University courses" },
+    { icon: Languages, title: "Languages" },
+    { icon: FileText, title: "Professional certifications (CFA, ACCA, PMP, Cloud)" },
+    { icon: Code, title: "Tech courses (AI, ML, Data Science, Cybersecurity)" },
+    { icon: Briefcase, title: "Business & Finance" },
+    { icon: Palette, title: "Arts, Law, Medicine" },
+    { icon: Lightbulb, title: "Soft skills & career skills" }
   ]
 
   const dashboardFeatures = [
@@ -269,8 +277,8 @@ export default function TeacherWaitlistPage() {
                 key={index}
                 className="flex items-start gap-3 p-5 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border border-blue-100"
               >
-                <BookOpen className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
-                <span className="text-slate-700 font-medium">{subject}</span>
+                <subject.icon className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
+                <span className="text-slate-700 font-medium">{subject.title}</span>
               </div>
             ))}
           </div>
