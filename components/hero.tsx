@@ -112,7 +112,7 @@ export default function Hero() {
               },
               {
                 icon: Brain,
-                title: "AI Powered Learning",
+                title: "AI Powered Assessment Preparation",
                 description: "Experience intelligent, adaptive learning that evolves with you",
               },
               {

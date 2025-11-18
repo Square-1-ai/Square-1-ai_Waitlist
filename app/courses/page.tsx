@@ -1,94 +1,36 @@
 "use client"
 
 import { useState } from "react"
-import { BookOpen, Trophy, Users, Briefcase, Rocket, GraduationCap, Languages, Award, Building2, ChevronDown, ChevronUp } from "lucide-react"
+import { BookOpen, Rocket, GraduationCap, Languages, Award, Building2, ChevronDown, ChevronUp } from "lucide-react"
 import Footer from "@/components/footer"
-import Image from "next/image"
 
 export default function CoursesPage() {
   const [expandedCategory, setExpandedCategory] = useState<number | null>(null)
-  const ecosystemItems = [
-    {
-      icon: BookOpen,
-      label: "AI Study Packs",
-      gradient: "from-blue-600/20 to-cyan-600/20",
-      border: "border-blue-400/40",
-      hoverGradient: "hover:from-blue-600/30 hover:to-cyan-600/30",
-      hoverBorder: "hover:border-blue-400/60"
-    },
-    {
-      icon: Trophy,
-      label: "Projects & Competitions",
-      gradient: "from-purple-600/20 to-pink-600/20",
-      border: "border-purple-400/40",
-      hoverGradient: "hover:from-purple-600/30 hover:to-pink-600/30",
-      hoverBorder: "hover:border-purple-400/60"
-    },
-    {
-      icon: Users,
-      label: "Circle Network",
-      gradient: "from-green-600/20 to-emerald-600/20",
-      border: "border-green-400/40",
-      hoverGradient: "hover:from-green-600/30 hover:to-emerald-600/30",
-      hoverBorder: "hover:border-green-400/60"
-    },
-    {
-      icon: Briefcase,
-      label: "Career Pathways",
-      gradient: "from-orange-600/20 to-red-600/20",
-      border: "border-orange-400/40",
-      hoverGradient: "hover:from-orange-600/30 hover:to-red-600/30",
-      hoverBorder: "hover:border-orange-400/60"
-    },
-    {
-      icon: Rocket,
-      label: "Startup Incubation",
-      gradient: "from-indigo-600/20 to-violet-600/20",
-      border: "border-indigo-400/40",
-      hoverGradient: "hover:from-indigo-600/30 hover:to-violet-600/30",
-      hoverBorder: "hover:border-indigo-400/60"
-    }
-  ]
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800">
       {/* Hero Section */}
-      <section className="pt-24 sm:pt-28 md:pt-32 pb-12 md:pb-16 px-4 sm:px-6 lg:px-8">
+      <section className="pt-24 sm:pt-28 md:pt-32 pb-8 md:pb-10 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto text-center">
           {/* Main Heading */}
-          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-white mb-6 leading-tight font-bold">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-white mb-4 leading-tight font-bold">
              The World's First AI-Powered Learn-to-Launch Platform 
           </h1>
           
           {/* Subheading/Description */}
-          <p className="text-white text-lg md:text-xl lg:text-2xl max-w-4xl mx-auto leading-relaxed mb-8">
+          <p className="text-white text-lg md:text-xl lg:text-2xl max-w-4xl mx-auto leading-relaxed mb-4">
             These courses feed directly into our ecosystem: AI Study Packs, Projects & competitions, Circle (powerhouse
              for Learners), Career pathways, and Startup incubation
           </p>
 
-          {/* Ecosystem Items */}
-          <div className="flex flex-wrap justify-center gap-4 md:gap-6 mt-12">
-            {ecosystemItems.map((item, index) => {
-              const Icon = item.icon
-              return (
-                <div
-                  key={index}
-                  className={`flex items-center gap-2 px-4 py-3 rounded-lg border ${item.border} bg-gradient-to-br ${item.gradient} backdrop-blur-sm text-white transition-all ${item.hoverGradient} ${item.hoverBorder} hover:scale-105`}
-                >
-                  <Icon className="w-5 h-5" />
-                  <span className="text-sm md:text-base font-medium">{item.label}</span>
-                </div>
-              )
-            })}
-          </div>
         </div>
       </section>
 
       {/* Course Catalogue Section */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8">
+      <section className="py-8 md:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2">
                Square 1 Ai  Complete Course Catalogue
             </h2>
             <p className="text-slate-300 text-lg md:text-xl">
@@ -96,54 +38,49 @@ export default function CoursesPage() {
             </p>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             {courseCategories.map((category, index) => {
               const Icon = category.icon
               const isExpanded = expandedCategory === index
               return (
                 <div
                   key={index}
-                  className="relative rounded-xl overflow-hidden transition-all duration-300 group"
+                  className="relative rounded-xl overflow-hidden transition-all duration-300 group bg-white"
                 >
-                  {/* Glass effect background */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${category.bgColor} opacity-10`}></div>
-                  <div className="absolute inset-0 bg-white/5 backdrop-blur-xl"></div>
-                  <div className={`absolute inset-0 border ${category.border} rounded-xl`}></div>
-                  
                   <div className="relative">
                     {/* Header - Clickable */}
                     <button
                       onClick={() => setExpandedCategory(isExpanded ? null : index)}
-                      className="w-full p-6 flex items-center justify-between hover:bg-white/10 transition-all duration-300"
+                      className="w-full p-4 flex items-center justify-between hover:bg-gray-50 transition-all duration-300"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="p-3 rounded-lg bg-white shadow-lg">
+                        <div className="p-3 rounded-lg">
                           <Icon className="w-8 h-8 text-blue-600" />
                         </div>
-                        <h3 className="text-xl md:text-2xl font-bold text-white text-left">
+                        <h3 className="text-xl md:text-2xl font-bold text-blue-600 text-left">
                           {category.displayTitle}
                         </h3>
                       </div>
-                      <div className="flex-shrink-0 p-2 rounded-lg bg-white/5">
+                      <div className="flex-shrink-0 p-2 rounded-lg">
                         {isExpanded ? (
-                          <ChevronUp className="w-6 h-6 text-white" />
+                          <ChevronUp className="w-6 h-6 text-blue-600" />
                         ) : (
-                          <ChevronDown className="w-6 h-6 text-white" />
+                          <ChevronDown className="w-6 h-6 text-blue-600" />
                         )}
                       </div>
                     </button>
 
                     {/* Dropdown Content */}
                     {isExpanded && (
-                      <div className="px-6 pb-6">
-                        <div className="bg-white/5 backdrop-blur-md rounded-lg p-6 border border-white/10">
-                          <div className="space-y-6">
+                      <div className="px-4 pb-4">
+                        <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                          <div className="space-y-4">
                             {category.items.map((item, itemIndex) => {
                               const subtitle = 'subtitle' in item ? (item as { subtitle?: string }).subtitle : undefined
                               return (
                                 <div key={itemIndex}>
                                   {subtitle && (
-                                    <h4 className="text-lg font-semibold text-white mb-3 border-b border-white/20 pb-2">
+                                    <h4 className="text-lg font-semibold text-blue-600 mb-2 border-b border-blue-300 pb-1.5">
                                       {subtitle}
                                     </h4>
                                   )}
