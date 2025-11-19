@@ -1,5 +1,6 @@
 "use client"
 
+import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 import Image from "next/image"
 import { InteractiveCard } from "@/components/ui/interactive-card"
@@ -8,9 +9,10 @@ import TextType from "@/components/ui/text-type"
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-blue-50">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
+      <Navbar />
       {/* Hero Section */}
-      <section className="pt-24 sm:pt-28 md:pt-32 pb-12 md:pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
+      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-12 md:pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-white mb-6 leading-tight font-semibold">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Square 1 Ai</span> The World's First AI-Powered Learn-to-Launch Platform
@@ -40,7 +42,7 @@ export default function AboutPage() {
       </section>
 
       {/* What We Are - Image Left, Text Right */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-blue-50">
+      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-800 to-slate-900">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Image - Left */}
@@ -61,23 +63,23 @@ export default function AboutPage() {
                 size="lg"
                 align="left"
                 variant="default"
-                textClassName="text-blue-900 mb-4 font-bold"
+                textClassName="text-white mb-4 font-bold"
                 containerClassName="mb-8"
                 enableBlur={true}
-                baseOpacity={0.1}
+                baseOpacity={0.2}
                 staggerDelay={0.03}
               >
                 What We Are
               </ScrollReveal>
-              <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-cyan-400 mb-8"></div>
+              <div className="w-24 h-1 bg-gradient-to-r from-blue-400 to-cyan-400 mb-8"></div>
               <ScrollReveal
                 size="sm"
                 align="left"
                 variant="default"
-                textClassName="text-slate-700 leading-relaxed mb-6"
+                textClassName="text-slate-200 leading-relaxed mb-6"
                 containerClassName="mb-6"
                 enableBlur={true}
-                baseOpacity={0.1}
+                baseOpacity={0.2}
                 staggerDelay={0.04}
               >
                 Square 1 Ai is the world's first AI-powered Learn-to-Launch platform a personalized ecosystem where students can learn smarter, build projects faster, and launch careers or startups seamlessly.
@@ -86,10 +88,10 @@ export default function AboutPage() {
                 size="sm"
                 align="left"
                 variant="default"
-                textClassName="text-slate-700 leading-relaxed mb-6"
+                textClassName="text-slate-200 leading-relaxed mb-6"
                 containerClassName="mb-6"
                 enableBlur={true}
-                baseOpacity={0.1}
+                baseOpacity={0.2}
                 staggerDelay={0.04}
               >
                 From school to university to the workplace, Square 1 Ai unifies education, skill-building, and entrepreneurship into one continuous, AI-driven journey.
@@ -98,9 +100,9 @@ export default function AboutPage() {
                 size="sm"
                 align="left"
                 variant="default"
-                textClassName="text-slate-700 leading-relaxed"
+                textClassName="text-slate-200 leading-relaxed"
                 enableBlur={true}
-                baseOpacity={0.1}
+                baseOpacity={0.2}
                 staggerDelay={0.04}
               >
                 It's where learning doesn't stop at knowledge it evolves into creation, innovation, and opportunity.
@@ -182,7 +184,7 @@ export default function AboutPage() {
       </section>
 
       {/* Our Mission - Image Left, Text Right */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-blue-50">
+      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-800 to-slate-900">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Image - Left */}
@@ -203,23 +205,23 @@ export default function AboutPage() {
                 size="lg"
                 align="left"
                 variant="default"
-                textClassName="text-blue-900 mb-4 font-bold"
+                textClassName="text-white mb-4 font-bold"
                 containerClassName="mb-8"
                 enableBlur={true}
-                baseOpacity={0.1}
+                baseOpacity={0.2}
                 staggerDelay={0.03}
               >
                 Our Mission
               </ScrollReveal>
-              <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-cyan-400 mb-8"></div>
+              <div className="w-24 h-1 bg-gradient-to-r from-blue-400 to-cyan-400 mb-8"></div>
               <ScrollReveal
                 size="sm"
                 align="left"
                 variant="default"
-                textClassName="text-slate-700 leading-relaxed mb-6"
+                textClassName="text-slate-200 leading-relaxed mb-6"
                 containerClassName="mb-6"
                 enableBlur={true}
-                baseOpacity={0.1}
+                baseOpacity={0.2}
                 staggerDelay={0.04}
               >
                 To democratize access to world-class education through intelligent AI-driven systems that personalize learning, quantify progress, and bridge the gap between knowledge and real-world application.
@@ -228,9 +230,9 @@ export default function AboutPage() {
                 size="sm"
                 align="left"
                 variant="default"
-                textClassName="text-slate-700 leading-relaxed"
+                textClassName="text-slate-200 leading-relaxed"
                 enableBlur={true}
-                baseOpacity={0.1}
+                baseOpacity={0.2}
                 staggerDelay={0.04}
               >
                 We help learners go from classroom to career and from idea to launch using the power of data, AI, and community.
@@ -312,7 +314,7 @@ export default function AboutPage() {
       </section>
 
       {/* Why It Matters - Image Left, Text Right */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-blue-50">
+      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-800 to-slate-900">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Image - Left */}
@@ -333,23 +335,23 @@ export default function AboutPage() {
                 size="lg"
                 align="left"
                 variant="default"
-                textClassName="text-blue-900 mb-4 font-bold"
+                textClassName="text-white mb-4 font-bold"
                 containerClassName="mb-8"
                 enableBlur={true}
-                baseOpacity={0.1}
+                baseOpacity={0.2}
                 staggerDelay={0.03}
               >
                 Why It Matters
               </ScrollReveal>
-              <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-cyan-400 mb-8"></div>
+              <div className="w-24 h-1 bg-gradient-to-r from-blue-400 to-cyan-400 mb-8"></div>
               <ScrollReveal
                 size="sm"
                 align="left"
                 variant="default"
-                textClassName="text-slate-700 leading-relaxed mb-6"
+                textClassName="text-slate-200 leading-relaxed mb-6"
                 containerClassName="mb-6"
                 enableBlur={true}
-                baseOpacity={0.1}
+                baseOpacity={0.2}
                 staggerDelay={0.04}
               >
                 The education system hasn't evolved with the pace of technology until now.
@@ -358,9 +360,9 @@ export default function AboutPage() {
                 size="sm"
                 align="left"
                 variant="default"
-                textClassName="text-slate-700 leading-relaxed"
+                textClassName="text-slate-200 leading-relaxed"
                 enableBlur={true}
-                baseOpacity={0.1}
+                baseOpacity={0.2}
                 staggerDelay={0.04}
               >
                 Square 1 Ai integrates Artificial Intelligence, Adaptive Learning, and Real-World Launch Programs into one seamless experience, helping millions of learners build skills, validate knowledge, and turn learning into measurable success.
@@ -467,7 +469,7 @@ export default function AboutPage() {
       </section>
 
       {/* Beyond Learning A Launchpad - Image Left, Text Right */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-blue-50">
+      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-800 to-slate-900">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Image - Left */}
@@ -488,46 +490,46 @@ export default function AboutPage() {
                 size="lg"
                 align="left"
                 variant="default"
-                textClassName="text-blue-900 mb-4 font-bold"
+                textClassName="text-white mb-4 font-bold"
                 containerClassName="mb-8"
                 enableBlur={true}
-                baseOpacity={0.1}
+                baseOpacity={0.2}
                 staggerDelay={0.03}
               >
                 Beyond Learning A Launchpad
               </ScrollReveal>
-              <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-cyan-400 mb-8"></div>
+              <div className="w-24 h-1 bg-gradient-to-r from-blue-400 to-cyan-400 mb-8"></div>
               <ScrollReveal
                 size="sm"
                 align="left"
                 variant="default"
-                textClassName="text-slate-700 leading-relaxed mb-8"
+                textClassName="text-slate-200 leading-relaxed mb-8"
                 containerClassName="mb-8"
                 enableBlur={true}
-                baseOpacity={0.1}
+                baseOpacity={0.2}
                 staggerDelay={0.04}
               >
                 Square 1 Ai is more than a platform it's an ecosystem:
               </ScrollReveal>
               
               <div className="space-y-6">
-                <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-6 border-l-4 border-blue-600">
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">Circle: the Powerhouse for Learners</h3>
-                  <p className="text-slate-700 leading-relaxed">
+                <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6 border-l-4 border-blue-400">
+                  <h3 className="text-xl font-bold text-white mb-2">Circle: the Powerhouse for Learners</h3>
+                  <p className="text-slate-200 leading-relaxed">
                     Share achievements, join communities, and connect with employers.
                   </p>
                 </div>
                 
-                <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-6 border-l-4 border-blue-600">
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">Competitions Hub</h3>
-                  <p className="text-slate-700 leading-relaxed">
+                <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6 border-l-4 border-cyan-400">
+                  <h3 className="text-xl font-bold text-white mb-2">Competitions Hub</h3>
+                  <p className="text-slate-200 leading-relaxed">
                     A Kaggle-like challenge space where students solve real-world problems and win recognition.
                   </p>
                 </div>
                 
-                <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-6 border-l-4 border-blue-600">
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">Career & Startup Labs</h3>
-                  <p className="text-slate-700 leading-relaxed">
+                <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6 border-l-4 border-blue-400">
+                  <h3 className="text-xl font-bold text-white mb-2">Career & Startup Labs</h3>
+                  <p className="text-slate-200 leading-relaxed">
                     Direct pathways to internships, funding, and entrepreneurship.
                   </p>
                 </div>
@@ -537,10 +539,10 @@ export default function AboutPage() {
                 size="sm"
                 align="left"
                 variant="default"
-                textClassName="text-slate-700 leading-relaxed mt-8 font-semibold"
+                textClassName="text-slate-200 leading-relaxed mt-8 font-semibold"
                 containerClassName="mt-8"
                 enableBlur={true}
-                baseOpacity={0.1}
+                baseOpacity={0.2}
                 staggerDelay={0.04}
               >
                 Every learner leaves with skills, credentials, and a portfolio that speaks for itself.
