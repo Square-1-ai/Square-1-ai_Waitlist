@@ -1,6 +1,5 @@
 "use client"
 
-import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 import Image from "next/image"
 import { InteractiveCard } from "@/components/ui/interactive-card"
@@ -10,10 +9,10 @@ import TextType from "@/components/ui/text-type"
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
-      <Navbar />
       {/* Hero Section */}
-      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-12 md:pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-12 md:pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
+        <div className="mesh-gradient"></div>
+        <div className="max-w-4xl mx-auto text-center relative z-10">
           <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-white mb-6 leading-tight font-semibold">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Square 1 Ai</span> The World's First AI-Powered Learn-to-Launch Platform
           </h1>
