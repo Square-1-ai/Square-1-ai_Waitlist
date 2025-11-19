@@ -113,7 +113,7 @@ export default function AboutPage() {
       </section>
 
       {/* Our Vision - Text Left, Image Right */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-blue-50">
+      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-100">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Text Content - Left */}
@@ -123,7 +123,7 @@ export default function AboutPage() {
                 size="lg"
                 align="left"
                 variant="default"
-                textClassName="text-blue-900 mb-4 font-bold"
+                textClassName="text-transparent bg-clip-text bg-gradient-to-r from-blue-900 via-indigo-800 to-cyan-900 mb-4 font-bold"
                 containerClassName="mb-8"
                 enableBlur={true}
                 baseOpacity={0.1}
@@ -243,7 +243,7 @@ export default function AboutPage() {
       </section>
 
       {/* How It Works - Text Left, Image Right */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-blue-50">
+      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-cyan-50 via-blue-50 to-indigo-100">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Text Content - Left */}
@@ -253,7 +253,7 @@ export default function AboutPage() {
                 size="lg"
                 align="left"
                 variant="default"
-                textClassName="text-blue-900 mb-4 font-bold"
+                textClassName="text-transparent bg-clip-text bg-gradient-to-r from-blue-900 via-cyan-800 to-indigo-900 mb-4 font-bold"
                 containerClassName="mb-8"
                 enableBlur={true}
                 baseOpacity={0.1}
@@ -373,7 +373,7 @@ export default function AboutPage() {
       </section>
 
       {/* AI-First Personalization - Text Left, Image Right */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-blue-50">
+      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 via-sky-50 to-cyan-100">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Text Content - Left */}
@@ -383,7 +383,7 @@ export default function AboutPage() {
                 size="lg"
                 align="left"
                 variant="default"
-                textClassName="text-blue-900 mb-4 font-bold"
+                textClassName="text-transparent bg-clip-text bg-gradient-to-r from-blue-900 via-sky-800 to-cyan-900 mb-4 font-bold"
                 containerClassName="mb-8"
                 enableBlur={true}
                 baseOpacity={0.1}
@@ -406,34 +406,34 @@ export default function AboutPage() {
               </ScrollReveal>
               
               <div className="grid grid-cols-1 gap-6">
-                <div className="bg-white rounded-xl p-6 shadow-md">
+                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-blue-100 hover:border-blue-300 group">
                   <div className="flex items-start gap-4">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
-                    <p className="text-slate-700 leading-relaxed">
+                    <div className="w-3 h-3 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full mt-2 flex-shrink-0 group-hover:scale-125 transition-transform"></div>
+                    <p className="text-slate-700 leading-relaxed font-medium">
                       Craft individual learning paths
                     </p>
                   </div>
                 </div>
-                <div className="bg-white rounded-xl p-6 shadow-md">
+                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-cyan-100 hover:border-cyan-300 group">
                   <div className="flex items-start gap-4">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
-                    <p className="text-slate-700 leading-relaxed">
+                    <div className="w-3 h-3 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-full mt-2 flex-shrink-0 group-hover:scale-125 transition-transform"></div>
+                    <p className="text-slate-700 leading-relaxed font-medium">
                       Recommend personalized study packs, projects, and mentors
                     </p>
                   </div>
                 </div>
-                <div className="bg-white rounded-xl p-6 shadow-md">
+                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-blue-100 hover:border-blue-300 group">
                   <div className="flex items-start gap-4">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
-                    <p className="text-slate-700 leading-relaxed">
+                    <div className="w-3 h-3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mt-2 flex-shrink-0 group-hover:scale-125 transition-transform"></div>
+                    <p className="text-slate-700 leading-relaxed font-medium">
                       Track learning outcomes with predictive analytics
                     </p>
                   </div>
                 </div>
-                <div className="bg-white rounded-xl p-6 shadow-md">
+                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-cyan-100 hover:border-cyan-300 group">
                   <div className="flex items-start gap-4">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
-                    <p className="text-slate-700 leading-relaxed">
+                    <div className="w-3 h-3 bg-gradient-to-r from-cyan-600 to-sky-600 rounded-full mt-2 flex-shrink-0 group-hover:scale-125 transition-transform"></div>
+                    <p className="text-slate-700 leading-relaxed font-medium">
                       Provide real-time feedback through natural-language interaction
                     </p>
                   </div>
@@ -609,7 +609,7 @@ export default function AboutPage() {
       </section>
 
       {/* Tagline Section */}
-      <section className="py-12 md:py-16 px-4 sm:px-6 lg:px-8 bg-blue-50">
+      <section className="py-12 md:py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 via-cyan-50 to-sky-100">
         <div className="max-w-4xl mx-auto text-center">
           <div className="flex justify-center mb-4">
             <Image 
