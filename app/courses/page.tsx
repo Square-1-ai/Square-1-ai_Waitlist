@@ -55,17 +55,17 @@ export default function CoursesPage() {
                     >
                       <div className="flex items-center gap-4">
                         <div className="p-3 rounded-lg">
-                          <Icon className="w-8 h-8 text-blue-600" />
+                          <Icon className="w-8 h-8 text-blue-900" />
                         </div>
-                        <h3 className="text-xl md:text-2xl font-bold text-blue-600 text-left">
+                        <h3 className="text-xl md:text-2xl font-bold text-blue-900 text-left">
                           {category.displayTitle}
                         </h3>
                       </div>
                       <div className="flex-shrink-0 p-2 rounded-lg">
                         {isExpanded ? (
-                          <ChevronUp className="w-6 h-6 text-blue-600" />
+                          <ChevronUp className="w-6 h-6 text-blue-900" />
                         ) : (
-                          <ChevronDown className="w-6 h-6 text-blue-600" />
+                          <ChevronDown className="w-6 h-6 text-blue-900" />
                         )}
                       </div>
                     </button>
