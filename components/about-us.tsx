@@ -1,6 +1,7 @@
 "use client"
 
 import { useCountAnimation } from "@/hooks/use-count-animation"
+import { Globe } from "@/components/ui/globe"
 
 export default function AboutUs() {
   const earlyAdopters = useCountAnimation({ end: 1000, suffix: '+' })
@@ -75,8 +76,11 @@ export default function AboutUs() {
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl p-8 md:p-12">
-          <div className="grid md:grid-cols-3 gap-8 text-center">
+        <div className="relative min-h-[500px] md:min-h-[600px] flex items-center justify-center overflow-hidden">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Globe className="opacity-70" />
+          </div>
+          <div className="relative z-10 grid md:grid-cols-3 gap-8 md:gap-12 text-center w-full max-w-4xl px-4">
             <div ref={earlyAdopters.ref}>
               <div className="text-4xl md:text-5xl font-bold text-blue-600 mb-2">
                 {earlyAdopters.count === '0+' ? '0' : earlyAdopters.count === '1000+' ? '1K+' : earlyAdopters.count}
