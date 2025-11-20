@@ -7,6 +7,9 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import TextType from "@/components/ui/text-type"
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
+import { Card } from "@/components/ui/card"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Bot, MoreHorizontal, X } from "lucide-react"
 
 interface Country {
   name: string;
@@ -37,6 +40,199 @@ const countries: Country[] = [
   { name: 'Japan', x: 81, y: 35, avatar: 'https://images.unsplash.com/photo-1571270237703-6ac8a769ad7a?w=200', connections: [10, 16, 18] },
   { name: 'New Zealand', x: 86, y: 70, avatar: 'https://images.unsplash.com/photo-1584162607168-7cf2a46a57bf?w=200', connections: [16, 17] },
 ];
+
+const questions = [
+  {
+    question: "What new skills should I learn to improve my education?",
+    answer: "Learn skills like time management, reading skills, basic coding, communication, and critical thinking. These help you study smarter and understand subjects better."
+  },
+  {
+    question: "How do I learn faster?",
+    answer: "Use short study sessions, take notes, practice daily, and test yourself often. Learning in small steps makes your brain remember faster."
+  },
+  {
+    question: "How can I become good at problem-solving?",
+    answer: "Practice puzzles, break big problems into small parts, ask \"why,\" and try different solutions. The more you practice, the better you become."
+  },
+  {
+    question: "How can I improve my English speaking?",
+    answer: "Speak every day, listen to English videos, read simple books, and learn new words. Practice with friends or a chatbot to build confidence."
+  },
+  {
+    question: "How can I improve my computer skills?",
+    answer: "Start with basic typing, using the internet safely, and learning common tools like Word, Excel, and PowerPoint. Then try beginner coding or simple projects."
+  }
+];
+
+function ChatInterface() {
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [displayedAnswer, setDisplayedAnswer] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [messages, setMessages] = useState<
+    Array<{ type: 'bot' | 'user'; text: string; questionIndex: number }>
+  >([]);
+
+  const currentQuestion = questions[currentQuestionIndex];
+
+  useEffect(() => {
+    // Push bot question
+    setMessages(prev => [
+      ...prev,
+      { type: 'bot', text: currentQuestion.question, questionIndex: currentQuestionIndex }
+    ]);
+    setDisplayedAnswer('');
+    setShowAnswer(false);
+    setIsTyping(false);
+
+    // small delay, then "type" the answer
+    const questionDelay = setTimeout(() => {
+      setShowAnswer(true);
+      setIsTyping(true);
+
+      let currentIndex = 0;
+      const typingInterval = setInterval(() => {
+        if (currentIndex < currentQuestion.answer.length) {
+          setDisplayedAnswer(currentQuestion.answer.slice(0, currentIndex + 1));
+          currentIndex++;
+        } else {
+          setIsTyping(false);
+          clearInterval(typingInterval);
+        }
+      }, 30);
+    }, 500);
+
+    return () => clearTimeout(questionDelay);
+  }, [currentQuestionIndex, currentQuestion.question, currentQuestion.answer]);
+
+  // add completed user answer to messages (only once per question)
+  useEffect(() => {
+    if (!isTyping && showAnswer && displayedAnswer) {
+      setMessages(prev => {
+        const lastMessage = prev[prev.length - 1];
+        if (lastMessage && lastMessage.type === 'user' && lastMessage.questionIndex === currentQuestionIndex) {
+          return prev;
+        }
+        return [...prev, { type: 'user', text: displayedAnswer, questionIndex: currentQuestionIndex }];
+      });
+    }
+  }, [isTyping, showAnswer, displayedAnswer, currentQuestionIndex]);
+
+  // auto-advance
+  useEffect(() => {
+    if (!isTyping && showAnswer && currentQuestionIndex < questions.length - 1) {
+      const timer = setTimeout(() => {
+        setCurrentQuestionIndex(idx => idx + 1);
+      }, 2500);
+      return () => clearTimeout(timer);
+    }
+  }, [isTyping, showAnswer, currentQuestionIndex]);
+
+  // auto-scroll
+  useEffect(() => {
+    const chatArea = document.getElementById('chat-area');
+    if (chatArea) {
+      chatArea.scrollTop = chatArea.scrollHeight;
+    }
+  }, [messages, displayedAnswer]);
+
+  return (
+    <div className="w-full max-w-md mx-auto">
+      <Card className="overflow-hidden shadow-xl">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-blue-500 to-cyan-500 p-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Avatar className="w-12 h-12 bg-white">
+              <AvatarFallback className="bg-blue-600 text-white">
+                <Bot className="w-6 h-6" />
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <h2 className="text-white">EduBot</h2>
+              <p className="text-blue-100 flex items-center gap-2">
+                <span className="w-2 h-2 bg-green-400 rounded-full" />
+                Online Now
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <button className="text-white hover:bg-blue-600 p-2 rounded">
+              <MoreHorizontal className="w-5 h-5" />
+            </button>
+            <button className="text-white hover:bg-blue-600 p-2 rounded">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Chat Area */}
+        <div id="chat-area" className="bg-white p-6 h-[500px] overflow-y-auto space-y-6 scrollbar-hide">
+          {messages.map((message, index) =>
+            message.type === 'bot' ? (
+              <div key={`msg-${index}`} className="flex gap-3">
+                <Avatar className="w-10 h-10 flex-shrink-0">
+                  <AvatarFallback className="bg-blue-600 text-white">
+                    <Bot className="w-5 h-5" />
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="text-gray-500 mb-2">EduBot</p>
+                  <div className="bg-gray-100 rounded-2xl rounded-tl-none p-4 max-w-sm">
+                    <p className="text-gray-800">{message.text}</p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div key={`msg-${index}`} className="flex justify-end">
+                <div className="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl rounded-tr-none p-4 max-w-sm">
+                  <p className="text-white">{message.text}</p>
+                </div>
+              </div>
+            )
+          )}
+
+          {/* Current typing user answer */}
+          {showAnswer && isTyping && (
+            <div className="flex justify-end">
+              <div className="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl rounded-tr-none p-4 max-w-sm">
+                <p className="text-white">
+                  {displayedAnswer}
+                  <span className="inline-block w-1 h-4 bg-white ml-1 animate-pulse" />
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="bg-gray-50 p-4 border-t">
+          <div className="flex items-center justify-between mb-2">
+            <input
+              type="text"
+              placeholder="Reply to EduBot..."
+              className="flex-1 bg-white border border-gray-200 rounded-full px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              disabled
+            />
+          </div>
+
+          {/* Progress Indicators */}
+          <div className="flex justify-center gap-2 mt-3">
+            {questions.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentQuestionIndex(index)}
+                className={`w-2 h-2 rounded-full transition-all ${
+                  index === currentQuestionIndex ? 'bg-blue-600 w-6' : 'bg-gray-300 hover:bg-gray-400'
+                }`}
+                aria-label={`Go to question ${index + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
+}
 
 function GlobalConnectionMap() {
   const [animationStage, setAnimationStage] = useState(0);
@@ -561,13 +757,7 @@ export default function AboutPage() {
 
             {/* Image - Right */}
             <div className="order-2">
-              <Image 
-                src="/about_pics/personalization.png" 
-                alt="AI-First Personalization" 
-                width={500}
-                height={350}
-                className="w-full h-auto max-w-md md:ml-8"
-              />
+              <ChatInterface />
             </div>
           </div>
         </div>
