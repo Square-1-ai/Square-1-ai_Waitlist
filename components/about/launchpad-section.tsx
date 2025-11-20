@@ -8,13 +8,61 @@ export function LaunchpadSection() {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Image - Left */}
           <div className="order-2 md:order-1">
-            <Image 
-              src="/about_pics/ecosystem.png" 
-              alt="Beyond Learning A Launchpad" 
-              width={500}
-              height={350}
-              className="w-full h-auto max-w-md"
-            />
+            <div className="relative w-full aspect-square flex items-center justify-center">
+              {/* Trophy in center */}
+              <div className="relative z-10 w-48 h-48 md:w-64 md:h-64 flex items-center justify-center">
+                <Image 
+                  src="/cup.png" 
+                  alt="Trophy" 
+                  width={225} 
+                  height={225}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+
+              {/* Top - achievements */}
+              <div className="absolute top-[8%] left-1/2 -translate-x-1/2">
+                <div className="bg-gradient-to-r from-blue-400 to-cyan-400 text-white px-4 md:px-6 py-2 md:py-3 rounded-full shadow-lg transform hover:scale-105 transition-transform">
+                  <span className="uppercase tracking-wider text-xs md:text-sm font-semibold">achievements</span>
+                </div>
+              </div>
+
+              {/* Right - communities */}
+              <div className="absolute right-[0%] top-1/2 -translate-y-1/2">
+                <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 md:px-6 py-2 md:py-3 rounded-full shadow-lg transform hover:scale-105 transition-transform">
+                  <span className="uppercase tracking-wider text-xs md:text-sm font-semibold">communities</span>
+                </div>
+              </div>
+
+              {/* Bottom Right - internships */}
+              <div className="absolute bottom-[12%] right-[15%]">
+                <div className="bg-gradient-to-r from-blue-400 to-cyan-400 text-white px-4 md:px-6 py-2 md:py-3 rounded-full shadow-lg transform hover:scale-105 transition-transform">
+                  <span className="uppercase tracking-wider text-xs md:text-sm font-semibold">internships</span>
+                </div>
+              </div>
+
+              {/* Bottom Left - funding */}
+              <div className="absolute bottom-[12%] left-[15%]">
+                <div className="bg-gradient-to-r from-cyan-400 to-blue-500 text-white px-4 md:px-6 py-2 md:py-3 rounded-full shadow-lg transform hover:scale-105 transition-transform">
+                  <span className="uppercase tracking-wider text-xs md:text-sm font-semibold">funding</span>
+                </div>
+              </div>
+
+              {/* Left - startups */}
+              <div className="absolute left-[2%] top-1/2 -translate-y-1/2">
+                <div className="bg-gradient-to-r from-cyan-500 to-blue-400 text-white px-4 md:px-6 py-2 md:py-3 rounded-full shadow-lg transform hover:scale-105 transition-transform">
+                  <span className="uppercase tracking-wider text-xs md:text-sm font-semibold">startups</span>
+                </div>
+              </div>
+
+              {/* Decorative circles */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="w-56 h-56 md:w-72 md:h-72 rounded-full border-2 border-blue-400/30"></div>
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="w-64 h-64 md:w-80 md:h-80 rounded-full border-2 border-cyan-400/20"></div>
+              </div>
+            </div>
           </div>
           
           {/* Text Content - Right */}
