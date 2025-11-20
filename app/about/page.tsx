@@ -301,7 +301,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Image - Left */}
-            <div className="order-2 md:order-1">
+            <div className="order-2 md:order-1 flex justify-start">
               <GlobalConnectionMap />
             </div>
             
