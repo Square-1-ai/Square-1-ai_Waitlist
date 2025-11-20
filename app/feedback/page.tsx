@@ -103,24 +103,19 @@ export default function FeedbackPage() {
     setError(null)
 
     try {
-      // TODO: Replace with your actual API endpoint
-      // const response = await fetch("/api/feedback", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(formData),
-      // })
+      const response = await fetch("/api/feedback/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
 
-      // if (!response.ok) {
-      //   throw new Error("Failed to submit feedback. Please try again.")
-      // }
+      const data = await response.json()
 
-      // Simulate API call for now
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      // For now, just log to console
-      console.log("Feedback submitted:", formData)
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to submit feedback. Please try again.")
+      }
 
       setSubmitted(true)
 

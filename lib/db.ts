@@ -1,6 +1,5 @@
 import mysql from 'mysql2/promise';
 
-// Parse the connection URL properly
 const connectionUrl = process.env.RAILWAY_DB_URL || 'mysql://root:password@localhost:3306/waitlist';
 
 const pool = mysql.createPool({

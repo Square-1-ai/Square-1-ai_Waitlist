@@ -183,7 +183,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
           body: JSON.stringify({ email: formData.email, type: 'student' }),
         });
         const result = await checkRes.json();
-        
+
         if (checkRes.ok && result.exists) {
           // Email already registered, go to thank you page
           alert('This email is already registered. Redirecting to your referral info...');
@@ -195,13 +195,11 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
         console.error('Email check error:', err);
       }
     }
-    
-    if (step < totalSteps) setStep(step + 1)
-  const nextStep = () => {
+
     if (validateStep(step)) {
       if (step < totalSteps) {
-        setStep(step + 1)
-        setErrors({})
+        setStep(step + 1);
+        setErrors({});
       }
     }
   }
@@ -241,42 +239,6 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
     } catch (err) {
       console.error('Submission error:', err);
       alert('Network error. Please check your connection and try again.');
-    e.preventDefault()
-    setSubmitError(null)
-
-    // Validate all steps before submission
-    for (let i = 1; i <= totalSteps; i++) {
-      if (!validateStep(i)) {
-        setStep(i)
-        setSubmitError("Please complete all required fields before submitting")
-        return
-      }
-    }
-
-    if (!formData.consent) {
-      setErrors({ consent: "Please agree to the terms to continue" })
-      setSubmitError("Please agree to the terms to continue")
-      return
-    }
-
-    setIsSubmitting(true)
-    setSubmitError(null)
-
-    try {
-      // Simulate API call - replace with actual API endpoint
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-      
-      // Call the onSubmit callback
-      onSubmit(formData)
-      setSubmitSuccess(true)
-    } catch (error) {
-      setSubmitError(
-        error instanceof Error
-          ? error.message
-          : "Failed to submit form. Please try again."
-      )
-    } finally {
-      setIsSubmitting(false)
     }
   }
 

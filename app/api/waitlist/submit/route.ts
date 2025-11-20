@@ -1,38 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 
-// Email validation regex
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// Validate email format
-function isValidEmail(email: string): boolean {
-  return EMAIL_REGEX.test(email);
-}
-
-// Sanitize string input
 function sanitizeString(input: string | undefined | null): string {
   if (!input) return '';
-  return String(input).trim().slice(0, 500); // Limit length
+  return String(input).trim().slice(0, 500);
 }
 
-function validateStudent(data: any): { valid: boolean; error?: string } {
+function validateWaitlistData(data: any): { valid: boolean; error?: string } {
   if (!data.fullName || sanitizeString(data.fullName).length < 2) {
     return { valid: false, error: 'Full name is required (minimum 2 characters)' };
   }
-  if (!data.email || !isValidEmail(data.email)) {
-    return { valid: false, error: 'Valid email is required' };
-  }
-  if (!data.consent) {
-    return { valid: false, error: 'Consent is required' };
-  }
-  return { valid: true };
-}
-
-function validateTeacher(data: any): { valid: boolean; error?: string } {
-  if (!data.fullName || sanitizeString(data.fullName).length < 2) {
-    return { valid: false, error: 'Full name is required (minimum 2 characters)' };
-  }
-  if (!data.email || !isValidEmail(data.email)) {
+  if (!data.email || !EMAIL_REGEX.test(data.email)) {
     return { valid: false, error: 'Valid email is required' };
   }
   if (!data.consent) {
@@ -42,8 +22,7 @@ function validateTeacher(data: any): { valid: boolean; error?: string } {
 }
 
 export async function POST(req: NextRequest) {
-    // Table creation SQLs (copied from migration script)
-    const studentTableSQL = `
+  const studentTableSQL = `
     CREATE TABLE IF NOT EXISTS students (
       id INT AUTO_INCREMENT PRIMARY KEY,
       full_name VARCHAR(100) NOT NULL,
@@ -104,7 +83,6 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { type, data } = body;
 
-    // Validate type
     if (type !== 'student' && type !== 'teacher') {
       return NextResponse.json(
         { error: 'Invalid submission type' },
@@ -112,10 +90,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Validate data based on type
-    const validation = type === 'student' 
-      ? validateStudent(data) 
-      : validateTeacher(data);
+    const validation = validateWaitlistData(data);
 
     if (!validation.valid) {
       return NextResponse.json(
@@ -124,13 +99,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Sanitize email
     const sanitizedEmail = sanitizeString(data.email).toLowerCase();
 
     if (type === 'student') {
-      // Ensure students table exists
       await query(studentTableSQL);
-      // Insert student data
       await query(
         `INSERT INTO students (
           full_name, email, country, city, internet_connection, devices, 
@@ -161,9 +133,7 @@ export async function POST(req: NextRequest) {
         ]
       );
     } else {
-      // Ensure teachers table exists
       await query(teacherTableSQL);
-      // Insert teacher data
       await query(
         `INSERT INTO teachers (
           full_name, email, country, city, internet_connection, devices, 
@@ -205,7 +175,6 @@ export async function POST(req: NextRequest) {
   } catch (error: any) {
     console.error('Waitlist submission error:', error);
 
-    // Handle duplicate email
     if (error.code === 'ER_DUP_ENTRY') {
       return NextResponse.json(
         { error: 'This email is already registered on the waitlist' },
@@ -213,9 +182,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Handle other database errors
     return NextResponse.json(
-      { error: 'Failed to submit. Please try again later.' },
+      { error: 'Something went wrong, Please try again later' },
       { status: 500 }
     );
   }

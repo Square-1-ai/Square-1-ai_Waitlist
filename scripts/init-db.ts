@@ -57,20 +57,39 @@ CREATE TABLE IF NOT EXISTS teachers (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 `;
 
+const feedbackTableSQL = `
+CREATE TABLE IF NOT EXISTS feedback (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  country VARCHAR(100) NOT NULL,
+  message TEXT NOT NULL,
+  ai_tools_expectation TEXT,
+  learning_progress_tracking TEXT,
+  course_types TEXT,
+  favorite_courses TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_created_at (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+`;
+
 async function initDatabase() {
   try {
     console.log('Creating students table...');
     await query(studentTableSQL);
-    console.log('✓ Students table created');
+    console.log('Students table created');
 
     console.log('Creating teachers table...');
     await query(teacherTableSQL);
-    console.log('✓ Teachers table created');
+    console.log('Teachers table created');
 
-    console.log('\n✅ Database initialized successfully!');
+    console.log('Creating feedback table...');
+    await query(feedbackTableSQL);
+    console.log('Feedback table created');
+
+    console.log('\n Database initialized successfully!');
     process.exit(0);
   } catch (error) {
-    console.error('❌ Database initialization failed:', error);
+    console.error(' Database initialization failed:', error);
     process.exit(1);
   }
 }

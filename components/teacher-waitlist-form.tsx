@@ -183,104 +183,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
   const nextStep = () => setStep((s: number) => Math.min(s + 1, totalSteps));
   const prevStep = () => setStep((s: number) => Math.max(s - 1, 1));
 
-  {/* Video upload removed */}
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.consent) {
-      alert('Please accept the terms and conditions to continue.');
-      return;
-    }
-    
-    try {
-      const res = await fetch('/api/waitlist/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'teacher', data: formData }),
-      });
-      
-      const result = await res.json();
-      
-      if (res.ok) {
-        onSubmit();
-      } else {
-        alert(result.error || 'Submission failed. Please try again.');
-      }
-    } catch (err) {
-      console.error('Submission error:', err);
-      alert('Network error. Please check your connection and try again.');
-
-  const handleArrayChange = (name: "devices" | "earlyAccess", value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: prev[name].includes(value)
-        ? prev[name].filter((item) => item !== value)
-        : [...prev[name], value],
-    }))
-    // Clear error for this field when user makes a selection
-    if (errors[name]) {
-      setErrors((prev) => {
-        const newErrors = { ...prev }
-        delete newErrors[name]
-        return newErrors
-      })
-    }
-  }
-
-  const nextStep = () => {
-    if (validateStep(step)) {
-      if (step < totalSteps) {
-        setStep(step + 1)
-        setErrors({})
-      }
-    }
-  }
-
-  const prevStep = () => {
-    if (step > 1) {
-      setStep(step - 1)
-      setErrors({})
-    }
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setSubmitError(null)
-
-    // Validate all steps before submission
-    for (let i = 1; i <= totalSteps; i++) {
-      if (!validateStep(i)) {
-        setStep(i)
-        setSubmitError("Please complete all required fields before submitting")
-        return
-      }
-    }
-
-    if (!formData.consent) {
-      setErrors({ consent: "Please agree to the terms to continue" })
-      setSubmitError("Please agree to the terms to continue")
-      return
-    }
-
-    setIsSubmitting(true)
-    setSubmitError(null)
-
-    try {
-      // Simulate API call - replace with actual API endpoint
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-      
-      // Call the onSubmit callback
-      onSubmit()
-      setSubmitSuccess(true)
-    } catch (error) {
-      setSubmitError(
-        error instanceof Error
-          ? error.message
-          : "Failed to submit form. Please try again."
-      )
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+  // Video upload removed
   const getProgressPercentage = () => {
     return (step / totalSteps) * 100
   }
@@ -300,6 +203,81 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
     "Marketing tools for teachers",
     "Revenue insights",
   ]
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmitError(null);
+
+    // Validate current step before proceeding
+    if (!validateStep(step)) {
+      return;
+    }
+
+    // If not on last step, go to next step
+    if (step < totalSteps) {
+      nextStep();
+      return;
+    }
+
+    // On last step, submit the form
+    setIsSubmitting(true);
+    try {
+      // Prepare form data for submission
+      const data = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        if (key === "teachingSample" && value instanceof File) {
+          data.append(key, value);
+        } else if (Array.isArray(value)) {
+          value.forEach((v) => data.append(key, v));
+        } else {
+          data.append(key, value as string);
+        }
+      });
+
+      // Replace with your API endpoint
+      const response = await fetch("/api/teacher-waitlist", {
+        method: "POST",
+        body: data,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || "Submission failed. Please try again.");
+      }
+
+      setSubmitSuccess(true);
+      setFormData({
+        fullName: "",
+        email: "",
+        country: "",
+        city: "",
+        internetConnection: "",
+        devices: [],
+        heardAbout: "",
+        subjects: "",
+        teachingLevel: "",
+        yearsExperience: "",
+        classTypePreference: "",
+        taughtOnline: "",
+        platformsUsed: "",
+        curriculums: "",
+        createStudyPacks: "",
+        availabilityToStart: "",
+        revenueSplit: "",
+        paymentMethod: "",
+        earlyAccess: [],
+        consent: false,
+        teachingSample: undefined,
+      });
+      if (typeof onSubmit === "function") {
+        onSubmit();
+      }
+    } catch (error: any) {
+      setSubmitError(error.message || "An unexpected error occurred.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
     <section className="py-8 md:py-12 px-4 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800 min-h-screen relative overflow-hidden">
