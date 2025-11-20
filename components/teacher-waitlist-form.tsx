@@ -47,6 +47,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
   paymentMethod: "",
   earlyAccess: [] as string[],
   consent: false,
+  teachingSample: undefined as File | undefined,
   })
 
   const totalSteps = 4
@@ -102,10 +103,18 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
       alert('Network error. Please check your connection and try again.');
     }
   }
-
   const getProgressPercentage = () => {
     return (step / totalSteps) * 100
   }
+
+  // Handle file input for teaching sample
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+    setFormData((prev) => ({
+      ...prev,
+      teachingSample: file || undefined,
+    }));
+  };
 
   const earlyAccessOptions = [
     "Teacher dashboard preview",
