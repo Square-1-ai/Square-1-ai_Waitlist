@@ -1,101 +1,153 @@
 "use client"
 
 import { useState } from "react"
-import { ChevronRight } from "lucide-react"
+import { ChevronRight, ChevronDown } from "lucide-react"
 import Footer from "@/components/footer"
-import { ThreeDScrollTriggerContainer, ThreeDScrollTriggerRow } from "@/components/ui/three-d-scroll-trigger"
-import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+
+const COUNTRIES = [
+  "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
+  "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan",
+  "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia",
+  "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica",
+  "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt",
+  "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon",
+  "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana",
+  "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel",
+  "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kuwait",
+  "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg",
+  "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico",
+  "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru",
+  "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Macedonia", "Norway", "Oman", "Pakistan",
+  "Palau", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar",
+  "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia",
+  "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa",
+  "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan",
+  "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu",
+  "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela",
+  "Vietnam", "Yemen", "Zambia", "Zimbabwe"
+].sort()
 
 export default function FeedbackPage() {
   const [formData, setFormData] = useState({
     name: "",
     country: "",
     message: "",
+    aiToolsExpectation: "",
+    learningProgressTracking: "",
+    courseTypes: "",
+    favoriteCourses: "",
   })
   const [submitted, setSubmitted] = useState(false)
-  
-  // Sample feedback data - Replace with actual data from your backend
-  const existingFeedback = [
-    {
-      id: 1,
-      name: "Sarah Johnson",
-      rating: 5,
-      category: "UI/UX Feedback",
-      message: "The interface is incredibly intuitive! The AI-powered learning features are exactly what students need. Looking forward to the full launch!",
-      date: "2 days ago"
-    },
-    {
-      id: 2,
-      name: "Michael Chen",
-      rating: 5,
-      category: "Feature Request",
-      message: "Love the concept! Would be great to see more collaborative features for group study sessions. The platform has huge potential.",
-      date: "5 days ago"
-    },
-    {
-      id: 3,
-      name: "Emily Rodriguez",
-      rating: 4,
-      category: "General Feedback",
-      message: "Really impressed with the personalized learning paths. The AI study packs are a game-changer for exam preparation!",
-      date: "1 week ago"
-    },
-    {
-      id: 4,
-      name: "David Park",
-      rating: 5,
-      category: "Content Suggestion",
-      message: "As a teacher, I'm excited about the tools for educators. The ability to create custom AI-powered content will revolutionize how we teach.",
-      date: "1 week ago"
-    },
-    {
-      id: 5,
-      name: "Jessica Williams",
-      rating: 5,
-      category: "General Feedback",
-      message: "Amazing platform! The AI tutoring is like having a personal mentor available 24/7. This will change education forever.",
-      date: "2 weeks ago"
-    },
-    {
-      id: 6,
-      name: "Alex Thompson",
-      rating: 4,
-      category: "Feature Request",
-      message: "The competition features are fantastic for motivation. Would love to see more team challenges and collaborative projects!",
-      date: "2 weeks ago"
-    }
-  ]
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     })
+    // Clear field error when user starts typing
+    if (fieldErrors[name]) {
+      setFieldErrors({
+        ...fieldErrors,
+        [name]: "",
+      })
+    }
+    // Clear general error
+    if (error) {
+      setError(null)
+    }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validateForm = (): boolean => {
+    const errors: Record<string, string> = {}
+
+    if (!formData.name.trim()) {
+      errors.name = "Name is required"
+    }
+
+    if (!formData.country.trim()) {
+      errors.country = "Country is required"
+    }
+
+    if (!formData.message.trim()) {
+      errors.message = "Feedback message is required"
+    }
+
+    if (formData.name.trim().length < 2) {
+      errors.name = "Name must be at least 2 characters"
+    }
+
+    if (formData.message.trim().length < 10) {
+      errors.message = "Feedback message must be at least 10 characters"
+    }
+
+    setFieldErrors(errors)
+    return Object.keys(errors).length === 0
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission here
-    console.log("Feedback submitted:", formData)
-    setSubmitted(true)
-    
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setSubmitted(false)
-      setFormData({
-        name: "",
-        country: "",
-        message: "",
-      })
-    }, 3000)
+    setError(null)
+    setFieldErrors({})
+
+    // Validate form
+    if (!validateForm()) {
+      setError("Please fix the errors in the form before submitting.")
+      return
+    }
+
+    setIsSubmitting(true)
+    setError(null)
+
+    try {
+      // TODO: Replace with your actual API endpoint
+      // const response = await fetch("/api/feedback", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(formData),
+      // })
+
+      // if (!response.ok) {
+      //   throw new Error("Failed to submit feedback. Please try again.")
+      // }
+
+      // Simulate API call for now
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
+      // For now, just log to console
+      console.log("Feedback submitted:", formData)
+
+      setSubmitted(true)
+
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setSubmitted(false)
+        setFormData({
+          name: "",
+          country: "",
+          message: "",
+          aiToolsExpectation: "",
+          learningProgressTracking: "",
+          courseTypes: "",
+          favoriteCourses: "",
+        })
+        setFieldErrors({})
+        setError(null)
+      }, 3000)
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "An error occurred while submitting your feedback. Please try again."
+      )
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -115,242 +167,6 @@ export default function FeedbackPage() {
         </div>
       </section>
 
-      {/* Existing Feedback Section */}
-      <section className="relative pb-8 md:pb-12 px-4 sm:px-6 lg:px-8">
-        <div className="w-full mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 text-center">
-            What Others Are Saying
-          </h2>
-          <ThreeDScrollTriggerContainer>
-            <ThreeDScrollTriggerRow baseVelocity={2} direction={1} className="mb-4">
-              {existingFeedback.slice(0, 2).map((feedback) => (
-                <Dialog key={feedback.id}>
-                  <DialogTrigger asChild>
-                    <button className="bg-slate-800 backdrop-blur-sm rounded-xl border border-slate-700 p-6 hover:border-blue-500/50 transition-all duration-300 mr-4 w-[400px] flex-shrink-0 cursor-pointer text-left">
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <h3 className="text-lg font-semibold text-white">{feedback.name}</h3>
-                          <p className="text-sm text-slate-400">{feedback.date}</p>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          {Array.from({ length: feedback.rating }).map((_, i) => (
-                            <span key={i} className="text-yellow-400">⭐</span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="mb-3">
-                        <span className="inline-block px-3 py-1 bg-blue-500/20 text-blue-300 text-xs font-medium rounded-full">
-                          {feedback.category}
-                        </span>
-                      </div>
-                      <p className="text-slate-300 text-sm leading-relaxed whitespace-normal">
-                        {feedback.message}
-                      </p>
-                    </button>
-                  </DialogTrigger>
-                  <DialogContent className="bg-slate-900 border-slate-700">
-                    <DialogHeader>
-                      <DialogTitle className="text-white">Send us your feedback</DialogTitle>
-                      <DialogDescription className="text-slate-400">
-                        Help us improve Square 1 Ai by sharing your thoughts and suggestions.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      <div>
-                        <input
-                          type="text"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          placeholder="Your name"
-                        />
-                      </div>
-                      <div>
-                        <input
-                          type="text"
-                          name="country"
-                          value={formData.country}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          placeholder="Your country"
-                        />
-                      </div>
-                      <div>
-                        <textarea
-                          name="message"
-                          value={formData.message}
-                          onChange={handleChange}
-                          required
-                          rows={4}
-                          className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                          placeholder="Share your thoughts, suggestions, or concerns..."
-                        />
-                      </div>
-                      <Button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
-                        Send Feedback
-                      </Button>
-                    </form>
-                  </DialogContent>
-                </Dialog>
-              ))}
-            </ThreeDScrollTriggerRow>
-            <ThreeDScrollTriggerRow baseVelocity={2} direction={-1} className="mb-4">
-              {existingFeedback.slice(2, 4).map((feedback) => (
-                <Dialog key={feedback.id}>
-                  <DialogTrigger asChild>
-                    <button className="bg-slate-800 backdrop-blur-sm rounded-xl border border-slate-700 p-6 hover:border-blue-500/50 transition-all duration-300 mr-4 w-[400px] flex-shrink-0 cursor-pointer text-left">
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <h3 className="text-lg font-semibold text-white">{feedback.name}</h3>
-                          <p className="text-sm text-slate-400">{feedback.date}</p>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          {Array.from({ length: feedback.rating }).map((_, i) => (
-                            <span key={i} className="text-yellow-400">⭐</span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="mb-3">
-                        <span className="inline-block px-3 py-1 bg-blue-500/20 text-blue-300 text-xs font-medium rounded-full">
-                          {feedback.category}
-                        </span>
-                      </div>
-                      <p className="text-slate-300 text-sm leading-relaxed whitespace-normal">
-                        {feedback.message}
-                      </p>
-                    </button>
-                  </DialogTrigger>
-                  <DialogContent className="bg-slate-900 border-slate-700">
-                    <DialogHeader>
-                      <DialogTitle className="text-white">Send us your feedback</DialogTitle>
-                      <DialogDescription className="text-slate-400">
-                        Help us improve Square 1 Ai by sharing your thoughts and suggestions.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      <div>
-                        <input
-                          type="text"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          placeholder="Your name"
-                        />
-                      </div>
-                      <div>
-                        <input
-                          type="text"
-                          name="country"
-                          value={formData.country}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          placeholder="Your country"
-                        />
-                      </div>
-                      <div>
-                        <textarea
-                          name="message"
-                          value={formData.message}
-                          onChange={handleChange}
-                          required
-                          rows={4}
-                          className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                          placeholder="Share your thoughts, suggestions, or concerns..."
-                        />
-                      </div>
-                      <Button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
-                        Send Feedback
-                      </Button>
-                    </form>
-                  </DialogContent>
-                </Dialog>
-              ))}
-            </ThreeDScrollTriggerRow>
-            <ThreeDScrollTriggerRow baseVelocity={2} direction={1}>
-              {existingFeedback.slice(4).map((feedback) => (
-                <Dialog key={feedback.id}>
-                  <DialogTrigger asChild>
-                    <button className="bg-slate-800 backdrop-blur-sm rounded-xl border border-slate-700 p-6 hover:border-blue-500/50 transition-all duration-300 mr-4 w-[400px] flex-shrink-0 cursor-pointer text-left">
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <h3 className="text-lg font-semibold text-white">{feedback.name}</h3>
-                          <p className="text-sm text-slate-400">{feedback.date}</p>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          {Array.from({ length: feedback.rating }).map((_, i) => (
-                            <span key={i} className="text-yellow-400">⭐</span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="mb-3">
-                        <span className="inline-block px-3 py-1 bg-blue-500/20 text-blue-300 text-xs font-medium rounded-full">
-                          {feedback.category}
-                        </span>
-                      </div>
-                      <p className="text-slate-300 text-sm leading-relaxed whitespace-normal">
-                        {feedback.message}
-                      </p>
-                    </button>
-                  </DialogTrigger>
-                  <DialogContent className="bg-slate-900 border-slate-700">
-                    <DialogHeader>
-                      <DialogTitle className="text-white">Send us your feedback</DialogTitle>
-                      <DialogDescription className="text-slate-400">
-                        Help us improve Square 1 Ai by sharing your thoughts and suggestions.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      <div>
-                        <input
-                          type="text"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          placeholder="Your name"
-                        />
-                      </div>
-                      <div>
-                        <input
-                          type="text"
-                          name="country"
-                          value={formData.country}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          placeholder="Your country"
-                        />
-                      </div>
-                      <div>
-                        <textarea
-                          name="message"
-                          value={formData.message}
-                          onChange={handleChange}
-                          required
-                          rows={4}
-                          className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                          placeholder="Share your thoughts, suggestions, or concerns..."
-                        />
-                      </div>
-                      <Button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
-                        Send Feedback
-                      </Button>
-                    </form>
-                  </DialogContent>
-                </Dialog>
-              ))}
-            </ThreeDScrollTriggerRow>
-          </ThreeDScrollTriggerContainer>
-        </div>
-      </section>
-
       {/* Feedback Form Section */}
       <section className="relative pb-16 md:pb-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
@@ -358,6 +174,28 @@ export default function FeedbackPage() {
             Share Your Feedback
           </h2>
           <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 p-6 sm:p-8 md:p-10">
+            {/* Error Message */}
+            {error && (
+              <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-lg">
+                <div className="flex items-start gap-3">
+                  <svg
+                    className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <p className="text-red-400 text-sm">{error}</p>
+                </div>
+              </div>
+            )}
+
             {submitted ? (
               <div className="text-center py-12">
                 <div className="mb-6">
@@ -394,9 +232,16 @@ export default function FeedbackPage() {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className={`w-full px-4 py-3 bg-slate-900/50 border rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
+                      fieldErrors.name
+                        ? "border-red-500 focus:ring-red-500"
+                        : "border-slate-600"
+                    }`}
                     placeholder="Enter your name"
                   />
+                  {fieldErrors.name && (
+                    <p className="mt-1 text-sm text-red-400">{fieldErrors.name}</p>
+                  )}
                 </div>
 
                 {/* Country Field */}
@@ -404,16 +249,33 @@ export default function FeedbackPage() {
                   <label htmlFor="country" className="block text-white font-semibold mb-2">
                     Country <span className="text-red-400">*</span>
                   </label>
-                  <input
-                    type="text"
-                    id="country"
-                    name="country"
-                    value={formData.country}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    placeholder="Enter your country"
-                  />
+                  <div className="relative">
+                    <select
+                      id="country"
+                      name="country"
+                      value={formData.country}
+                      onChange={handleChange}
+                      required
+                      className={`w-full px-4 py-3 pr-10 bg-slate-900/50 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none cursor-pointer ${
+                        fieldErrors.country
+                          ? "border-red-500 focus:ring-red-500"
+                          : "border-slate-600"
+                      }`}
+                    >
+                      <option value="" disabled className="bg-slate-900 text-slate-400">
+                        Select your country
+                      </option>
+                      {COUNTRIES.map((country) => (
+                        <option key={country} value={country} className="bg-slate-900 text-white">
+                          {country}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                  </div>
+                  {fieldErrors.country && (
+                    <p className="mt-1 text-sm text-red-400">{fieldErrors.country}</p>
+                  )}
                 </div>
 
                 {/* Message Field */}
@@ -428,18 +290,118 @@ export default function FeedbackPage() {
                     onChange={handleChange}
                     required
                     rows={6}
-                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                    className={`w-full px-4 py-3 bg-slate-900/50 border rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none ${
+                      fieldErrors.message
+                        ? "border-red-500 focus:ring-red-500"
+                        : "border-slate-600"
+                    }`}
                     placeholder="Share your thoughts, suggestions, or concerns..."
+                  />
+                  {fieldErrors.message && (
+                    <p className="mt-1 text-sm text-red-400">{fieldErrors.message}</p>
+                  )}
+                </div>
+
+                {/* AI Tools Expectation Field */}
+                <div>
+                  <label htmlFor="aiToolsExpectation" className="block text-white font-semibold mb-2">
+                    How do you expect AI tools to make your learning experience easier?
+                  </label>
+                  <textarea
+                    id="aiToolsExpectation"
+                    name="aiToolsExpectation"
+                    value={formData.aiToolsExpectation}
+                    onChange={handleChange}
+                    rows={4}
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                    placeholder="Share your expectations about AI tools in learning..."
+                  />
+                </div>
+
+                {/* Learning Progress Tracking Field */}
+                <div>
+                  <label htmlFor="learningProgressTracking" className="block text-white font-semibold mb-2">
+                    How would you like to track and monitor your learning progress?
+                  </label>
+                  <textarea
+                    id="learningProgressTracking"
+                    name="learningProgressTracking"
+                    value={formData.learningProgressTracking}
+                    onChange={handleChange}
+                    rows={4}
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                    placeholder="Describe how you'd like to track your learning progress..."
+                  />
+                </div>
+
+                {/* Course Types Field */}
+                <div>
+                  <label htmlFor="courseTypes" className="block text-white font-semibold mb-2">
+                    What types of courses are you interested in?
+                  </label>
+                  <textarea
+                    id="courseTypes"
+                    name="courseTypes"
+                    value={formData.courseTypes}
+                    onChange={handleChange}
+                    rows={4}
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                    placeholder="Tell us about the types of courses you're interested in..."
+                  />
+                </div>
+
+                {/* Favorite Courses Field */}
+                <div>
+                  <label htmlFor="favoriteCourses" className="block text-white font-semibold mb-2">
+                    Which specific courses or topics do you enjoy the most?
+                  </label>
+                  <textarea
+                    id="favoriteCourses"
+                    name="favoriteCourses"
+                    value={formData.favoriteCourses}
+                    onChange={handleChange}
+                    rows={4}
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                    placeholder="Share your favorite courses or topics..."
                   />
                 </div>
 
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full group px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-bold text-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
+                  disabled={isSubmitting}
+                  className="w-full group px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-bold text-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
-                  Submit Feedback
-                  <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  {isSubmitting ? (
+                    <>
+                      <svg
+                        className="animate-spin h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Submitting...
+                    </>
+                  ) : (
+                    <>
+                      Submit Feedback
+                      <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
                 </button>
               </form>
             )}

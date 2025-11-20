@@ -1,94 +1,36 @@
 "use client"
 
 import { useState } from "react"
-import { BookOpen, Trophy, Users, Briefcase, Rocket, GraduationCap, Languages, Award, Building2, X } from "lucide-react"
+import { BookOpen, Rocket, GraduationCap, Languages, Award, Building2, ChevronDown, ChevronUp } from "lucide-react"
 import Footer from "@/components/footer"
-import Image from "next/image"
 
 export default function CoursesPage() {
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(null)
-  const ecosystemItems = [
-    {
-      icon: BookOpen,
-      label: "AI Study Packs",
-      gradient: "from-blue-600/20 to-cyan-600/20",
-      border: "border-blue-400/40",
-      hoverGradient: "hover:from-blue-600/30 hover:to-cyan-600/30",
-      hoverBorder: "hover:border-blue-400/60"
-    },
-    {
-      icon: Trophy,
-      label: "Projects & Competitions",
-      gradient: "from-purple-600/20 to-pink-600/20",
-      border: "border-purple-400/40",
-      hoverGradient: "hover:from-purple-600/30 hover:to-pink-600/30",
-      hoverBorder: "hover:border-purple-400/60"
-    },
-    {
-      icon: Users,
-      label: "Circle Network",
-      gradient: "from-green-600/20 to-emerald-600/20",
-      border: "border-green-400/40",
-      hoverGradient: "hover:from-green-600/30 hover:to-emerald-600/30",
-      hoverBorder: "hover:border-green-400/60"
-    },
-    {
-      icon: Briefcase,
-      label: "Career Pathways",
-      gradient: "from-orange-600/20 to-red-600/20",
-      border: "border-orange-400/40",
-      hoverGradient: "hover:from-orange-600/30 hover:to-red-600/30",
-      hoverBorder: "hover:border-orange-400/60"
-    },
-    {
-      icon: Rocket,
-      label: "Startup Incubation",
-      gradient: "from-indigo-600/20 to-violet-600/20",
-      border: "border-indigo-400/40",
-      hoverGradient: "hover:from-indigo-600/30 hover:to-violet-600/30",
-      hoverBorder: "hover:border-indigo-400/60"
-    }
-  ]
+  const [expandedCategory, setExpandedCategory] = useState<number | null>(null)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800">
       {/* Hero Section */}
-      <section className="pt-24 sm:pt-28 md:pt-32 pb-12 md:pb-16 px-4 sm:px-6 lg:px-8">
+      <section className="pt-24 sm:pt-28 md:pt-32 pb-8 md:pb-10 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto text-center">
           {/* Main Heading */}
-          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-white mb-6 leading-tight font-bold">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-white mb-4 leading-tight font-bold">
              The World's First AI-Powered Learn-to-Launch Platform 
           </h1>
           
           {/* Subheading/Description */}
-          <p className="text-white text-lg md:text-xl lg:text-2xl max-w-4xl mx-auto leading-relaxed mb-8">
+          <p className="text-white text-lg md:text-xl lg:text-2xl max-w-4xl mx-auto leading-relaxed mb-4">
             These courses feed directly into our ecosystem: AI Study Packs, Projects & competitions, Circle (powerhouse
              for Learners), Career pathways, and Startup incubation
           </p>
 
-          {/* Ecosystem Items */}
-          <div className="flex flex-wrap justify-center gap-4 md:gap-6 mt-12">
-            {ecosystemItems.map((item, index) => {
-              const Icon = item.icon
-              return (
-                <div
-                  key={index}
-                  className={`flex items-center gap-2 px-4 py-3 rounded-lg border ${item.border} bg-gradient-to-br ${item.gradient} backdrop-blur-sm text-white transition-all ${item.hoverGradient} ${item.hoverBorder} hover:scale-105`}
-                >
-                  <Icon className="w-5 h-5" />
-                  <span className="text-sm md:text-base font-medium">{item.label}</span>
-                </div>
-              )
-            })}
-          </div>
         </div>
       </section>
 
       {/* Course Catalogue Section */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8">
+      <section className="py-8 md:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2">
                Square 1 Ai  Complete Course Catalogue
             </h2>
             <p className="text-slate-300 text-lg md:text-xl">
@@ -96,36 +38,71 @@ export default function CoursesPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="space-y-3">
             {courseCategories.map((category, index) => {
               const Icon = category.icon
+              const isExpanded = expandedCategory === index
               return (
                 <div
                   key={index}
-                  className="relative bg-white rounded-xl p-6 hover:scale-105 transition-transform duration-300 flex flex-col overflow-hidden animated-gradient-border"
+                  className="relative rounded-xl overflow-hidden transition-all duration-300 group bg-white"
                 >
-                  
-                  <div className="flex items-center gap-4 mb-6 flex-1">
-                    {/* Icon/Image on the left */}
-                    <div className="flex-shrink-0">
-                      <Icon className="w-12 h-12 text-blue-600" />
-                    </div>
-                    
-                    {/* Title on the right */}
-                    <div className="flex-1">
-                      <h3 className="text-lg md:text-xl font-bold text-slate-900 leading-tight">
-                        {category.displayTitle}
-                      </h3>
-                    </div>
-                  </div>
+                  <div className="relative">
+                    {/* Header - Clickable */}
+                    <button
+                      onClick={() => setExpandedCategory(isExpanded ? null : index)}
+                      className="w-full p-4 flex items-center justify-between hover:bg-gray-50 transition-all duration-300"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 rounded-lg">
+                          <Icon className="w-8 h-8 text-blue-900" />
+                        </div>
+                        <h3 className="text-xl md:text-2xl font-bold text-blue-900 text-left">
+                          {category.displayTitle}
+                        </h3>
+                      </div>
+                      <div className="flex-shrink-0 p-2 rounded-lg">
+                        {isExpanded ? (
+                          <ChevronUp className="w-6 h-6 text-blue-900" />
+                        ) : (
+                          <ChevronDown className="w-6 h-6 text-blue-900" />
+                        )}
+                      </div>
+                    </button>
 
-                  {/* View all Courses Button */}
-                  <button
-                    onClick={() => setSelectedCategory(index)}
-                    className="w-full bg-slate-100 text-slate-900 font-semibold py-3 px-4 rounded-lg hover:bg-slate-200 transition-colors text-sm md:text-base border border-blue-300"
-                  >
-                    View all Courses
-                  </button>
+                    {/* Dropdown Content */}
+                    {isExpanded && (
+                      <div className="px-4 pb-4">
+                        <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                          <div className="space-y-4">
+                            {category.items.map((item, itemIndex) => {
+                              const subtitle = 'subtitle' in item ? (item as { subtitle?: string }).subtitle : undefined
+                              return (
+                                <div key={itemIndex}>
+                                  {subtitle && (
+                                    <h4 className="text-lg font-semibold text-blue-600 mb-2 border-b border-blue-300 pb-1.5">
+                                      {subtitle}
+                                    </h4>
+                                  )}
+                                  <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                    {item.courses.map((course, courseIndex) => (
+                                      <li
+                                        key={courseIndex}
+                                        className="text-blue-900 text-sm md:text-base flex items-start gap-2 py-2 px-3 rounded-md bg-white hover:bg-white/90 transition-colors shadow-sm"
+                                      >
+                                        <span className="text-blue-600 mt-1.5 flex-shrink-0">•</span>
+                                        <span>{course}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )
             })}
@@ -140,75 +117,6 @@ export default function CoursesPage() {
         </div>
       </section>
 
-      {/* Course Details Modal */}
-      {selectedCategory !== null && (() => {
-        const category = courseCategories[selectedCategory]
-        const Icon = category.icon
-        return (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <div className="bg-slate-900 rounded-xl border border-slate-700 max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-              {/* Modal Header */}
-              <div className={`${category.bgColor} p-6 flex items-center justify-between`}>
-                <div className="flex items-center gap-4">
-                  <div className={`p-3 rounded-lg bg-white/10 backdrop-blur-sm ${category.iconBg}`}>
-                    <Icon className="w-8 h-8 text-white" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-white">
-                    {category.displayTitle}
-                  </h2>
-                </div>
-                <button
-                  onClick={() => setSelectedCategory(null)}
-                  className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors"
-                  aria-label="Close"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-
-              {/* Modal Content */}
-              <div className="flex-1 overflow-y-auto p-6">
-                <div className="space-y-6">
-                  {category.items.map((item, itemIndex) => {
-                    const subtitle = 'subtitle' in item ? (item as { subtitle?: string }).subtitle : undefined
-                    return (
-                      <div key={itemIndex}>
-                        {subtitle && (
-                          <h3 className="text-lg font-semibold text-white mb-3">
-                            {subtitle}
-                          </h3>
-                        )}
-                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                          {item.courses.map((course, courseIndex) => (
-                            <li
-                              key={courseIndex}
-                              className="text-slate-300 text-sm md:text-base flex items-start gap-2"
-                            >
-                              <span className="text-slate-500 mt-1.5 flex-shrink-0">•</span>
-                              <span>{course}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-
-              {/* Modal Footer */}
-              <div className="p-6 border-t border-slate-700">
-                <button
-                  onClick={() => setSelectedCategory(null)}
-                  className="w-full bg-white text-slate-900 font-semibold py-3 px-4 rounded-lg hover:bg-slate-100 transition-colors"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        )
-      })()}
-
       <Footer />
     </div>
   )
@@ -219,7 +127,7 @@ const courseCategories = [
     title: "🟦 1. School (K–12) Courses",
     displayTitle: "School (K–12) Courses",
     icon: GraduationCap,
-    bgColor: "bg-gradient-to-br from-blue-700 to-blue-900",
+    bgColor: "bg-gradient-to-br from-blue-600 to-blue-800",
     iconBg: "bg-blue-500/20",
     gradient: "from-blue-600/20 to-cyan-600/20",
     border: "border-blue-400/40",
@@ -281,10 +189,10 @@ const courseCategories = [
     title: "🟩 2. University & Higher Education Courses",
     displayTitle: "University & Higher Education Courses",
     icon: BookOpen,
-    bgColor: "bg-gradient-to-br from-purple-700 to-purple-900",
-    iconBg: "bg-purple-500/20",
-    gradient: "from-green-600/20 to-emerald-600/20",
-    border: "border-green-400/40",
+    bgColor: "bg-gradient-to-br from-blue-600 to-blue-800",
+    iconBg: "bg-blue-500/20",
+    gradient: "from-blue-600/20 to-cyan-600/20",
+    border: "border-blue-400/40",
     items: [
       {
         subtitle: "Computer Science & Engineering",
@@ -357,10 +265,10 @@ const courseCategories = [
     title: "🟨 3. Languages & Test Prep",
     displayTitle: "Languages & Test Prep",
     icon: Languages,
-    bgColor: "bg-gradient-to-br from-green-700 to-green-900",
-    iconBg: "bg-green-500/20",
-    gradient: "from-yellow-600/20 to-amber-600/20",
-    border: "border-yellow-400/40",
+    bgColor: "bg-gradient-to-br from-blue-600 to-blue-800",
+    iconBg: "bg-blue-500/20",
+    gradient: "from-blue-600/20 to-cyan-600/20",
+    border: "border-blue-400/40",
     items: [
       {
         subtitle: "Language Courses",
@@ -404,10 +312,10 @@ const courseCategories = [
     title: "🟥 4. Professional Qualifications",
     displayTitle: "Professional Qualifications",
     icon: Award,
-    bgColor: "bg-gradient-to-br from-red-700 to-red-900",
-    iconBg: "bg-red-500/20",
-    gradient: "from-red-600/20 to-rose-600/20",
-    border: "border-red-400/40",
+    bgColor: "bg-gradient-to-br from-blue-600 to-blue-800",
+    iconBg: "bg-blue-500/20",
+    gradient: "from-blue-600/20 to-cyan-600/20",
+    border: "border-blue-400/40",
     items: [
       {
         courses: [
@@ -431,10 +339,10 @@ const courseCategories = [
     title: "🟧 5. Specialized Learning Programs",
     displayTitle: "Specialized Learning Programs",
     icon: Rocket,
-    bgColor: "bg-gradient-to-br from-orange-700 to-orange-900",
-    iconBg: "bg-orange-500/20",
-    gradient: "from-orange-600/20 to-red-600/20",
-    border: "border-orange-400/40",
+    bgColor: "bg-gradient-to-br from-blue-600 to-blue-800",
+    iconBg: "bg-blue-500/20",
+    gradient: "from-blue-600/20 to-cyan-600/20",
+    border: "border-blue-400/40",
     items: [
       {
         subtitle: "Technology & AI",
@@ -477,10 +385,10 @@ const courseCategories = [
     title: "🟫 6. Corporate & Workforce Training",
     displayTitle: "Corporate & Workforce Training",
     icon: Building2,
-    bgColor: "bg-gradient-to-br from-indigo-700 to-indigo-900",
-    iconBg: "bg-indigo-500/20",
-    gradient: "from-amber-600/20 to-yellow-600/20",
-    border: "border-amber-400/40",
+    bgColor: "bg-gradient-to-br from-blue-600 to-blue-800",
+    iconBg: "bg-blue-500/20",
+    gradient: "from-blue-600/20 to-cyan-600/20",
+    border: "border-blue-400/40",
     items: [
       {
         courses: [

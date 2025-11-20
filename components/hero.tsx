@@ -102,7 +102,11 @@ export default function Hero() {
         <div className="max-w-7xl mx-auto">
         <div className="mt-0">
           <div className="text-center mb-12 sm:mb-16 px-2">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">Why Join Square 1 Ai Early?</h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">Why Join{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+               Square 1 Ai
+              </span>
+               {" "}Early?</h2>
             <p className="text-base sm:text-lg text-blue-100 px-4">Get Exclusive Benefits And Shape The Future Of AI Learning</p>
           </div>
 
@@ -115,7 +119,7 @@ export default function Hero() {
               },
               {
                 icon: Brain,
-                title: "AI Powered Learning",
+                title: "AI Powered Assessment Preparation",
                 description: "Experience intelligent, adaptive learning that evolves with you",
               },
               {
