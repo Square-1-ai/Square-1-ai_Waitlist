@@ -118,11 +118,10 @@ export default function AboutPage() {
             {/* Text Content - Left */}
             <div className="order-1">
               <ScrollReveal
-                as="h2"
                 size="lg"
                 align="left"
                 variant="default"
-                textClassName="text-transparent bg-clip-text bg-gradient-to-r from-blue-900 via-indigo-800 to-cyan-900 mb-4 font-bold"
+                textClassName="text-blue-900 mb-4 font-bold"
                 containerClassName="mb-8"
                 enableBlur={true}
                 baseOpacity={0.1}
@@ -248,11 +247,10 @@ export default function AboutPage() {
             {/* Text Content - Left */}
             <div className="order-1">
               <ScrollReveal
-                as="h2"
                 size="lg"
                 align="left"
                 variant="default"
-                textClassName="text-transparent bg-clip-text bg-gradient-to-r from-blue-900 via-cyan-800 to-indigo-900 mb-4 font-bold"
+                textClassName="text-blue-900 mb-4 font-bold"
                 containerClassName="mb-8"
                 enableBlur={true}
                 baseOpacity={0.1}
@@ -378,11 +376,10 @@ export default function AboutPage() {
             {/* Text Content - Left */}
             <div className="order-1">
               <ScrollReveal
-                as="h2"
                 size="lg"
                 align="left"
                 variant="default"
-                textClassName="text-transparent bg-clip-text bg-gradient-to-r from-blue-900 via-sky-800 to-cyan-900 mb-4 font-bold"
+                textClassName="text-blue-900 mb-4 font-bold"
                 containerClassName="mb-8"
                 enableBlur={true}
                 baseOpacity={0.1}
