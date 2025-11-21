@@ -7,29 +7,52 @@ export function HowItWorksSection() {
   const stages = [
     {
       number: 1,
-      title: "Learn",
+      title: "Learning",
       icon: BookOpen,
       color: "#3b82f6",
       bgColor: "bg-blue-500",
-      description: "Interactive courses enhanced with AI Study Packs (notes, mind maps, quizzes, podcasts).",
+      description: "Enroll in courses (live or recorded) — school, university, professional, or language.",
+      details: "Every class enhanced with AI: notes, Q&A stacks, mind maps, practice questions, further reading.",
       side: "left"
     },
     {
       number: 2,
-      title: "Apply",
+      title: "Practical Application",
       icon: Lightbulb,
       color: "#06b6d4",
       bgColor: "bg-cyan-500",
-      description: "Real-world projects and competitions driven by data, innovation, and problem-solving.",
+      description: "After each course, complete real-world projects (case studies, coding projects, business challenges).",
+      details: "Compete in quizzes, hackathons, and Kaggle-style competitions.",
       side: "right"
     },
     {
       number: 3,
-      title: "Launch",
+      title: "Certification",
+      icon: Rocket,
+      color: "#10b981",
+      bgColor: "bg-emerald-500",
+      description: "Earn Square1 Ai Certificates backed by industry partnerships.",
+      details: "Recognized for university admissions, professional CVs, and employer trust.",
+      side: "left"
+    },
+    {
+      number: 4,
+      title: "Career Enablement",
+      icon: Rocket,
+      color: "#f59e0b",
+      bgColor: "bg-amber-500",
+      description: "Join career fairs hosted on Square1 Ai with partner companies.",
+      details: "AI-powered CV & interview prep tools. Direct job placements through the Square1 Ai Career Hub.",
+      side: "right"
+    },
+    {
+      number: 5,
+      title: "Startup Incubation (Phase 2)",
       icon: Rocket,
       color: "#6366f1",
       bgColor: "bg-indigo-500",
-      description: "AI-assisted career guidance, portfolio building, and startup incubation through our innovation network.",
+      description: "Enter the Startup Club. Participate in Idea Generation Weeks & Startup Days.",
+      details: "Get matched with mentors, co-founders, and investors. Access funding & incubation support (similar to Y Combinator).",
       side: "left"
     }
   ]
@@ -96,10 +119,14 @@ export function HowItWorksSection() {
                       transition={{ delay: 0.7 + index * 0.3 }}
                     >
                       <div className={`bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-shadow duration-300 border-l-4 ${isLeft ? 'border-r-0' : 'border-l-0 border-r-4'}`} style={{ borderColor: stage.color }}>
-                        <h2 className="mb-0 font-semibold text-xl" style={{ color: stage.color }}>
-                          {stage.title}
-                        </h2>
-                        <p className="mt-2 text-slate-600">{stage.description}</p>
+                        <div className="flex items-center gap-3 mb-3 justify-start">
+                          <span className="text-2xl font-bold text-slate-300">Step {stage.number}</span>
+                          <h2 className="mb-0 font-semibold text-xl" style={{ color: stage.color }}>
+                            {stage.title}
+                          </h2>
+                        </div>
+                        <p className="mt-2 text-slate-700 font-medium">{stage.description}</p>
+                        <p className="mt-2 text-slate-600 text-sm leading-relaxed">{stage.details}</p>
                       </div>
                     </motion.div>
 
