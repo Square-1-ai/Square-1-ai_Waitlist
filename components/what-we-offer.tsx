@@ -164,22 +164,22 @@ export default function WhatWeOffer() {
               return (
                 <div
                   key={index}
-                  className="relative bg-white rounded-2xl overflow-hidden border border-gray-200 flex-shrink-0 w-[350px] snap-center"
+                  className="relative bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden border border-white/20 flex-shrink-0 w-[350px] snap-center shadow-lg hover:bg-white/15 transition-all duration-300"
                 >
                   {/* Content */}
                   <div className="p-6">
                     {/* Icon */}
                     <div className="mb-4">
-                      <feature.icon className="w-14 h-14 text-blue-900" />
+                      <feature.icon className="w-14 h-14 text-white" />
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-xl font-bold text-blue-900 mb-3">
+                    <h3 className="text-xl font-bold text-blue-600 mb-3">
                       {feature.title}
                     </h3>
 
                     {/* Description */}
-                    <p className="text-blue-900 text-sm leading-relaxed">
+                    <p className="text-white/90 text-sm leading-relaxed">
                       {feature.description}
                     </p>
                   </div>
