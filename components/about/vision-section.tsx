@@ -60,13 +60,7 @@ export function VisionSection() {
 
           {/* Image - Right */}
           <div className="order-2">
-            <Image 
-              src="/about_pics/our-vision.png" 
-              alt="Our Vision" 
-              width={500}
-              height={350}
-              className="w-full h-auto max-w-md"
-            />
+            
           </div>
         </div>
       </div>
