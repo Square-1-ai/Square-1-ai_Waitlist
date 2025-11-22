@@ -3,7 +3,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
-import Image from "next/image";
 
 interface Node {
   id: number;
@@ -46,9 +45,9 @@ export function NetworkAnimation() {
     // Teachers on the left
     {
       id: 1,
-      x: -180,
+      x: -220,
       y: -100,
-      size: 50,
+      size: 70,
       imageUrl:
         "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWFjaGVyJTIwcG9ydHJhaXR8ZW58MXx8fHwxNzYzNzAwMzQwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
       type: "teacher",
@@ -57,16 +56,16 @@ export function NetworkAnimation() {
       id: 2,
       x: -160,
       y: -20,
-      size: 45,
+      size: 70,
       imageUrl:
         "https://images.unsplash.com/photo-1580894732444-8ecded7900cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmZW1hbGUlMjB0ZWFjaGVyfGVufDF8fHx8MTc2Mzc5MDQwMnww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
       type: "teacher",
     },
     {
       id: 3,
-      x: -190,
+      x: -220,
       y: 65,
-      size: 48,
+      size: 70,
       imageUrl:
         "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWFjaGVyJTIwcG9ydHJhaXR8ZW58MXx8fHwxNzYzNzAwMzQwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
       type: "teacher",
@@ -75,9 +74,9 @@ export function NetworkAnimation() {
     // Children on the right
     {
       id: 4,
-      x: 180,
+      x: 220,
       y: -90,
-      size: 48,
+      size: 70,
       imageUrl:
         "https://images.unsplash.com/photo-1654027879796-b9dee8caabb6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaGlsZCUyMHN0dWRlbnQlMjBwb3J0cmFpdHxlbnwxfHx8fDE3NjM3OTA0MDF8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
       type: "child",
@@ -85,17 +84,17 @@ export function NetworkAnimation() {
     {
       id: 5,
       x: 165,
-      y: -15,
-      size: 45,
+      y: -10,
+      size: 70,
       imageUrl:
         "https://images.unsplash.com/photo-1591845466152-62ab76b84fd6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx5b3VuZyUyMGNoaWxkJTIwaGFwcHl8ZW58MXx8fHwxNzYzNzkwNDAyfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
       type: "child",
     },
     {
       id: 6,
-      x: 190,
-      y: 60,
-      size: 50,
+      x: 230,
+      y: 70,
+      size: 70,
       imageUrl:
         "https://images.unsplash.com/photo-1701686713520-fc724f9d7ca2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaGlsZHJlbiUyMHN0dWRlbnRzfGVufDF8fHx8MTc2Mzc5MDQwMnww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
       type: "child",
@@ -190,14 +189,13 @@ export function NetworkAnimation() {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        <Image
-          src="/White.png"
+        <img
+          src="/logo.svg"
           alt="Square1 AI"
-          width={120}
-          height={45}
-          className="w-auto"
+          className="w-auto h-auto object-contain"
           style={{
             height: `${30 * scale}px`,
+            width: 'auto',
           }}
         />
       </motion.div>

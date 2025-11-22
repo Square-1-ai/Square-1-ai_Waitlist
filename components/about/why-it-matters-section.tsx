@@ -1,24 +1,18 @@
-import Image from "next/image"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
+import { ChalkboardText } from "@/components/ChalkboardText"
 
 export function WhyItMattersSection() {
   return (
-    <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-800 to-slate-900">
+    <section className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-800 to-slate-900">
       <div className="max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid md:grid-cols-2 gap-8 sm:gap-12 items-center">
           {/* Image - Left */}
-          <div className="order-2 md:order-1">
-            <Image 
-              src="/about_pics/why-it-matters.png" 
-              alt="Why It Matters" 
-              width={500}
-              height={350}
-              className="w-full h-auto max-w-md"
-            />
+          <div className="order-2 md:order-1 w-full">
+            <ChalkboardText />
           </div>
           
           {/* Text Content - Right */}
-          <div className="order-1 md:order-2">
+          <div className="order-1 md:order-2 w-full">
             <ScrollReveal
               as="h2"
               size="lg"

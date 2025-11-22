@@ -113,7 +113,7 @@ export function HowItWorksSection() {
                   <div className={`flex flex-col md:flex-row md:items-center ${isLeft ? 'md:flex-row' : 'md:flex-row-reverse'} gap-4 md:gap-12`}>
                     {/* Content Card */}
                     <motion.div
-                      className={`flex-1 w-full ${isLeft ? 'md:text-right md:pr-4' : 'md:text-left md:pl-4'} text-left`}
+                      className={`flex-1 w-full text-left ${isLeft ? 'md:pr-4' : 'md:pl-4'}`}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.7 + index * 0.3 }}
@@ -175,3 +175,5 @@ export function HowItWorksSection() {
     </section>
   )
 }
+
+export default HowItWorksSection
