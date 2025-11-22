@@ -4,7 +4,7 @@ import { useCountAnimation } from "@/hooks/use-count-animation"
 import { Globe } from "@/components/ui/globe"
 
 export default function AboutUs() {
-  const earlyAdopters = useCountAnimation({ end: 1000, suffix: '+' })
+  const earlyAdopters = useCountAnimation({ end: 3000, suffix: '+' })
   const aiFeatures = useCountAnimation({ end: 15, suffix: '+' })
   const countries = useCountAnimation({ end: 10, suffix: '+' })
   return (
@@ -75,12 +75,15 @@ export default function AboutUs() {
             </ul>
           </div>
         </div>
+        
 
         <div className="relative min-h-[500px] md:min-h-[600px] flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 flex items-center justify-center">
             <Globe className="opacity-70" />
           </div>
-          <div className="relative z-10 grid md:grid-cols-3 gap-8 md:gap-12 text-center w-full max-w-4xl px-4">
+        </div>
+
+        <div className="relative z-10 grid md:grid-cols-3 gap-8 md:gap-12 text-center w-full max-w-4xl px-4 mx-auto mt-16">
             <div ref={earlyAdopters.ref}>
               <div className="text-4xl md:text-5xl font-bold text-blue-600 mb-2">
                 {earlyAdopters.count === '0+' ? '0' : earlyAdopters.count === '1000+' ? '1K+' : earlyAdopters.count}
@@ -100,7 +103,6 @@ export default function AboutUs() {
               <div className="text-slate-700 font-medium">Countries Across</div>
             </div>
           </div>
-        </div>
       </div>
     </section>
   )

@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
+import { NetworkAnimation } from "./network-animation"
 
 export function VisionSection() {
   return (
@@ -60,13 +63,7 @@ export function VisionSection() {
 
           {/* Image - Right */}
           <div className="order-2">
-            <Image 
-              src="/about_pics/our-vision.png" 
-              alt="Our Vision" 
-              width={500}
-              height={350}
-              className="w-full h-auto max-w-md"
-            />
+            <NetworkAnimation />
           </div>
         </div>
       </div>
