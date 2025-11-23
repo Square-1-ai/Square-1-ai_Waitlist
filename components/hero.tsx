@@ -138,10 +138,10 @@ export default function Hero() {
                   className="p-5 sm:p-6 rounded-xl sm:rounded-2xl border border-blue-200 bg-white hover:shadow-xl transition-all duration-300 hover:scale-105 hover:border-blue-400"
                 >
                   <div className="mb-3 sm:mb-4">
-                    <IconComponent className="w-10 h-10 sm:w-12 sm:h-12 text-blue-900" />
+                    <IconComponent className="w-8 h-8 sm:w-12 sm:h-12 text-blue-900" />
                   </div>
-                  <h3 className="text-lg sm:text-xl font-bold text-blue-900 mb-2 sm:mb-3">{feature.title}</h3>
-                  <p className="text-sm sm:text-base text-blue-900">{feature.description}</p>
+                  <h3 className="text-sm sm:text-xl font-bold text-blue-900 mb-2 sm:mb-3">{feature.title}</h3>
+                  <p className="text-xs sm:text-base text-blue-900">{feature.description}</p>
                 </div>
               );
             })}
