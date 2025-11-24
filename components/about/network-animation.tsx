@@ -48,8 +48,7 @@ export function NetworkAnimation() {
       x: -220,
       y: -100,
       size: 70,
-      imageUrl:
-        "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWFjaGVyJTIwcG9ydHJhaXR8ZW58MXx8fHwxNzYzNzAwMzQwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+      imageUrl: "/teachers/teacher1.png",
       type: "teacher",
     },
     {
@@ -57,8 +56,7 @@ export function NetworkAnimation() {
       x: -160,
       y: -20,
       size: 70,
-      imageUrl:
-        "https://images.unsplash.com/photo-1580894732444-8ecded7900cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmZW1hbGUlMjB0ZWFjaGVyfGVufDF8fHx8MTc2Mzc5MDQwMnww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+      imageUrl: "/teachers/teacher2.png",
       type: "teacher",
     },
     {
@@ -66,8 +64,7 @@ export function NetworkAnimation() {
       x: -220,
       y: 65,
       size: 70,
-      imageUrl:
-        "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWFjaGVyJTIwcG9ydHJhaXR8ZW58MXx8fHwxNzYzNzAwMzQwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+      imageUrl: "/teachers/teacher3.png",
       type: "teacher",
     },
 
@@ -77,8 +74,7 @@ export function NetworkAnimation() {
       x: 220,
       y: -90,
       size: 70,
-      imageUrl:
-        "https://images.unsplash.com/photo-1654027879796-b9dee8caabb6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaGlsZCUyMHN0dWRlbnQlMjBwb3J0cmFpdHxlbnwxfHx8fDE3NjM3OTA0MDF8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+      imageUrl: "/students/student13.png",
       type: "child",
     },
     {
@@ -86,8 +82,7 @@ export function NetworkAnimation() {
       x: 165,
       y: -10,
       size: 70,
-      imageUrl:
-        "https://images.unsplash.com/photo-1591845466152-62ab76b84fd6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx5b3VuZyUyMGNoaWxkJTIwaGFwcHl8ZW58MXx8fHwxNzYzNzkwNDAyfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+      imageUrl: "/students/student14.png",
       type: "child",
     },
     {
@@ -95,8 +90,7 @@ export function NetworkAnimation() {
       x: 230,
       y: 70,
       size: 70,
-      imageUrl:
-        "https://images.unsplash.com/photo-1701686713520-fc724f9d7ca2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaGlsZHJlbiUyMHN0dWRlbnRzfGVufDF8fHx8MTc2Mzc5MDQwMnww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+      imageUrl: "/students/student1.png",
       type: "child",
     },
     
