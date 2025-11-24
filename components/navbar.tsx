@@ -2,9 +2,11 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect } from "react"
+import { usePathname } from "next/navigation"
 import { Menu, X } from "lucide-react"
 
 export default function Navbar() {
+  const pathname = usePathname()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isOverWhite, setIsOverWhite] = useState(false)
 
@@ -74,9 +76,9 @@ export default function Navbar() {
   const mobileHoverBg = isOverWhite ? 'hover:bg-slate-100' : 'hover:bg-white/10'
 
   return (
-  // Fixed transparent navbar with blur effect and bottom border
-  // backdrop-blur-md creates a frosted glass effect
-  <nav aria-label="Main navigation" className={`fixed top-0 left-0 right-0 z-50 w-full bg-transparent backdrop-blur-md border-b ${borderColor} transition-colors duration-300`}>
+    // Fixed transparent navbar with blur effect and bottom border
+    // backdrop-blur-md creates a frosted glass effect
+    <nav aria-label="Main navigation" className={`fixed top-0 left-0 right-0 z-50 w-full bg-transparent backdrop-blur-md border-b ${borderColor} transition-colors duration-300`}>
       <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
         <div className="flex items-center gap-3">
           {/* Logo that changes based on background */}
@@ -93,17 +95,20 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-6 lg:gap-8">
-          <Link href="/about" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110`}>
+          <Link href="/" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110 ${pathname === '/' ? 'border-b-2 border-blue-500 pb-1' : ''}`}>
+            Home
+          </Link>
+          <Link href="/about" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110 ${pathname === '/about' ? 'border-b-2 border-blue-500 pb-1' : ''}`}>
             About
           </Link>
-          <Link href="/feedback" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110`}>
-            Feedback
-          </Link>
-          <Link href="/courses" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110`}>
+          <Link href="/courses" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110 ${pathname === '/courses' ? 'border-b-2 border-blue-500 pb-1' : ''}`}>
             Courses
           </Link>
-          <Link href="/teachers-section" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110`}>
+          <Link href="/teachers-section" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110 ${pathname === '/teachers-section' ? 'border-b-2 border-blue-500 pb-1' : ''}`}>
             Teachers
+          </Link>
+          <Link href="/feedback" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110 ${pathname === '/feedback' ? 'border-b-2 border-blue-500 pb-1' : ''}`}>
+            Feedback
           </Link>
         </div>
 
@@ -123,28 +128,28 @@ export default function Navbar() {
           <div className="flex flex-col px-4 py-4 space-y-4">
             <Link 
               href="/about" 
-              className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors`}
+              className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors ${pathname === '/about' ? 'border-b-2 border-blue-500 pb-1' : ''}`}
               onClick={() => setIsMenuOpen(false)}
             >
               About
             </Link>
             <Link 
               href="/feedback" 
-              className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors`}
+              className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors ${pathname === '/feedback' ? 'border-b-2 border-blue-500 pb-1' : ''}`}
               onClick={() => setIsMenuOpen(false)}
             >
               Feedback
             </Link>
             <Link 
               href="/courses" 
-              className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors`}
+              className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors ${pathname === '/courses' ? 'border-b-2 border-blue-500 pb-1' : ''}`}
               onClick={() => setIsMenuOpen(false)}
             >
               Courses
             </Link>
             <Link 
               href="/teacher-waitlist" 
-              className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors`}
+              className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors ${pathname === '/teacher-waitlist' ? 'border-b-2 border-blue-500 pb-1' : ''}`}
               onClick={() => setIsMenuOpen(false)}
             >
               Teachers
