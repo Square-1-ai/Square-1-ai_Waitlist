@@ -85,6 +85,17 @@ export default function WhatWeOffer() {
         "Create a public impact portfolio that showcases your innovation."
       ]
     },
+    {
+      icon: Globe,
+      title: "Community & Open-Source Projects",
+      subtitle: "Learn, build, and impact together.",
+      description: "Collaborate on open-source projects across global domains like AI, HealthTech, AgriTech, Finance, and Arts.",
+      keyFeatures: [
+        "Work with peers worldwide on real projects.",
+        "Earn verified badges, contributor titles, and mentor recognition.",
+        "Create a public impact portfolio that showcases your innovation."
+      ]
+    },
   ]
 
   const scrollContainerRef = useRef<HTMLDivElement>(null)
@@ -164,17 +175,34 @@ export default function WhatWeOffer() {
               return (
                 <div
                   key={index}
-                  className="relative bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden border border-white/20 flex-shrink-0 w-[350px] snap-center shadow-lg hover:bg-white/15 transition-all duration-300"
+                  className="relative flex-shrink-0 w-[350px] snap-center shadow-lg transition-all duration-300 group"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(41, 82, 204, 0.25) 0%, rgba(253,187,45,0.18) 100%)',
+                    border: '1.5px solid rgba(45, 145, 252, 0.18)',
+                    boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.18)',
+                    backdropFilter: 'blur(16px) saturate(180%)',
+                    WebkitBackdropFilter: 'blur(16px) saturate(180%)',
+                    borderRadius: '1.5rem',
+                    overflow: 'hidden',
+                  }}
                 >
+                  {/* Glass gradient overlay for extra effect */}
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background: 'radial-gradient(circle at 80% 20%, rgba(18, 130, 221, 0.18) 0%, rgba(39, 21, 238, 0.05) 100%)',
+                      zIndex: 1,
+                    }}
+                  />
                   {/* Content */}
-                  <div className="p-6">
+                  <div className="p-6 relative z-10">
                     {/* Icon */}
                     <div className="mb-4">
-                      <feature.icon className="w-14 h-14 text-white" />
+                      <feature.icon className="w-14 h-14 text-white drop-shadow-lg" />
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-xl font-bold text-blue-600 mb-3">
+                    <h3 className="text-xl font-bold text-white mb-3">
                       {feature.title}
                     </h3>
 
