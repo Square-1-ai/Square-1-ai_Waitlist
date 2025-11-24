@@ -130,7 +130,7 @@ export default function TeacherWaitlistPage() {
               Reach thousands of students, earn globally, and let AI handle the heavy work so you can focus on what you do best: teaching.
             </p>
             <a
-              href="#apply"
+              href="/teacher-waitlist"
               className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-full font-bold text-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
             >
               Become a Teacher
@@ -391,7 +391,7 @@ export default function TeacherWaitlistPage() {
           </p>
           
           <a
-            href="/teacher-waitlist-form"
+            href="/teacher-waitlist"
             className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-full font-bold text-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
           >
             Apply to Teach on Square 1 Ai
