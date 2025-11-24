@@ -102,7 +102,7 @@ export default function Navbar() {
           <Link href="/courses" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110`}>
             Courses
           </Link>
-          <Link href="/teacher-waitlist" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110`}>
+          <Link href="/teachers-section" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110`}>
             Teachers
           </Link>
         </div>
