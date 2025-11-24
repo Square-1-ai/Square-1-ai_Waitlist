@@ -13,18 +13,18 @@ interface Country {
 }
 
 const countries: Country[] = [
-  { name: 'USA', x: 20, y: 22, avatar: 'https://images.unsplash.com/photo-1662838496660-61af6ffa3788?w=200', connections: [1, 5, 8] },
-  { name: 'Brazil', x: 35, y: 58, avatar: 'https://images.unsplash.com/photo-1609043238951-9bb29775f27c?w=200', connections: [0, 3] },
-  { name: 'UK', x: 48.5, y: 14, avatar: 'https://images.unsplash.com/photo-1610103278906-6c96a3b2c1f0?w=200', connections: [6, 9] },
-  { name: 'Russia', x: 66, y: 18, avatar: 'https://images.unsplash.com/photo-1596602549485-90a066ad2f2d?w=200', connections: [10, 6] },
-  { name: 'Egypt', x: 56, y: 36, avatar: 'https://images.unsplash.com/photo-1754639488181-7eae9f6c06e0?w=200', connections: [3, 4] },
-  { name: 'France', x: 43, y: 29, avatar: 'https://images.unsplash.com/photo-1597117753473-9a20330f5fb7?w=200', connections: [2, 6] },
-  { name: 'India', x: 66, y: 42, avatar: 'https://images.unsplash.com/photo-1669787210388-1847b47bdc2e?w=200', connections: [10, 12] },
-  { name: 'South Africa', x: 53, y: 60, avatar: 'https://images.unsplash.com/photo-1761052710052-b545a62720a9?w=200', connections: [4, 3] },
-  { name: 'Peru', x: 27, y: 50, avatar: 'https://images.unsplash.com/photo-1752652012551-d7685a746058?w=200', connections: [8, 1] },
-  { name: 'Australia', x: 79, y: 57, avatar: 'https://images.unsplash.com/photo-1597117753473-9a20330f5fb7?w=200', connections: [10, 11, 18] },
-  { name: 'Japan', x: 81, y: 35, avatar: 'https://images.unsplash.com/photo-1571270237703-6ac8a769ad7a?w=200', connections: [10, 16, 18] },
-  { name: 'New Zealand', x: 86, y: 70, avatar: 'https://images.unsplash.com/photo-1584162607168-7cf2a46a57bf?w=200', connections: [16, 17] },
+  { name: 'USA', x: 20, y: 22, avatar: '/students/student1.png', connections: [1, 5, 8] },
+  { name: 'Brazil', x: 35, y: 58, avatar: '/students/student2.png', connections: [0, 3] },
+  { name: 'UK', x: 48.5, y: 14, avatar: '/students/student3.png', connections: [6, 9] },
+  { name: 'Russia', x: 66, y: 18, avatar: '/students/student4.png', connections: [10, 6] },
+  { name: 'Egypt', x: 56, y: 36, avatar: '/students/student5.png', connections: [3, 4] },
+  { name: 'France', x: 43, y: 29, avatar: '/students/student6.png', connections: [2, 6] },
+  { name: 'India', x: 66, y: 42, avatar: '/students/student7.png', connections: [10, 12] },
+  { name: 'South Africa', x: 53, y: 60, avatar: '/students/student8.png', connections: [4, 3] },
+  { name: 'Peru', x: 27, y: 50, avatar: '/students/student9.png', connections: [8, 1] },
+  { name: 'Australia', x: 79, y: 57, avatar: '/students/student10.png', connections: [10, 11, 18] },
+  { name: 'Japan', x: 81, y: 35, avatar: '/students/student11.png', connections: [10, 16, 18] },
+  { name: 'New Zealand', x: 86, y: 70, avatar: '/students/student12.png', connections: [16, 17] },
 ];
 
 export function GlobalConnectionMap() {
