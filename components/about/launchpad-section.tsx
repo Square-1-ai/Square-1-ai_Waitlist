@@ -12,7 +12,7 @@ export function LaunchpadSection() {
               {/* Trophy in center */}
               <div className="relative z-10 w-48 h-48 md:w-64 md:h-64 flex items-center justify-center">
                 <Image 
-                  src="/cup.png" 
+                  src="/logo.svg" 
                   alt="Trophy" 
                   width={225} 
                   height={225}
