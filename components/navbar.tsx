@@ -86,7 +86,7 @@ export default function Navbar() {
               alt="Square 1 Ai Logo" 
               width={135} 
               height={50}
-              className="object-contain w-[100px] sm:w-[120px] md:w-[135px] h-auto transition-opacity duration-300"
+              className="object-contain w-[100px] sm:w-[120px] md:w-[135px] h-auto transition-opacity duration-300 shadow-none"
             />
           </Link>
         </div>
