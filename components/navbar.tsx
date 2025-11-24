@@ -127,32 +127,41 @@ export default function Navbar() {
         <div className={`md:hidden absolute top-full left-0 right-0 ${mobileMenuBg} backdrop-blur-lg border-b ${borderColor}`}>
           <div className="flex flex-col px-4 py-4 space-y-4">
             <Link 
+              href="/" 
+              className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Home
+            </Link>
+            
+            <Link 
               href="/about" 
-              className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors ${pathname === '/about' ? 'border-b-2 border-blue-500 pb-1' : ''}`}
+              className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors`}
               onClick={() => setIsMenuOpen(false)}
             >
               About
             </Link>
-            <Link 
-              href="/feedback" 
-              className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors ${pathname === '/feedback' ? 'border-b-2 border-blue-500 pb-1' : ''}`}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Feedback
-            </Link>
+            
             <Link 
               href="/courses" 
-              className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors ${pathname === '/courses' ? 'border-b-2 border-blue-500 pb-1' : ''}`}
+              className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors`}
               onClick={() => setIsMenuOpen(false)}
             >
               Courses
             </Link>
             <Link 
               href="/teacher-waitlist" 
-              className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors ${pathname === '/teacher-waitlist' ? 'border-b-2 border-blue-500 pb-1' : ''}`}
+              className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors`}
               onClick={() => setIsMenuOpen(false)}
             >
               Teachers
+            </Link>
+            <Link 
+              href="/feedback" 
+              className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Feedback
             </Link>
           </div>
         </div>
