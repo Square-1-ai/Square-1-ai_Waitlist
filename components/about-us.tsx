@@ -77,7 +77,7 @@ export default function AboutUs() {
         </div>
         
 
-        <div className="relative min-h-[300px] md:min-h-[600px] flex items-center justify-center overflow-hidden">
+        <div className="relative min-h-[350px] md:min-h-[600px] flex items-center justify-center overflow-hidden mb-10 md:mb-10">
           <div className="absolute inset-0 flex items-center justify-center">
             <Globe className="opacity-70" />
           </div>
