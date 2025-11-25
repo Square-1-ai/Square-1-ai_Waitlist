@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Brain, Video, Trophy, Users, GraduationCap, Rocket, Globe } from "lucide-react"
 
 export default function WhatWeOffer() {
@@ -99,57 +99,81 @@ export default function WhatWeOffer() {
   ]
 
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const [activeIndex, setActiveIndex] = useState(0)
 
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current
     if (!scrollContainer) return
 
-    // Duplicate items for seamless loop
-    const items = Array.from(scrollContainer.children)
-    items.forEach(item => {
-      const clone = item.cloneNode(true) as HTMLElement
-      scrollContainer.appendChild(clone)
-    })
-
+    // Only auto-scroll and duplicate for desktop
+    const isMobile = window.innerWidth < 768
     let animationFrameId: number
     let scrollPosition = 0
     let isPaused = false
     const scrollSpeed = 1.0 // pixels per frame
 
+    if (!isMobile) {
+      // Duplicate items for seamless loop
+      const items = Array.from(scrollContainer.children)
+      if (items.length === features.length) {
+        items.forEach(item => {
+          const clone = item.cloneNode(true) as HTMLElement
+          scrollContainer.appendChild(clone)
+        })
+      }
+    }
+
     const animate = () => {
-      if (!isPaused && scrollContainer) {
+      if (!isPaused && scrollContainer && !isMobile) {
         scrollPosition += scrollSpeed
-        
         const maxScroll = scrollContainer.scrollWidth / 2
-        
         if (scrollPosition >= maxScroll) {
           scrollPosition = 0
         }
-        
         scrollContainer.scrollLeft = scrollPosition
       }
       animationFrameId = requestAnimationFrame(animate)
     }
 
-    animationFrameId = requestAnimationFrame(animate)
-
-    const handleMouseEnter = () => {
-      isPaused = true
+    if (!isMobile) {
+      animationFrameId = requestAnimationFrame(animate)
     }
 
-    const handleMouseLeave = () => {
-      isPaused = false
-    }
+    const handleMouseEnter = () => { isPaused = true }
+    const handleMouseLeave = () => { isPaused = false }
 
     scrollContainer.addEventListener('mouseenter', handleMouseEnter)
     scrollContainer.addEventListener('mouseleave', handleMouseLeave)
+
+    // Mobile: track scroll to update activeIndex
+    const handleScroll = () => {
+      if (isMobile) {
+        const cardWidth = 350 + 24 // card width + gap (w-[350px] + gap-6)
+        const idx = Math.round(scrollContainer.scrollLeft / cardWidth)
+        setActiveIndex(Math.min(Math.max(idx, 0), features.length - 1))
+      }
+    }
+    if (isMobile) {
+      scrollContainer.addEventListener('scroll', handleScroll)
+    }
 
     return () => {
       cancelAnimationFrame(animationFrameId)
       scrollContainer.removeEventListener('mouseenter', handleMouseEnter)
       scrollContainer.removeEventListener('mouseleave', handleMouseLeave)
+      if (isMobile) {
+        scrollContainer.removeEventListener('scroll', handleScroll)
+      }
     }
-  }, [])
+  }, [features.length])
+
+  // Mobile: scroll to card when dot is clicked
+  const handleDotClick = (idx: number) => {
+    const scrollContainer = scrollContainerRef.current
+    if (!scrollContainer) return
+    const cardWidth = 350 + 24 // card width + gap (w-[350px] + gap-6)
+    scrollContainer.scrollTo({ left: idx * cardWidth, behavior: 'smooth' })
+  }
 
   return (
     <section className="relative pt-24 sm:pt-28 md:pt-32 pb-16 md:pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-900 to-slate-800">
@@ -214,6 +238,39 @@ export default function WhatWeOffer() {
                 </div>
               );
             })}
+          </div>
+          {/* Pagination Dots and Arrows for Mobile */}
+          <div className="flex md:hidden justify-center items-center mt-4 gap-20">
+            {/* Left Arrow */}
+            <button
+              aria-label="Previous card"
+              className="w-7 h-7 flex items-center justify-center rounded-full bg-white/20 hover:bg-blue-500/80 text-white transition disabled:opacity-40"
+              onClick={() => handleDotClick(Math.max(activeIndex - 1, 0))}
+              disabled={activeIndex === 0}
+              type="button"
+            >
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            {/* Dots */}
+            {/* {features.map((_, idx) => (
+              <button
+                key={idx}
+                aria-label={`Go to card ${idx + 1}`}
+                className={`w-2.5 h-2.5 rounded-full transition-all duration-200 ${activeIndex === idx ? 'bg-blue-500 scale-125' : 'bg-white/30'}`}
+                onClick={() => handleDotClick(idx)}
+                type="button"
+              />
+            ))} */}
+            {/* Right Arrow */}
+            <button
+              aria-label="Next card"
+              className="w-7 h-7 flex items-center justify-center rounded-full bg-white/20 hover:bg-blue-500/80 text-white transition disabled:opacity-40"
+              onClick={() => handleDotClick(Math.min(activeIndex + 1, features.length - 1))}
+              disabled={activeIndex === features.length - 1}
+              type="button"
+            >
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </button>
           </div>
         </div>
       </div>
