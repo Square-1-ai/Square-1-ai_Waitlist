@@ -8,11 +8,18 @@ import {
 
   Pencil, Grid3x3, StickyNote, Type, Shapes, ChevronDown, 
 
+
   Undo, Redo, Pen, Minus, Plus, HelpCircle, User, Share2 
 
 } from "lucide-react";
 
-const TEXT = "Square 1 Ai integrates Artificial Intelligence, Adaptive Learning, and Real-World Launch Programs into one seamless experience, helping millions of learners build skills, validate knowledge, and turn learning into measurable success.";
+const TEXT_LINES = [
+  "READ number",
+  "IF number > 0 THEN PRINT \"Positive\"",
+  "ELSE PRINT \"Not Positive\"",
+  "END"
+];
+const TEXT = TEXT_LINES.join("\n");
 
 export function ChalkboardText() {
 
