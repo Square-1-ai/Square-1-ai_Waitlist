@@ -38,21 +38,21 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
     internetConnection: "",
     devices: [] as string[],
     heardAbout: "",
-    // Teacher Profile
-    subjects: "",
-    teachingLevel: "",
-    yearsExperience: "",
-    classTypePreference: "",
-    taughtOnline: "",
-    platformsUsed: "",
-    curriculums: "",
-    createStudyPacks: "",
-    availabilityToStart: "",
-    revenueSplit: "",
-    paymentMethod: "",
-    teachingSample: null as File | null,
-    earlyAccess: [] as string[],
-    consent: false,
+  // Teacher Profile
+  subjects: "",
+  teachingLevel: "",
+  yearsExperience: "",
+  classTypePreference: "",
+  taughtOnline: "",
+  platformsUsed: "",
+  curriculums: "",
+  createStudyPacks: "",
+  availabilityToStart: "",
+  revenueSplit: "",
+  paymentMethod: "",
+  earlyAccess: [] as string[],
+  consent: false,
+  teachingSample: undefined as File | undefined,
   })
 
   const totalSteps = 4
@@ -166,98 +166,36 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
     }
   }
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null
-    setFormData((prev) => ({
-      ...prev,
-      teachingSample: file,
-    }))
-    // Clear error for this field when user selects a file
-    if (errors.teachingSample) {
-      setErrors((prev) => {
-        const newErrors = { ...prev }
-        delete newErrors.teachingSample
-        return newErrors
-      })
-    }
-  }
+  // Helper to toggle array fields (devices, earlyAccess)
+  const handleArrayChange = (field: string, value: string) => {
+    setFormData((prev: typeof formData) => {
+      const arr = Array.isArray(prev[field as keyof typeof prev]) ? prev[field as keyof typeof prev] as string[] : [];
+      return {
+        ...prev,
+        [field]: arr.includes(value)
+          ? arr.filter((v) => v !== value)
+          : [...arr, value],
+      };
+    });
+  };
 
-  const handleArrayChange = (name: "devices" | "earlyAccess", value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: prev[name].includes(value)
-        ? prev[name].filter((item) => item !== value)
-        : [...prev[name], value],
-    }))
-    // Clear error for this field when user makes a selection
-    if (errors[name]) {
-      setErrors((prev) => {
-        const newErrors = { ...prev }
-        delete newErrors[name]
-        return newErrors
-      })
-    }
-  }
+  // Navigation helpers for multi-step form
+  const nextStep = () => setStep((s: number) => Math.min(s + 1, totalSteps));
+  const prevStep = () => setStep((s: number) => Math.max(s - 1, 1));
 
-  const nextStep = () => {
-    if (validateStep(step)) {
-      if (step < totalSteps) {
-        setStep(step + 1)
-        setErrors({})
-      }
-    }
-  }
-
-  const prevStep = () => {
-    if (step > 1) {
-      setStep(step - 1)
-      setErrors({})
-    }
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setSubmitError(null)
-
-    // Validate all steps before submission
-    for (let i = 1; i <= totalSteps; i++) {
-      if (!validateStep(i)) {
-        setStep(i)
-        setSubmitError("Please complete all required fields before submitting")
-        return
-      }
-    }
-
-    if (!formData.consent) {
-      setErrors({ consent: "Please agree to the terms to continue" })
-      setSubmitError("Please agree to the terms to continue")
-      return
-    }
-
-    setIsSubmitting(true)
-    setSubmitError(null)
-
-    try {
-      // Simulate API call - replace with actual API endpoint
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-      
-      // Call the onSubmit callback
-      onSubmit()
-      setSubmitSuccess(true)
-    } catch (error) {
-      setSubmitError(
-        error instanceof Error
-          ? error.message
-          : "Failed to submit form. Please try again."
-      )
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
+  // Video upload removed
   const getProgressPercentage = () => {
     return (step / totalSteps) * 100
   }
+
+  // Handle file input for teaching sample
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+    setFormData((prev) => ({
+      ...prev,
+      teachingSample: file || undefined,
+    }));
+  };
 
   const earlyAccessOptions = [
     "Teacher dashboard preview",
@@ -265,6 +203,81 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
     "Marketing tools for teachers",
     "Revenue insights",
   ]
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmitError(null);
+
+    // Validate current step before proceeding
+    if (!validateStep(step)) {
+      return;
+    }
+
+    // If not on last step, go to next step
+    if (step < totalSteps) {
+      nextStep();
+      return;
+    }
+
+    // On last step, submit the form
+    setIsSubmitting(true);
+    try {
+      // Prepare form data for submission
+      const data = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        if (key === "teachingSample" && value instanceof File) {
+          data.append(key, value);
+        } else if (Array.isArray(value)) {
+          value.forEach((v) => data.append(key, v));
+        } else {
+          data.append(key, value as string);
+        }
+      });
+
+      // Replace with your API endpoint
+      const response = await fetch("/api/teacher-waitlist", {
+        method: "POST",
+        body: data,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || "Submission failed. Please try again.");
+      }
+
+      setSubmitSuccess(true);
+      setFormData({
+        fullName: "",
+        email: "",
+        country: "",
+        city: "",
+        internetConnection: "",
+        devices: [],
+        heardAbout: "",
+        subjects: "",
+        teachingLevel: "",
+        yearsExperience: "",
+        classTypePreference: "",
+        taughtOnline: "",
+        platformsUsed: "",
+        curriculums: "",
+        createStudyPacks: "",
+        availabilityToStart: "",
+        revenueSplit: "",
+        paymentMethod: "",
+        earlyAccess: [],
+        consent: false,
+        teachingSample: undefined,
+      });
+      if (typeof onSubmit === "function") {
+        onSubmit();
+      }
+    } catch (error: any) {
+      setSubmitError(error.message || "An unexpected error occurred.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
     <section className="py-8 md:py-12 px-4 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800 min-h-screen relative overflow-hidden">

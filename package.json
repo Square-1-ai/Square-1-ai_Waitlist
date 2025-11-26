@@ -6,7 +6,8 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "eslint .",
-    "start": "next start"
+    "start": "next start",
+    "db:init": "ts-node scripts/init-db.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -50,6 +51,7 @@
     "gsap": "^3.13.0",
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
+    "mysql2": "^3.15.3",
     "motion": "^12.23.24",
     "next": "16.0.0",
     "next-themes": "^0.4.6",
@@ -62,7 +64,7 @@
     "sonner": "^1.7.4",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
-    "vaul": "^0.9.9",
+    "vaul": "^1.1.2",
     "zod": "3.25.76"
   },
   "devDependencies": {
