@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { Brain, Video, Trophy, Users, GraduationCap, Rocket, Globe } from "lucide-react"
+import { Brain, Video, Trophy, Users, GraduationCap, Rocket, Globe, ChevronLeft, ChevronRight } from "lucide-react"
 
 export default function WhatWeOffer() {
   const features = [
@@ -100,6 +100,24 @@ export default function WhatWeOffer() {
 
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
+  const [currentIndex, setCurrentIndex] = useState(0)
+  // Navigation logic for arrows
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev === 0 ? features.length - 1 : prev - 1));
+    scrollToCard(currentIndex === 0 ? features.length - 1 : currentIndex - 1);
+  };
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev === features.length - 1 ? 0 : prev + 1));
+    scrollToCard(currentIndex === features.length - 1 ? 0 : currentIndex + 1);
+  };
+
+  const scrollToCard = (idx: number) => {
+    const scrollContainer = scrollContainerRef.current;
+    if (!scrollContainer) return;
+    const cardWidth = 350 + 24; // card width + gap (w-[350px] + gap-6)
+    scrollContainer.scrollTo({ left: idx * cardWidth, behavior: 'smooth' });
+  };
 
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current
@@ -167,13 +185,12 @@ export default function WhatWeOffer() {
     }
   }, [features.length])
 
-  // Mobile: scroll to card when dot is clicked
+
+  // Mobile & desktop: scroll to card when dot is clicked
   const handleDotClick = (idx: number) => {
-    const scrollContainer = scrollContainerRef.current
-    if (!scrollContainer) return
-    const cardWidth = 350 + 24 // card width + gap (w-[350px] + gap-6)
-    scrollContainer.scrollTo({ left: idx * cardWidth, behavior: 'smooth' })
-  }
+    setCurrentIndex(idx);
+    scrollToCard(idx);
+  };
 
   return (
     <section className="relative pt-24 sm:pt-28 md:pt-32 pb-16 md:pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-900 to-slate-800">
@@ -188,8 +205,26 @@ export default function WhatWeOffer() {
           </p>
         </div>
 
-        {/* Horizontal Scrolling Cards */}
+        {/* Horizontal Scrolling Cards with Navigation Arrows */}
         <div className="relative overflow-hidden">
+          {/* Navigation Arrows */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-white/90 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10 md:hidden"
+            aria-label="Previous slide"
+            type="button"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-white/90 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10 md:hidden"
+            aria-label="Next slide"
+            type="button"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+
           <div 
             ref={scrollContainerRef}
             className="flex overflow-x-auto gap-6 pb-4 scrollbar-hide"
@@ -239,41 +274,25 @@ export default function WhatWeOffer() {
               );
             })}
           </div>
-          {/* Pagination Dots and Arrows for Mobile */}
-          <div className="flex md:hidden justify-center items-center mt-4 gap-20">
-            {/* Left Arrow */}
-            <button
-              aria-label="Previous card"
-              className="w-7 h-7 flex items-center justify-center rounded-full bg-white/20 hover:bg-blue-500/80 text-white transition disabled:opacity-40"
-              onClick={() => handleDotClick(Math.max(activeIndex - 1, 0))}
-              disabled={activeIndex === 0}
-              type="button"
-            >
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
-            </button>
-            {/* Dots */}
-            {/* {features.map((_, idx) => (
+          {/* Dots Indicator */}
+          <div className="flex justify-center gap-2 mt-8">
+            {features.map((_, index) => (
               <button
-                key={idx}
-                aria-label={`Go to card ${idx + 1}`}
-                className={`w-2.5 h-2.5 rounded-full transition-all duration-200 ${activeIndex === idx ? 'bg-blue-500 scale-125' : 'bg-white/30'}`}
-                onClick={() => handleDotClick(idx)}
+                key={index}
+                onClick={() => handleDotClick(index)}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  index === currentIndex 
+                    ? 'bg-white w-8' 
+                    : 'bg-white/50 hover:bg-white/75'
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
                 type="button"
               />
-            ))} */}
-            {/* Right Arrow */}
-            <button
-              aria-label="Next card"
-              className="w-7 h-7 flex items-center justify-center rounded-full bg-white/20 hover:bg-blue-500/80 text-white transition disabled:opacity-40"
-              onClick={() => handleDotClick(Math.min(activeIndex + 1, features.length - 1))}
-              disabled={activeIndex === features.length - 1}
-              type="button"
-            >
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
-            </button>
+            ))}
           </div>
         </div>
       </div>
     </section>
   )
 }
+
