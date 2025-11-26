@@ -1,8 +1,7 @@
 "use client"
 
-
-import { useState } from "react"
-import { useEffect } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import StudentWaitlistForm from "@/components/student-waitlist-form"
 import Footer from "@/components/footer"
 import { Share2, Clipboard, Loader, CheckCircle } from "lucide-react"
@@ -106,8 +105,8 @@ export default function StudentWaitlistPage() {
     <div className="min-h-screen bg-white">
       {!formSubmitted && <StudentWaitlistForm onSubmit={handleFormSubmit} />}
       {formSubmitted && (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-cyan-50 px-4">
-          <div className="text-center max-w-md animate-fade-in">
+        <div className="min-h-screen flex items-center justify-center px-4 bg-[#141e30]">
+          <div className="text-center max-w-md animate-fade-in text-white">
             <div className="text-6xl mb-6">🎉</div>
             <h2 className="text-3xl font-bold text-blue-900 mb-4">Thank You for Joining!</h2>
             {loading && (
