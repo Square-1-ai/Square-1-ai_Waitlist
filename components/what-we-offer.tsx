@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import { Brain, Video, Trophy, Users, GraduationCap, Rocket, Globe, ChevronLeft, ChevronRight } from "lucide-react"
 
 export default function WhatWeOffer() {
+  // Features for the scrolling cards (existing)
   const features = [
     {
       icon: Brain,
@@ -193,106 +194,144 @@ export default function WhatWeOffer() {
   };
 
   return (
-    <section className="relative pt-24 sm:pt-28 md:pt-32 pb-16 md:pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-900 to-slate-800">
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
-            What We Offer
+    <>
+      {/* New Section: Teach Smarter with AI */}
+      <section className="w-full bg-[#10192B] py-16 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white text-center mb-2">
+            Teach Smarter with <span className="text-sky-400">AI</span>
           </h2>
-          <p className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto">
-            A Complete Ecosystem For Learning, Growth, And Career Success
+          <p className="text-lg text-gray-300 text-center mb-10">
+            Our platform generates everything a teacher needs — automatically.
           </p>
-        </div>
-
-        {/* Horizontal Scrolling Cards with Navigation Arrows */}
-        <div className="relative overflow-hidden">
-          {/* Navigation Arrows */}
-          <button
-            onClick={prevSlide}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-white/90 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10 md:hidden"
-            aria-label="Previous slide"
-            type="button"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-          <button
-            onClick={nextSlide}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-white/90 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10 md:hidden"
-            aria-label="Next slide"
-            type="button"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
-
-          <div 
-            ref={scrollContainerRef}
-            className="flex overflow-x-auto gap-6 pb-4 scrollbar-hide"
-            style={{ scrollBehavior: 'auto' }}
-          >
-            {features.map((feature, index) => {
-              return (
-                <div
-                  key={index}
-                  className="relative flex-shrink-0 w-[350px] snap-center shadow-lg transition-all duration-300 group"
-                  style={{
-                    background: 'linear-gradient(135deg, rgba(41, 82, 204, 0.25) 0%, rgba(253,187,45,0.18) 100%)',
-                    border: '1.5px solid rgba(45, 145, 252, 0.18)',
-                    boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.18)',
-                    backdropFilter: 'blur(16px) saturate(180%)',
-                    WebkitBackdropFilter: 'blur(16px) saturate(180%)',
-                    borderRadius: '1.5rem',
-                    overflow: 'hidden',
-                  }}
-                >
-                  {/* Glass gradient overlay for extra effect */}
-                  <div
-                    className="absolute inset-0 pointer-events-none"
-                    style={{
-                      background: 'radial-gradient(circle at 80% 20%, rgba(18, 130, 221, 0.18) 0%, rgba(39, 21, 238, 0.05) 100%)',
-                      zIndex: 1,
-                    }}
-                  />
-                  {/* Content */}
-                  <div className="p-6 relative z-10">
-                    {/* Icon */}
-                    <div className="mb-4">
-                      <feature.icon className="w-14 h-14 text-white drop-shadow-lg" />
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="text-xl font-bold text-white mb-3">
-                      {feature.title}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-white/90 text-sm leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          {/* Dots Indicator */}
-          <div className="flex justify-center gap-2 mt-8">
-            {features.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => handleDotClick(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  index === currentIndex 
-                    ? 'bg-white w-8' 
-                    : 'bg-white/50 hover:bg-white/75'
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-                type="button"
-              />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {[
+              'AI-generated lecture notes',
+              'AI-generated quizzes',
+              'AI-generated mind maps',
+              'AI-generated podcasts from your lessons',
+              'AI-generated revision guides',
+              'AI student learning outcome summaries',
+              'Auto-created homework & questions',
+              'AI-powered assessments',
+              'Automatic class transcripts',
+            ].map((item, idx) => (
+              <div
+                key={item}
+                className="flex items-center gap-3 bg-[#10192B] border border-[#1E293B] rounded-xl px-6 py-5 shadow-sm"
+              >
+                <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#0ea5e9" fillOpacity="0.12"/><path d="M8.5 12.5l2 2 5-5" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <span className="text-white text-base font-medium">{item}</span>
+              </div>
             ))}
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Existing What We Offer Section */}
+      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-16 md:pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-900 to-slate-800">
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Section Header */}
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
+              What We Offer
+            </h2>
+            <p className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto">
+              A Complete Ecosystem For Learning, Growth, And Career Success
+            </p>
+          </div>
+
+          {/* Horizontal Scrolling Cards with Navigation Arrows */}
+          <div className="relative overflow-hidden flex items-center min-h-[400px]">
+            {/* Navigation Arrows */}
+            <button
+              onClick={prevSlide}
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-white/90 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10 md:hidden flex items-center justify-center"
+              aria-label="Previous slide"
+              type="button"
+              style={{height: '48px', width: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            <button
+              onClick={nextSlide}
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-white/90 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10 md:hidden flex items-center justify-center"
+              aria-label="Next slide"
+              type="button"
+              style={{height: '48px', width: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+
+            <div 
+              ref={scrollContainerRef}
+              className="flex overflow-x-auto gap-6 pb-4 scrollbar-hide w-full"
+              style={{ scrollBehavior: 'auto' }}
+            >
+              {features.map((feature, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="relative flex-shrink-0 w-[350px] snap-center shadow-lg transition-all duration-300 group"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(41, 82, 204, 0.25) 0%, rgba(253,187,45,0.18) 100%)',
+                      border: '1.5px solid rgba(45, 145, 252, 0.18)',
+                      boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.18)',
+                      backdropFilter: 'blur(16px) saturate(180%)',
+                      WebkitBackdropFilter: 'blur(16px) saturate(180%)',
+                      borderRadius: '1.5rem',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {/* Glass gradient overlay for extra effect */}
+                    <div
+                      className="absolute inset-0 pointer-events-none"
+                      style={{
+                        background: 'radial-gradient(circle at 80% 20%, rgba(18, 130, 221, 0.18) 0%, rgba(39, 21, 238, 0.05) 100%)',
+                        zIndex: 1,
+                      }}
+                    />
+                    {/* Content */}
+                    <div className="p-6 relative z-10">
+                      {/* Icon */}
+                      <div className="mb-4">
+                        <feature.icon className="w-14 h-14 text-white drop-shadow-lg" />
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="text-xl font-bold text-white mb-3">
+                        {feature.title}
+                      </h3>
+
+                      {/* Description */}
+                      <p className="text-white/90 text-sm leading-relaxed">
+                        {feature.description}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            {/* Dots Indicator */}
+            <div className="flex justify-center gap-2 mt-8 absolute bottom-4 left-1/2 -translate-x-1/2 w-auto">
+              {features.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleDotClick(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    index === currentIndex 
+                      ? 'bg-white w-8' 
+                      : 'bg-white/50 hover:bg-white/75'
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                  type="button"
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   )
 }
 
