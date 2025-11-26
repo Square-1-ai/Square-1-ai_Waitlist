@@ -188,7 +188,7 @@ export function NetworkAnimation() {
           alt="Square1 AI"
           className="w-auto h-auto object-contain"
           style={{
-            height: `${30 * scale}px`,
+            height: `${70 * scale}px`,
             width: 'auto',
           }}
         />

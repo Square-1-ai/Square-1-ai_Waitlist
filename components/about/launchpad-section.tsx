@@ -10,12 +10,12 @@ export function LaunchpadSection() {
           <div className="order-2 md:order-1">
             <div className="relative w-full aspect-square flex items-center justify-center">
               {/* Trophy in center */}
-              <div className="relative z-10 w-48 h-48 md:w-64 md:h-64 flex items-center justify-center">
+              <div className="relative z-10 w-28 h-28 sm:w-36 sm:h-36 md:w-64 md:h-64 flex items-center justify-center">
                 <Image 
                   src="/logo.svg" 
                   alt="Trophy" 
-                  width={225} 
-                  height={225}
+                  width={144} 
+                  height={144}
                   className="w-full h-full object-contain"
                 />
               </div>

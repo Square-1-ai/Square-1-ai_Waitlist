@@ -13,8 +13,8 @@ interface Country {
 }
 
 const countries: Country[] = [
-  { name: 'USA', x: 20, y: 22, avatar: '/students/student1.png', connections: [1, 5, 8] },
-  { name: 'Brazil', x: 35, y: 58, avatar: '/students/student2.png', connections: [0, 3] },
+  { name: 'USA', x: 15, y: 18, avatar: '/students/student1.png', connections: [1, 5, 8] },
+  { name: 'Brazil', x: 25, y: 68, avatar: '/students/student2.png', connections: [0, 3] },
   { name: 'UK', x: 48.5, y: 14, avatar: '/students/student3.png', connections: [6, 9] },
   { name: 'Russia', x: 66, y: 18, avatar: '/students/student4.png', connections: [10, 6] },
   { name: 'Egypt', x: 56, y: 36, avatar: '/students/student5.png', connections: [3, 4] },
