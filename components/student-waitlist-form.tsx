@@ -60,7 +60,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
     willingToPay: "",
     referralCode: getRefIdFromUrl(),
     earlyAccess: [] as string[],
-    consent: false,
+    newsletter: false,
   })
 
   const totalSteps = 4
@@ -129,10 +129,6 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
       }
       if (formData.earlyAccess.length === 0) {
         newErrors.earlyAccess = "Please select at least one early access option"
-      }
-    } else if (stepNumber === 4) {
-      if (!formData.consent) {
-        newErrors.consent = "Please agree to the terms to continue"
       }
     }
 
@@ -213,10 +209,6 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.consent) {
-      alert('Please accept the terms and conditions to continue.');
-      return;
-    }
     
     try {
       const res = await fetch('/api/waitlist/submit', {
@@ -817,31 +809,17 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
                   <Separator className="bg-white/20" />
                   <div className="flex items-start space-x-3 p-4 bg-white/10 rounded-lg border border-white/20">
                     <Checkbox
-                      id="consent"
-                      checked={formData.consent}
+                      id="newsletter"
+                      checked={formData.newsletter}
                       onCheckedChange={(checked) => {
-                        setFormData((prev) => ({ ...prev, consent: checked === true }))
-                        if (errors.consent) {
-                          setErrors((prev) => {
-                            const newErrors = { ...prev }
-                            delete newErrors.consent
-                            return newErrors
-                          })
-                        }
+                        setFormData((prev) => ({ ...prev, newsletter: checked === true }))
                       }}
-                      required
                       className="mt-1 border-white/30 data-[state=checked]:bg-white data-[state=checked]:text-purple-900"
                     />
-                    <Label htmlFor="consent" className="text-sm font-normal cursor-pointer leading-relaxed text-white">
-                      I agree to receive updates, early access info, and beta invites from Square 1 Ai. <span className="text-red-500">*</span>
+                    <Label htmlFor="newsletter" className="text-sm font-normal cursor-pointer leading-relaxed text-white">
+                      I agree to receive updates, early access info, and beta invites from Square 1 Ai.
                     </Label>
                   </div>
-                  {errors.consent && (
-                    <p className="text-sm text-red-400 flex items-center gap-1">
-                      <AlertCircle className="w-4 h-4" />
-                      {errors.consent}
-                    </p>
-                  )}
                 </div>
               )}
 
@@ -874,7 +852,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
                 {step === totalSteps && (
                   <Button
                     type="submit"
-                    disabled={!formData.consent || isSubmitting}
+                    disabled={isSubmitting}
                     className="ml-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 text-white"
                   >
                     {isSubmitting ? "Submitting..." : "Join the Waitlist!"}

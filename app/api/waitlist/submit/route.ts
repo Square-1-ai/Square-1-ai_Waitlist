@@ -15,9 +15,6 @@ function validateWaitlistData(data: any): { valid: boolean; error?: string } {
   if (!data.email || !EMAIL_REGEX.test(data.email)) {
     return { valid: false, error: 'Valid email is required' };
   }
-  if (!data.consent) {
-    return { valid: false, error: 'Consent is required' };
-  }
   return { valid: true };
 }
 
@@ -43,7 +40,6 @@ export async function POST(req: NextRequest) {
       willing_to_pay VARCHAR(50),
       referral_code VARCHAR(100),
       early_access TEXT,
-      consent BOOLEAN,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       INDEX idx_email (email),
       INDEX idx_created_at (created_at)
@@ -72,7 +68,6 @@ export async function POST(req: NextRequest) {
       revenue_split VARCHAR(100),
       payment_method VARCHAR(100),
       early_access TEXT,
-      consent BOOLEAN,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       INDEX idx_email (email),
       INDEX idx_created_at (created_at)
@@ -108,8 +103,8 @@ export async function POST(req: NextRequest) {
           full_name, email, country, city, internet_connection, devices, 
           heard_about, education_level, subjects, learning_preference, 
           taken_online_courses, why_interested, motivation, competitions, 
-          hours_per_week, willing_to_pay, referral_code, early_access, consent
-        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+          hours_per_week, willing_to_pay, referral_code, early_access
+        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
         [
           sanitizeString(data.fullName),
           sanitizedEmail,
@@ -128,8 +123,7 @@ export async function POST(req: NextRequest) {
           sanitizeString(data.hoursPerWeek),
           sanitizeString(data.willingToPay),
           sanitizeString(data.referralCode),
-          JSON.stringify(data.earlyAccess || []),
-          !!data.consent
+          JSON.stringify(data.earlyAccess || [])
         ]
       );
     } else {
@@ -140,8 +134,8 @@ export async function POST(req: NextRequest) {
           heard_about, subjects, teaching_level, years_experience, 
           class_type_preference, taught_online, platforms_used, curriculums, 
           create_study_packs, availability_to_start, revenue_split, 
-          payment_method, early_access, consent
-        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+          payment_method, early_access
+        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
         [
           sanitizeString(data.fullName),
           sanitizedEmail,
@@ -161,8 +155,7 @@ export async function POST(req: NextRequest) {
           sanitizeString(data.availabilityToStart),
           sanitizeString(data.revenueSplit),
           sanitizeString(data.paymentMethod),
-          JSON.stringify(data.earlyAccess || []),
-          !!data.consent
+          JSON.stringify(data.earlyAccess || [])
         ]
       );
     }

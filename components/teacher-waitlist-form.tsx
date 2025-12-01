@@ -23,7 +23,7 @@ import { Separator } from "@/components/ui/separator"
 import TypingText from "@/components/ui/typing-text"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
-export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void }) {
+export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: any) => void }) {
   const [step, setStep] = useState(1)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -51,7 +51,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
   revenueSplit: "",
   paymentMethod: "",
   earlyAccess: [] as string[],
-  consent: false,
+  newsletter: false,
   teachingSample: undefined as File | undefined,
   })
 
@@ -141,10 +141,6 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
       if (formData.earlyAccess.length === 0) {
         newErrors.earlyAccess = "Please select at least one early access option"
       }
-    } else if (stepNumber === 4) {
-      if (!formData.consent) {
-        newErrors.consent = "Please agree to the terms to continue"
-      }
     }
 
     setErrors(newErrors)
@@ -222,58 +218,25 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
     // On last step, submit the form
     setIsSubmitting(true);
     try {
-      // Prepare form data for submission
-      const data = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
-        if (key === "teachingSample" && value instanceof File) {
-          data.append(key, value);
-        } else if (Array.isArray(value)) {
-          value.forEach((v) => data.append(key, v));
-        } else {
-          data.append(key, value as string);
-        }
+      const response = await fetch('/api/waitlist/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'teacher', data: formData }),
       });
 
-      // Replace with your API endpoint
-      const response = await fetch("/api/teacher-waitlist", {
-        method: "POST",
-        body: data,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || "Submission failed. Please try again.");
+      const result = await response.json();
+      
+      if (response.ok) {
+        onSubmit(formData);
+      } else if (result.error && result.error.includes('already registered')) {
+        alert('This email is already registered on the waitlist.');
+        onSubmit(formData);
+      } else {
+        alert(result.error || 'Submission failed. Please try again.');
       }
-
-      setSubmitSuccess(true);
-      setFormData({
-        fullName: "",
-        email: "",
-        country: "",
-        city: "",
-        internetConnection: "",
-        devices: [],
-        heardAbout: "",
-        subjects: "",
-        teachingLevel: "",
-        yearsExperience: "",
-        classTypePreference: "",
-        taughtOnline: "",
-        platformsUsed: "",
-        curriculums: "",
-        createStudyPacks: "",
-        availabilityToStart: "",
-        revenueSplit: "",
-        paymentMethod: "",
-        earlyAccess: [],
-        consent: false,
-        teachingSample: undefined,
-      });
-      if (typeof onSubmit === "function") {
-        onSubmit();
-      }
-    } catch (error: any) {
-      setSubmitError(error.message || "An unexpected error occurred.");
+    } catch (err) {
+      console.error('Submission error:', err);
+      alert('Network error. Please check your connection and try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -875,31 +838,17 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                   <Separator className="bg-white/20" />
                   <div className="flex items-start space-x-3 p-4 bg-white/10 rounded-lg border border-white/20">
                     <Checkbox
-                      id="consent"
-                      checked={formData.consent}
+                      id="newsletter"
+                      checked={formData.newsletter}
                       onCheckedChange={(checked) => {
-                        setFormData((prev) => ({ ...prev, consent: checked === true }))
-                        if (errors.consent) {
-                          setErrors((prev) => {
-                            const newErrors = { ...prev }
-                            delete newErrors.consent
-                            return newErrors
-                          })
-                        }
+                        setFormData((prev) => ({ ...prev, newsletter: checked === true }))
                       }}
-                      required
                       className="mt-1 border-white/30 data-[state=checked]:bg-white data-[state=checked]:text-purple-900"
                     />
-                    <Label htmlFor="consent" className="text-sm font-normal cursor-pointer leading-relaxed text-white">
-                      I agree to receive updates, early access info, and beta invites from Square 1 Ai. <span className="text-red-500">*</span>
+                    <Label htmlFor="newsletter" className="text-sm font-normal cursor-pointer leading-relaxed text-white">
+                      I agree to receive updates, early access info, and beta invites from Square 1 Ai.
                     </Label>
                   </div>
-                  {errors.consent && (
-                    <p className="text-sm text-red-400 flex items-center gap-1">
-                      <AlertCircle className="w-4 h-4" />
-                      {errors.consent}
-                    </p>
-                  )}
                 </div>
               )}
 
@@ -932,7 +881,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: () => void
                 {step === totalSteps && (
                   <Button
                     type="submit"
-                    disabled={!formData.consent || isSubmitting}
+                    disabled={isSubmitting}
                     className="ml-auto bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 disabled:opacity-50 text-white"
                   >
                     {isSubmitting ? "Submitting..." : "Join the Waitlist!"}

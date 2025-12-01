@@ -36,7 +36,7 @@ export default function StudentWaitlistPage() {
 
   // Called after local form submit
   // Accepts formData and errorType (for duplicate)
-  const handleFormSubmit = (formData: any, errorType?: string) => {
+  const handleFormSubmit = async (formData: any, errorType?: string) => {
     setStudentEmail(formData.email);
     setReferralCode(formData.referralCode || '');
     setFormSubmitted(true);
@@ -44,6 +44,29 @@ export default function StudentWaitlistPage() {
       setError('This email is already registered on the waitlist. Showing your referral info.');
     } else {
       setError("");
+    }
+
+    // Always call newsletter API with newsletter value (true/false)
+    try {
+      const response = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: formData.email,
+          name: formData.fullName,
+          role: 'student',
+          newsletter: formData.newsletter,
+        }),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Newsletter subscription failed:', errorData);
+      } else {
+        console.log('Newsletter subscription successful');
+      }
+    } catch (err) {
+      console.error('Newsletter subscription error:', err);
     }
   };
 

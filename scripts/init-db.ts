@@ -21,7 +21,6 @@ CREATE TABLE IF NOT EXISTS students (
   willing_to_pay VARCHAR(50),
   referral_code VARCHAR(100),
   early_access TEXT,
-  consent BOOLEAN,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_email (email),
   INDEX idx_created_at (created_at)
@@ -50,7 +49,6 @@ CREATE TABLE IF NOT EXISTS teachers (
   revenue_split VARCHAR(100),
   payment_method VARCHAR(100),
   early_access TEXT,
-  consent BOOLEAN,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_email (email),
   INDEX idx_created_at (created_at)

@@ -7,9 +7,37 @@ import Footer from "@/components/footer"
 export default function TeacherWaitlistPage() {
   const [formSubmitted, setFormSubmitted] = useState(false)
 
+  const handleFormSubmit = async (formData?: any) => {
+    setFormSubmitted(true);
+
+    if (formData) {
+      try {
+        const response = await fetch('/api/newsletter/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: formData.email,
+            name: formData.fullName,
+            role: 'teacher',
+            newsletter: formData.newsletter,
+          }),
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error('Newsletter subscription failed:', errorData);
+        } else {
+          console.log('Newsletter subscription successful');
+        }
+      } catch (err) {
+        console.error('Newsletter subscription error:', err);
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
-      {!formSubmitted && <TeacherWaitlistForm onSubmit={() => setFormSubmitted(true)} />}
+      {!formSubmitted && <TeacherWaitlistForm onSubmit={handleFormSubmit} />}
       {formSubmitted && (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-50 to-blue-50 px-4">
           <div className="text-center max-w-md animate-fade-in">

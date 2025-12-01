@@ -110,7 +110,7 @@ export default function Hero() {
             <p className="text-base sm:text-lg text-blue-100 px-4">Get Exclusive Benefits And Shape The Future Of AI Learning</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6 px-2">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 px-2 max-w-6xl mx-auto auto-rows-fr">
             {[
               {
                 icon: Shield,
@@ -137,18 +137,23 @@ export default function Hero() {
                 title: "Personalized Learning Paths",
                 description: "AI tailors your learning journey to your goals and pace",
               },
+              {
+                icon: ChevronRight,
+                title: "Priority Support & Updates",
+                description: "Get dedicated support and be the first to know about new features",
+              },
             ].map((feature, index) => {
               const IconComponent = feature.icon
               return (
                 <div
                   key={index}
-                  className="p-5 sm:p-6 rounded-xl sm:rounded-2xl border border-blue-200 bg-white hover:shadow-xl transition-all duration-300 hover:scale-105 hover:border-blue-400"
+                  className="p-6 sm:p-8 rounded-xl sm:rounded-2xl border border-blue-200 bg-white hover:shadow-xl transition-all duration-300 hover:scale-105 hover:border-blue-400 flex flex-col h-full"
                 >
-                  <div className="mb-3 sm:mb-4">
-                    <IconComponent className="w-8 h-8 sm:w-12 sm:h-12 text-blue-900" />
+                  <div className="mb-4 sm:mb-5">
+                    <IconComponent className="w-10 h-10 sm:w-14 sm:h-14 text-blue-900" />
                   </div>
-                  <h3 className="text-sm sm:text-xl font-bold text-blue-900 mb-2 sm:mb-3">{feature.title}</h3>
-                  <p className="text-xs sm:text-base text-blue-900">{feature.description}</p>
+                  <h3 className="text-base sm:text-xl font-bold text-blue-900 mb-3 sm:mb-4">{feature.title}</h3>
+                  <p className="text-sm sm:text-base text-blue-900 flex-grow">{feature.description}</p>
                 </div>
               );
             })}

@@ -11,6 +11,13 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const email = sanitizeEmail(body.email);
+    const name = body.name;
+    const role = body.role;
+    const newsletter = body.newsletter || false;
+    const studentTagId = 13026251
+    const teacherTagId = 13026254
+    const newsLetterEnabledTagId = 13026258
+    
 
     if (!email || !EMAIL_REGEX.test(email)) {
       return NextResponse.json(
@@ -19,41 +26,54 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const BEEHIIV_API_KEY = process.env.BEEHIIV_API_KEY;
-    const BEEHIIV_PUBLICATION_ID = process.env.BEEHIIV_PUBLICATION_ID;
+    const CONVERTKIT_API_KEY = process.env.CONVERTKIT_API_KEY;
+    const formId = process.env.CONVERTKIT_FORM_ID;
 
-    if (!BEEHIIV_API_KEY || !BEEHIIV_PUBLICATION_ID) {
-      console.error('Missing Beehiiv configuration');
+    if (!CONVERTKIT_API_KEY ) {
+      console.error('Missing ConvertKit configuration');
       return NextResponse.json(
         { error: 'Newsletter service is not configured' },
         { status: 500 }
       );
     }
 
-    const beehiivResponse = await fetch(
-      `https://api.beehiiv.com/v2/publications/${BEEHIIV_PUBLICATION_ID}/subscriptions`, {
+    const tags: number[] = [];
+    
+    if (role === 'student') {
+      tags.push(studentTagId);
+    } else if (role === 'teacher') {
+      tags.push(teacherTagId);
+    }
+    
+    if (newsletter) {
+      tags.push(newsLetterEnabledTagId);
+    }
+
+    console.log('Subscribing with tags:', tags);
+        console.log('Subscribing with nmae:', name);
+
+
+    const convertkitResponse = await fetch(
+      `https://api.convertkit.com/v3/forms/${formId}/subscribe`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${BEEHIIV_API_KEY}`,
       },
       body: JSON.stringify({
         email: email,
-        reactivate_existing: false,
-        send_welcome_email: true,
-        utm_source: 'website',
-        utm_medium: 'footer',
-        utm_campaign: 'newsletter_signup',
+        api_key: CONVERTKIT_API_KEY,
+        first_name: name,
+        tags: tags,
       }),
     });
 
-    const beehiivData = await beehiivResponse.json();
+    const convertkitData = await convertkitResponse.json();
 
-    if (!beehiivResponse.ok) {
-      console.error('Beehiiv API error:', beehiivData);
+    if (!convertkitResponse.ok) {
+      console.error('ConvertKit API error:', convertkitData);
 
-      if (beehiivResponse.status === 400 && beehiivData.errors) {
-        const errorMessage = beehiivData.errors[0]?.message || 'Invalid email or already subscribed';
+      if (convertkitResponse.status === 400 && convertkitData.errors) {
+        const errorMessage = convertkitData.errors[0]?.message || 'Invalid email or already subscribed';
         return NextResponse.json(
           { error: errorMessage },
           { status: 400 }
@@ -62,7 +82,7 @@ export async function POST(req: NextRequest) {
 
       return NextResponse.json(
         { error: 'Failed to subscribe. Please try again later.' },
-        { status: beehiivResponse.status }
+        { status: convertkitResponse.status }
       );
     }
 
@@ -70,7 +90,7 @@ export async function POST(req: NextRequest) {
       { 
         message: 'Successfully subscribed to newsletter!',
         success: true,
-        data: beehiivData
+        data: convertkitData
       },
       { status: 200 }
     );
