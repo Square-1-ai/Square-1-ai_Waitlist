@@ -10,7 +10,7 @@ export default function TeacherWaitlistPage() {
   const handleFormSubmit = async (formData?: any) => {
     setFormSubmitted(true);
 
-    if (formData) {
+    if (formData && formData.newsletter) {
       try {
         const response = await fetch('/api/newsletter/subscribe', {
           method: 'POST',

@@ -46,27 +46,29 @@ export default function StudentWaitlistPage() {
       setError("");
     }
 
-    // Always call newsletter API with newsletter value (true/false)
-    try {
-      const response = await fetch('/api/newsletter/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: formData.email,
-          name: formData.fullName,
-          role: 'student',
-          newsletter: formData.newsletter,
-        }),
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Newsletter subscription failed:', errorData);
-      } else {
-        console.log('Newsletter subscription successful');
+    // Only call newsletter API if user checked the newsletter checkbox
+    if (formData.newsletter) {
+      try {
+        const response = await fetch('/api/newsletter/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: formData.email,
+            name: formData.fullName,
+            role: 'student',
+            newsletter: formData.newsletter,
+          }),
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error('Newsletter subscription failed:', errorData);
+        } else {
+          console.log('Newsletter subscription successful');
+        }
+      } catch (err) {
+        console.error('Newsletter subscription error:', err);
       }
-    } catch (err) {
-      console.error('Newsletter subscription error:', err);
     }
   };
 
