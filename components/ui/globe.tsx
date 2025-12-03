@@ -13,7 +13,7 @@ const GLOBE_CONFIG: COBEOptions = {
   height: 800,
   onRender: () => {},
   devicePixelRatio: 2,
-  phi: 0,
+  phi: 1.4, // Start from Sri Lanka's longitude (approximately 80°E = 1.4 radians)
   theta: 0.3,
   dark: 0,
   diffuse: 0.4,
@@ -23,6 +23,7 @@ const GLOBE_CONFIG: COBEOptions = {
   markerColor: [0.4, 0.6, 1],
   glowColor: [1, 1, 1],
   markers: [
+    { location: [7.8731, 80.7718], size: 0.08 }, // Sri Lanka (Colombo)
     { location: [14.5995, 120.9842], size: 0.03 }, // Manila
     { location: [19.076, 72.8777], size: 0.1 }, // Mumbai
     { location: [23.8103, 90.4125], size: 0.05 }, // Dhaka
@@ -95,6 +96,61 @@ const GLOBE_CONFIG: COBEOptions = {
     { location: [19.076, 72.8777], size: 0.06 }, // Mumbai (alt)
     { location: [31.9686, 99.9018], size: 0.06 }, // Texas (center)
     { location: [35.8617, 104.1954], size: 0.06 }, // China (center, alt)
+    // Additional markers for better global coverage
+    { location: [-1.2921, 36.8219], size: 0.06 }, // Nairobi
+    { location: [26.8206, 30.8025], size: 0.06 }, // Luxor
+    { location: [15.5007, 32.5599], size: 0.06 }, // Khartoum
+    { location: [33.8869, 9.5375], size: 0.06 }, // Tunis
+    { location: [36.7538, 3.0588], size: 0.06 }, // Algiers
+    { location: [-26.2041, 28.0473], size: 0.06 }, // Johannesburg
+    { location: [9.082, 8.6753], size: 0.06 }, // Abuja
+    { location: [-4.4419, 15.2663], size: 0.06 }, // Kinshasa
+    { location: [5.6037, -0.1870], size: 0.06 }, // Accra
+    { location: [-6.7924, 39.2083], size: 0.06 }, // Dar es Salaam
+    { location: [15.3875, 44.1910], size: 0.06 }, // Sana'a
+    { location: [33.3152, 44.3661], size: 0.06 }, // Baghdad
+    { location: [36.2048, 138.2529], size: 0.06 }, // Nagano
+    { location: [37.9838, 23.7275], size: 0.06 }, // Athens
+    { location: [44.7866, 20.4489], size: 0.06 }, // Belgrade
+    { location: [47.4979, 19.0402], size: 0.06 }, // Budapest
+    { location: [50.4501, 30.5234], size: 0.06 }, // Kyiv
+    { location: [59.4370, 24.7536], size: 0.06 }, // Tallinn
+    { location: [56.9496, 24.1052], size: 0.06 }, // Riga
+    { location: [54.6872, 25.2797], size: 0.06 }, // Vilnius
+    { location: [52.2297, 21.0122], size: 0.06 }, // Warsaw
+    { location: [44.4268, 26.1025], size: 0.06 }, // Bucharest
+    { location: [42.6977, 23.3219], size: 0.06 }, // Sofia
+    { location: [64.1466, -21.9426], size: 0.06 }, // Reykjavik
+    { location: [12.5657, -7.9925], size: 0.06 }, // Bamako
+    { location: [33.9716, -6.8498], size: 0.06 }, // Rabat
+    { location: [14.6928, -17.4467], size: 0.06 }, // Dakar
+    { location: [17.3850, 78.4867], size: 0.06 }, // Hyderabad
+    { location: [22.5726, 88.3639], size: 0.06 }, // Kolkata
+    { location: [13.0827, 80.2707], size: 0.06 }, // Chennai
+    { location: [11.0168, 76.9558], size: 0.06 }, // Coimbatore
+    { location: [18.5204, 73.8567], size: 0.06 }, // Pune
+    { location: [23.0225, 72.5714], size: 0.06 }, // Ahmedabad
+    { location: [26.9124, 75.7873], size: 0.06 }, // Jaipur
+    { location: [27.1767, 78.0081], size: 0.06 }, // Agra
+    { location: [34.0522, 74.7915], size: 0.06 }, // Srinagar
+    { location: [8.5241, 76.9366], size: 0.06 }, // Trivandrum
+    { location: [9.9252, 78.1198], size: 0.06 }, // Madurai
+    { location: [24.5854, 73.7125], size: 0.06 }, // Udaipur
+    { location: [21.1702, 72.8311], size: 0.06 }, // Surat
+    { location: [49.2827, -123.1207], size: 0.06 }, // Vancouver
+    { location: [51.0447, -114.0719], size: 0.06 }, // Calgary
+    { location: [53.5461, -113.4938], size: 0.06 }, // Edmonton
+    { location: [43.6532, -79.3832], size: 0.06 }, // Toronto
+    { location: [45.4215, -75.6972], size: 0.06 }, // Ottawa
+    { location: [46.8139, -71.2080], size: 0.06 }, // Quebec City
+    { location: [44.6488, -63.5752], size: 0.06 }, // Halifax
+    { location: [-37.8136, 144.9631], size: 0.06 }, // Melbourne
+    { location: [-27.4698, 153.0251], size: 0.06 }, // Brisbane
+    { location: [-31.9505, 115.8605], size: 0.06 }, // Perth
+    { location: [-35.2809, 149.1300], size: 0.06 }, // Canberra
+    { location: [-41.2865, 174.7762], size: 0.06 }, // Wellington
+    { location: [-36.8485, 174.7633], size: 0.06 }, // Auckland
+    { location: [-43.5321, 172.6362], size: 0.06 }, // Christchurch
   ],
 }
 
