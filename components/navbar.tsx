@@ -134,13 +134,6 @@ export default function Navbar() {
               About
             </Link>
             <Link 
-              href="/feedback" 
-              className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors ${pathname === '/feedback' ? 'border-b-2 border-blue-500 pb-1' : ''}`}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Feedback
-            </Link>
-            <Link 
               href="/courses" 
               className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors ${pathname === '/courses' ? 'border-b-2 border-blue-500 pb-1' : ''}`}
               onClick={() => setIsMenuOpen(false)}
@@ -153,6 +146,13 @@ export default function Navbar() {
               onClick={() => setIsMenuOpen(false)}
             >
               Teachers
+            </Link>
+            <Link 
+              href="/feedback" 
+              className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors ${pathname === '/feedback' ? 'border-b-2 border-blue-500 pb-1' : ''}`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Feedback
             </Link>
           </div>
         </div>

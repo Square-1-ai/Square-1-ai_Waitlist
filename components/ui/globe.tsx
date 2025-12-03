@@ -13,7 +13,7 @@ const GLOBE_CONFIG: COBEOptions = {
   height: 800,
   onRender: () => {},
   devicePixelRatio: 2,
-  phi: 0,
+  phi: 1.4, // Start from Sri Lanka's longitude (approximately 80°E = 1.4 radians)
   theta: 0.3,
   dark: 0,
   diffuse: 0.4,
@@ -23,6 +23,7 @@ const GLOBE_CONFIG: COBEOptions = {
   markerColor: [0.4, 0.6, 1],
   glowColor: [1, 1, 1],
   markers: [
+    { location: [7.8731, 80.7718], size: 0.08 }, // Sri Lanka (Colombo)
     { location: [14.5995, 120.9842], size: 0.03 }, // Manila
     { location: [19.076, 72.8777], size: 0.1 }, // Mumbai
     { location: [23.8103, 90.4125], size: 0.05 }, // Dhaka
@@ -95,6 +96,110 @@ const GLOBE_CONFIG: COBEOptions = {
     { location: [19.076, 72.8777], size: 0.06 }, // Mumbai (alt)
     { location: [31.9686, 99.9018], size: 0.06 }, // Texas (center)
     { location: [35.8617, 104.1954], size: 0.06 }, // China (center, alt)
+    // Additional markers for better global coverage
+    { location: [-1.2921, 36.8219], size: 0.06 }, // Nairobi
+    { location: [26.8206, 30.8025], size: 0.06 }, // Luxor
+    { location: [15.5007, 32.5599], size: 0.06 }, // Khartoum
+    { location: [33.8869, 9.5375], size: 0.06 }, // Tunis
+    { location: [36.7538, 3.0588], size: 0.06 }, // Algiers
+    { location: [-26.2041, 28.0473], size: 0.06 }, // Johannesburg
+    { location: [9.082, 8.6753], size: 0.06 }, // Abuja
+    { location: [-4.4419, 15.2663], size: 0.06 }, // Kinshasa
+    { location: [5.6037, -0.1870], size: 0.06 }, // Accra
+    { location: [-6.7924, 39.2083], size: 0.06 }, // Dar es Salaam
+    { location: [15.3875, 44.1910], size: 0.06 }, // Sana'a
+    { location: [33.3152, 44.3661], size: 0.06 }, // Baghdad
+    { location: [36.2048, 138.2529], size: 0.06 }, // Nagano
+    { location: [37.9838, 23.7275], size: 0.06 }, // Athens
+    { location: [44.7866, 20.4489], size: 0.06 }, // Belgrade
+    { location: [47.4979, 19.0402], size: 0.06 }, // Budapest
+    { location: [50.4501, 30.5234], size: 0.06 }, // Kyiv
+    { location: [59.4370, 24.7536], size: 0.06 }, // Tallinn
+    { location: [56.9496, 24.1052], size: 0.06 }, // Riga
+    { location: [54.6872, 25.2797], size: 0.06 }, // Vilnius
+    { location: [52.2297, 21.0122], size: 0.06 }, // Warsaw
+    { location: [44.4268, 26.1025], size: 0.06 }, // Bucharest
+    { location: [42.6977, 23.3219], size: 0.06 }, // Sofia
+    { location: [64.1466, -21.9426], size: 0.06 }, // Reykjavik
+    { location: [12.5657, -7.9925], size: 0.06 }, // Bamako
+    { location: [33.9716, -6.8498], size: 0.06 }, // Rabat
+    { location: [14.6928, -17.4467], size: 0.06 }, // Dakar
+    { location: [17.3850, 78.4867], size: 0.06 }, // Hyderabad
+    { location: [22.5726, 88.3639], size: 0.06 }, // Kolkata
+    { location: [13.0827, 80.2707], size: 0.06 }, // Chennai
+    { location: [11.0168, 76.9558], size: 0.06 }, // Coimbatore
+    { location: [18.5204, 73.8567], size: 0.06 }, // Pune
+    { location: [23.0225, 72.5714], size: 0.06 }, // Ahmedabad
+    { location: [26.9124, 75.7873], size: 0.06 }, // Jaipur
+    { location: [27.1767, 78.0081], size: 0.06 }, // Agra
+    { location: [34.0522, 74.7915], size: 0.06 }, // Srinagar
+    { location: [8.5241, 76.9366], size: 0.06 }, // Trivandrum
+    { location: [9.9252, 78.1198], size: 0.06 }, // Madurai
+    { location: [24.5854, 73.7125], size: 0.06 }, // Udaipur
+    { location: [21.1702, 72.8311], size: 0.06 }, // Surat
+    { location: [49.2827, -123.1207], size: 0.06 }, // Vancouver
+    { location: [51.0447, -114.0719], size: 0.06 }, // Calgary
+    { location: [53.5461, -113.4938], size: 0.06 }, // Edmonton
+    { location: [43.6532, -79.3832], size: 0.06 }, // Toronto
+    { location: [45.4215, -75.6972], size: 0.06 }, // Ottawa
+    { location: [46.8139, -71.2080], size: 0.06 }, // Quebec City
+    { location: [44.6488, -63.5752], size: 0.06 }, // Halifax
+    { location: [-37.8136, 144.9631], size: 0.06 }, // Melbourne
+    { location: [-27.4698, 153.0251], size: 0.06 }, // Brisbane
+    { location: [-31.9505, 115.8605], size: 0.06 }, // Perth
+    { location: [-35.2809, 149.1300], size: 0.06 }, // Canberra
+    { location: [-41.2865, 174.7762], size: 0.06 }, // Wellington
+    { location: [-36.8485, 174.7633], size: 0.06 }, // Auckland
+    { location: [-43.5321, 172.6362], size: 0.06 }, // Christchurch
+    // More African cities
+    { location: [33.5731, -7.5898], size: 0.06 }, // Casablanca
+    { location: [30.0626, 31.2497], size: 0.06 }, // Cairo (alt)
+    { location: [31.7917, -7.0926], size: 0.06 }, // Marrakech
+    { location: [36.8065, 10.1815], size: 0.06 }, // Tunis (alt)
+    { location: [32.8872, 13.1913], size: 0.06 }, // Tripoli
+    { location: [4.8594, 31.5713], size: 0.06 }, // Juba
+    { location: [0.3476, 32.5825], size: 0.06 }, // Kampala
+    { location: [9.0579, 7.4951], size: 0.06 }, // Abuja (alt)
+    { location: [6.4531, 3.3958], size: 0.06 }, // Lagos (alt)
+    { location: [7.3775, 3.9470], size: 0.06 }, // Ibadan
+    { location: [12.0022, 8.5919], size: 0.06 }, // Kano
+    { location: [5.5600, -0.2050], size: 0.06 }, // Accra (alt)
+    { location: [6.1256, 1.2223], size: 0.06 }, // Lome
+    { location: [6.3703, 5.6037], size: 0.06 }, // Cotonou
+    { location: [12.3714, -1.5197], size: 0.06 }, // Ouagadougou
+    { location: [5.3599, -4.0082], size: 0.06 }, // Abidjan
+    { location: [13.4549, -16.5790], size: 0.06 }, // Banjul
+    { location: [8.9806, -13.2358], size: 0.06 }, // Freetown
+    { location: [6.8770, -5.3009], size: 0.06 }, // Yamoussoukro
+    { location: [9.5293, -13.6773], size: 0.06 }, // Conakry
+    { location: [11.8657, 15.5989], size: 0.06 }, // N'Djamena
+    { location: [3.8480, 11.5021], size: 0.06 }, // Yaounde
+    { location: [4.0511, 9.7679], size: 0.06 }, // Douala
+    { location: [0.3901, 9.4544], size: 0.06 }, // Libreville
+    { location: [-0.2280, 15.8277], size: 0.06 }, // Brazzaville
+    { location: [-8.8383, 13.2344], size: 0.06 }, // Luanda
+    { location: [-15.4167, 28.2833], size: 0.06 }, // Lusaka
+    { location: [-17.8252, 31.0335], size: 0.06 }, // Harare
+    { location: [-25.9692, 32.5732], size: 0.06 }, // Maputo
+    { location: [-20.1609, 57.5012], size: 0.06 }, // Mauritius
+    { location: [-18.8792, 47.5079], size: 0.06 }, // Antananarivo
+    { location: [-1.9441, 30.0619], size: 0.06 }, // Kigali
+    { location: [-3.3731, 29.9189], size: 0.06 }, // Bujumbura
+    { location: [-13.9626, 33.7741], size: 0.06 }, // Lilongwe
+    { location: [-24.6282, 25.9231], size: 0.06 }, // Gaborone
+    { location: [-22.5597, 17.0832], size: 0.06 }, // Windhoek
+    { location: [-29.8587, 31.0218], size: 0.06 }, // Durban
+    { location: [-33.9249, 18.4241], size: 0.06 }, // Cape Town
+    { location: [-25.7479, 28.2293], size: 0.06 }, // Pretoria
+    { location: [15.5527, 32.5599], size: 0.06 }, // Khartoum (alt)
+    { location: [15.5877, 32.5341], size: 0.06 }, // Omdurman
+    { location: [11.8251, 42.5903], size: 0.06 }, // Djibouti
+    { location: [15.3229, 38.9251], size: 0.06 }, // Asmara
+    { location: [9.0320, 38.7469], size: 0.06 }, // Addis Ababa
+    { location: [2.0469, 45.3182], size: 0.06 }, // Mogadishu
+    { location: [-12.0464, 37.3087], size: 0.06 }, // Mbeya
+    { location: [-6.1630, 35.7516], size: 0.06 }, // Dodoma
+    { location: [7.9465, 1.0232], size: 0.06 }, // Kpalime
   ],
 }
 
@@ -134,6 +239,8 @@ export function Globe({
   }
 
   useEffect(() => {
+    if (!canvasRef.current) return
+
     const onResize = () => {
       if (canvasRef.current) {
         width = canvasRef.current.offsetWidth
@@ -143,7 +250,7 @@ export function Globe({
     window.addEventListener("resize", onResize)
     onResize()
 
-    const globe = createGlobe(canvasRef.current!, {
+    const globe = createGlobe(canvasRef.current, {
       ...config,
       width: width * 2,
       height: width * 2,
@@ -155,7 +262,12 @@ export function Globe({
       },
     })
 
-    setTimeout(() => (canvasRef.current!.style.opacity = "1"), 0)
+    setTimeout(() => {
+      if (canvasRef.current) {
+        canvasRef.current.style.opacity = "1"
+      }
+    }, 0)
+    
     return () => {
       globe.destroy()
       window.removeEventListener("resize", onResize)
