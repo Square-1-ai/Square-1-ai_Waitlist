@@ -151,6 +151,55 @@ const GLOBE_CONFIG: COBEOptions = {
     { location: [-41.2865, 174.7762], size: 0.06 }, // Wellington
     { location: [-36.8485, 174.7633], size: 0.06 }, // Auckland
     { location: [-43.5321, 172.6362], size: 0.06 }, // Christchurch
+    // More African cities
+    { location: [33.5731, -7.5898], size: 0.06 }, // Casablanca
+    { location: [30.0626, 31.2497], size: 0.06 }, // Cairo (alt)
+    { location: [31.7917, -7.0926], size: 0.06 }, // Marrakech
+    { location: [36.8065, 10.1815], size: 0.06 }, // Tunis (alt)
+    { location: [32.8872, 13.1913], size: 0.06 }, // Tripoli
+    { location: [4.8594, 31.5713], size: 0.06 }, // Juba
+    { location: [0.3476, 32.5825], size: 0.06 }, // Kampala
+    { location: [9.0579, 7.4951], size: 0.06 }, // Abuja (alt)
+    { location: [6.4531, 3.3958], size: 0.06 }, // Lagos (alt)
+    { location: [7.3775, 3.9470], size: 0.06 }, // Ibadan
+    { location: [12.0022, 8.5919], size: 0.06 }, // Kano
+    { location: [5.5600, -0.2050], size: 0.06 }, // Accra (alt)
+    { location: [6.1256, 1.2223], size: 0.06 }, // Lome
+    { location: [6.3703, 5.6037], size: 0.06 }, // Cotonou
+    { location: [12.3714, -1.5197], size: 0.06 }, // Ouagadougou
+    { location: [5.3599, -4.0082], size: 0.06 }, // Abidjan
+    { location: [13.4549, -16.5790], size: 0.06 }, // Banjul
+    { location: [8.9806, -13.2358], size: 0.06 }, // Freetown
+    { location: [6.8770, -5.3009], size: 0.06 }, // Yamoussoukro
+    { location: [9.5293, -13.6773], size: 0.06 }, // Conakry
+    { location: [11.8657, 15.5989], size: 0.06 }, // N'Djamena
+    { location: [3.8480, 11.5021], size: 0.06 }, // Yaounde
+    { location: [4.0511, 9.7679], size: 0.06 }, // Douala
+    { location: [0.3901, 9.4544], size: 0.06 }, // Libreville
+    { location: [-0.2280, 15.8277], size: 0.06 }, // Brazzaville
+    { location: [-8.8383, 13.2344], size: 0.06 }, // Luanda
+    { location: [-15.4167, 28.2833], size: 0.06 }, // Lusaka
+    { location: [-17.8252, 31.0335], size: 0.06 }, // Harare
+    { location: [-25.9692, 32.5732], size: 0.06 }, // Maputo
+    { location: [-20.1609, 57.5012], size: 0.06 }, // Mauritius
+    { location: [-18.8792, 47.5079], size: 0.06 }, // Antananarivo
+    { location: [-1.9441, 30.0619], size: 0.06 }, // Kigali
+    { location: [-3.3731, 29.9189], size: 0.06 }, // Bujumbura
+    { location: [-13.9626, 33.7741], size: 0.06 }, // Lilongwe
+    { location: [-24.6282, 25.9231], size: 0.06 }, // Gaborone
+    { location: [-22.5597, 17.0832], size: 0.06 }, // Windhoek
+    { location: [-29.8587, 31.0218], size: 0.06 }, // Durban
+    { location: [-33.9249, 18.4241], size: 0.06 }, // Cape Town
+    { location: [-25.7479, 28.2293], size: 0.06 }, // Pretoria
+    { location: [15.5527, 32.5599], size: 0.06 }, // Khartoum (alt)
+    { location: [15.5877, 32.5341], size: 0.06 }, // Omdurman
+    { location: [11.8251, 42.5903], size: 0.06 }, // Djibouti
+    { location: [15.3229, 38.9251], size: 0.06 }, // Asmara
+    { location: [9.0320, 38.7469], size: 0.06 }, // Addis Ababa
+    { location: [2.0469, 45.3182], size: 0.06 }, // Mogadishu
+    { location: [-12.0464, 37.3087], size: 0.06 }, // Mbeya
+    { location: [-6.1630, 35.7516], size: 0.06 }, // Dodoma
+    { location: [7.9465, 1.0232], size: 0.06 }, // Kpalime
   ],
 }
 
@@ -190,6 +239,8 @@ export function Globe({
   }
 
   useEffect(() => {
+    if (!canvasRef.current) return
+
     const onResize = () => {
       if (canvasRef.current) {
         width = canvasRef.current.offsetWidth
@@ -199,7 +250,7 @@ export function Globe({
     window.addEventListener("resize", onResize)
     onResize()
 
-    const globe = createGlobe(canvasRef.current!, {
+    const globe = createGlobe(canvasRef.current, {
       ...config,
       width: width * 2,
       height: width * 2,
@@ -211,7 +262,12 @@ export function Globe({
       },
     })
 
-    setTimeout(() => (canvasRef.current!.style.opacity = "1"), 0)
+    setTimeout(() => {
+      if (canvasRef.current) {
+        canvasRef.current.style.opacity = "1"
+      }
+    }, 0)
+    
     return () => {
       globe.destroy()
       window.removeEventListener("resize", onResize)
