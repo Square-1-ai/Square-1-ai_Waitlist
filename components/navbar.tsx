@@ -141,7 +141,7 @@ export default function Navbar() {
               Courses
             </Link>
             <Link 
-              href="/teacher-waitlist" 
+              href="/teachers-section" 
               className={`${textColor} text-base py-2 px-4 ${mobileHoverBg} rounded-lg transition-colors ${pathname === '/teacher-waitlist' ? 'border-b-2 border-blue-500 pb-1' : ''}`}
               onClick={() => setIsMenuOpen(false)}
             >
