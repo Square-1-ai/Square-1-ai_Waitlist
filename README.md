@@ -187,8 +187,7 @@ This project is proprietary software owned by Square-1 AI. All rights reserved.
 ## 📧 Contact
 
 For questions or support, please contact:
-- Website: [Square-1 AI](https://square-1-ai.com)
-- Email: support@square-1-ai.com
+- Website: [Square-1 AI](https://s-ochre.vercel.app/)
 
 ---
 
