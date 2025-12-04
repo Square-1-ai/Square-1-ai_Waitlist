@@ -11,8 +11,8 @@ const interTight = Inter_Tight({
 });
 
 export const metadata: Metadata = {
-  title: 'Sqaure1',
-  description: 'Sqaure1 AI',
+  title: 'Square1',
+  description: 'Square1 AI',
   generator: 'v0.app',
   icons: {
     icon: [
