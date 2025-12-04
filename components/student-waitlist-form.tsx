@@ -22,8 +22,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import TypingText from "@/components/ui/typing-text"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { useToast } from "@/hooks/use-toast"
 
 export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any, errorType?: string) => void }) {
+  const { toast } = useToast()
   const [step, setStep] = useState(1)
   
   // Extract ref_id from URL on component mount
@@ -169,26 +171,43 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
   }
 
   const nextStep = async () => {
-    // On step 1, check if email is already registered
     if (step === 1 && formData.email) {
       try {
-        // Check if email already exists using lightweight check endpoint
         const checkRes = await fetch('/api/waitlist/check-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: formData.email, type: 'student' }),
         });
+
+        if (!checkRes.ok) {
+          console.error('Email check failed with status:', checkRes.status);
+          toast({
+            title: "Connection Error",
+            description: "Unable to verify email. Please try again.",
+            variant: "destructive"
+          });
+          return;
+        }
+
         const result = await checkRes.json();
 
-        if (checkRes.ok && result.exists) {
-          // Email already registered, go to thank you page
-          alert('This email is already registered. Redirecting to your referral info...');
+        if (result.exists) {
+          toast({
+            title: "Email Already Registered",
+            description: "This email is already registered. Redirecting to referral details.",
+            variant: "default"
+          });
           onSubmit(formData, 'duplicate');
           return;
         }
       } catch (err) {
-        // If check fails, proceed normally
         console.error('Email check error:', err);
+        toast({
+          title: "Connection Error",
+          description: "Unable to verify email. Please check your connection.",
+          variant: "destructive"
+        });
+        return;
       }
     }
 
@@ -226,11 +245,19 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
         onSubmit(formData, 'duplicate');
       } else {
         // Show specific error message from server
-        alert(result.error || 'Submission failed. Please try again.');
+        toast({
+          title: "Submission Failed",
+          description: result.error || 'Submission failed. Please try again.',
+          variant: "destructive"
+        });
       }
     } catch (err) {
       console.error('Submission error:', err);
-      alert('Network error. Please check your connection and try again.');
+      toast({
+        title: "Network Error",
+        description: 'Please check your connection and try again.',
+        variant: "destructive"
+      });
     }
   }
 
@@ -760,7 +787,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
                         className="h-11 border-white/30 bg-white/20 text-white placeholder:text-white/60"
                       />
                       <p className="text-xs text-white/70">
-                        Invite 10 of your friends! Get 25% off when they join.
+                        Invite your friends! Get up to 20% off on first course.
                       </p>
                     </div>
 
@@ -804,7 +831,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
                   </h3>
                   <p className="text-white/80 mb-8">
                     Thank you for joining the Square 1 Ai student waitlist. You'll receive early access updates and
-                    exclusive beta invites soon. Keep an eye on your inbox! 📧
+                    exclusive beta invites soon. Keep an eye on your inbox! 
                   </p>
                   <Separator className="bg-white/20" />
                   <div className="flex items-start space-x-3 p-4 bg-white/10 rounded-lg border border-white/20">

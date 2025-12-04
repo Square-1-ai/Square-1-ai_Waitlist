@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState } from "react"
-import { ChevronRight, ChevronLeft, Upload, ArrowLeft, AlertCircle, CheckCircle2 } from "lucide-react"
+import { ChevronRight, ChevronLeft, ArrowLeft, AlertCircle, CheckCircle2 } from "lucide-react"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -22,13 +22,24 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import TypingText from "@/components/ui/typing-text"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { useToast } from "@/hooks/use-toast"
 
 export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: any) => void }) {
+  const { toast } = useToast()
   const [step, setStep] = useState(1)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [submitSuccess, setSubmitSuccess] = useState(false)
+
+  // Extract ref_id from URL on component mount
+  const getRefIdFromUrl = () => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('ref_id') || '';
+    }
+    return '';
+  };
   const [formData, setFormData] = useState({
     // Common Section
     fullName: "",
@@ -50,9 +61,9 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
   availabilityToStart: "",
   revenueSplit: "",
   paymentMethod: "",
+  referralCode: getRefIdFromUrl(),
   earlyAccess: [] as string[],
   newsletter: false,
-  teachingSample: undefined as File | undefined,
   })
 
   const totalSteps = 4
@@ -63,14 +74,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
     return emailRegex.test(email)
   }
 
-  const validateFile = (file: File | null): boolean => {
-    if (!file) return true // File is optional
-    const maxSize = 100 * 1024 * 1024 // 100MB
-    const allowedTypes = ['video/mp4', 'video/webm', 'video/quicktime', 'video/x-msvideo']
-    if (file.size > maxSize) return false
-    if (!allowedTypes.includes(file.type)) return false
-    return true
-  }
+
 
   const validateStep = (stepNumber: number): boolean => {
     const newErrors: Record<string, string> = {}
@@ -131,13 +135,6 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
       if (!formData.paymentMethod.trim()) {
         newErrors.paymentMethod = "Payment method is required"
       }
-      if (formData.teachingSample && !validateFile(formData.teachingSample)) {
-        if (formData.teachingSample.size > 100 * 1024 * 1024) {
-          newErrors.teachingSample = "File size must be less than 100MB"
-        } else {
-          newErrors.teachingSample = "Please upload a valid video file (MP4, WebM, MOV, AVI)"
-        }
-      }
       if (formData.earlyAccess.length === 0) {
         newErrors.earlyAccess = "Please select at least one early access option"
       }
@@ -176,22 +173,61 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
   };
 
   // Navigation helpers for multi-step form
-  const nextStep = () => setStep((s: number) => Math.min(s + 1, totalSteps));
+  const nextStep = async () => {
+    // On step 1, check if email is already registered
+    if (step === 1 && formData.email) {
+      try {
+        // Check if email already exists using lightweight check endpoint
+        const checkRes = await fetch('/api/waitlist/check-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: formData.email, type: 'teacher' }),
+        });
+
+        if (!checkRes.ok) {
+          console.error('Email check failed with status:', checkRes.status);
+          toast({
+            title: "Connection Error",
+            description: "Unable to verify email. Please try again.",
+            variant: "destructive"
+          });
+          return;
+        }
+
+        const result = await checkRes.json();
+
+        if (result.exists) {
+          // Email already registered, go to thank you page
+          toast({
+            title: "Email Already Registered",
+            description: "This email is already registered. Redirecting to referral details.",
+            variant: "default"
+          });
+          onSubmit(formData);
+          return;
+        }
+      } catch (err) {
+        // If check fails, don't proceed
+        console.error('Email check error:', err);
+        toast({
+          title: "Connection Error",
+          description: "Unable to verify email. Please check your connection.",
+          variant: "destructive"
+        });
+        return;
+      }
+    }
+
+    if (validateStep(step)) {
+      setStep((s: number) => Math.min(s + 1, totalSteps));
+      setErrors({});
+    }
+  };
   const prevStep = () => setStep((s: number) => Math.max(s - 1, 1));
 
-  // Video upload removed
   const getProgressPercentage = () => {
     return (step / totalSteps) * 100
   }
-
-  // Handle file input for teaching sample
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0];
-    setFormData((prev) => ({
-      ...prev,
-      teachingSample: file || undefined,
-    }));
-  };
 
   const earlyAccessOptions = [
     "Teacher dashboard preview",
@@ -229,14 +265,26 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
       if (response.ok) {
         onSubmit(formData);
       } else if (result.error && result.error.includes('already registered')) {
-        alert('This email is already registered on the waitlist.');
+        toast({
+          title: "Email Already Registered",
+          description: "This email is already registered on the waitlist.",
+          variant: "default"
+        });
         onSubmit(formData);
       } else {
-        alert(result.error || 'Submission failed. Please try again.');
+        toast({
+          title: "Submission Failed",
+          description: result.error || 'Submission failed. Please try again.',
+          variant: "destructive"
+        });
       }
     } catch (err) {
       console.error('Submission error:', err);
-      alert('Network error. Please check your connection and try again.');
+      toast({
+        title: "Network Error",
+        description: 'Please check your connection and try again.',
+        variant: "destructive"
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -248,7 +296,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
         <div className="max-w-2xl mx-auto">
           {/* Back Button */}
           <Link
-            href="/"
+            href={`/${formData.referralCode ? `?ref_id=${formData.referralCode}` : ''}`}
             className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors mb-6 group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
@@ -766,31 +814,18 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="teachingSample" className="text-white">Please upload your teaching sample (Optional)</Label>
-                      <div className="flex items-center gap-4">
-                        <Input
-                          id="teachingSample"
-                          type="file"
-                          accept="video/*"
-                          onChange={handleFileChange}
-                          className="h-11 border-white/30 bg-white/20 text-white file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-cyan-500 file:text-white hover:file:bg-cyan-600"
-                        />
-                      </div>
+                      <Label htmlFor="referralCode" className="text-white">Referral Code (Optional)</Label>
+                      <Input
+                        id="referralCode"
+                        type="text"
+                        placeholder="Enter referral code"
+                        value={formData.referralCode}
+                        onChange={(e) => handleInputChange("referralCode", e.target.value)}
+                        className="h-11 border-white/30 bg-white/20 text-white placeholder:text-white/60"
+                      />
                       <p className="text-xs text-white/70">
-                        A 2-minute video clip introducing yourself or teaching a topic (for vetting)
+                        Refer teachers and reduce your platform fee! 5 referrals = 5% fee reduction for 3 months. 10 referrals = 10% fee reduction for 3 months.
                       </p>
-                      {formData.teachingSample && (
-                        <p className="text-sm text-cyan-400 flex items-center gap-2">
-                          <Upload className="w-4 h-4" />
-                          {formData.teachingSample.name}
-                        </p>
-                      )}
-                      {errors.teachingSample && (
-                        <p className="text-sm text-red-400 flex items-center gap-1">
-                          <AlertCircle className="w-4 h-4" />
-                          {errors.teachingSample}
-                        </p>
-                      )}
                     </div>
 
                     <div className="space-y-3">
@@ -833,7 +868,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
                   </h3>
                   <p className="text-white/80 mb-8">
                     Thank you for joining the Square 1 Ai teacher waitlist. We're excited to partner with you. You'll
-                    receive early access updates and exclusive beta invites soon. Keep an eye on your inbox! 📧
+                    receive early access updates and exclusive beta invites soon. Keep an eye on your inbox!
                   </p>
                   <Separator className="bg-white/20" />
                   <div className="flex items-start space-x-3 p-4 bg-white/10 rounded-lg border border-white/20">

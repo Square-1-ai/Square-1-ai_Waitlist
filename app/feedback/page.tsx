@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { ChevronRight, ChevronDown } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 import Footer from "@/components/footer"
 
 const COUNTRIES = [
@@ -28,8 +29,11 @@ const COUNTRIES = [
 ].sort()
 
 export default function FeedbackPage() {
+  const { toast } = useToast()
+  
   const [formData, setFormData] = useState({
     name: "",
+    email: "",
     country: "",
     message: "",
     aiToolsExpectation: "",
@@ -48,14 +52,12 @@ export default function FeedbackPage() {
       ...formData,
       [name]: value,
     })
-    // Clear field error when user starts typing
     if (fieldErrors[name]) {
       setFieldErrors({
         ...fieldErrors,
         [name]: "",
       })
     }
-    // Clear general error
     if (error) {
       setError(null)
     }
@@ -63,9 +65,16 @@ export default function FeedbackPage() {
 
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {}
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
     if (!formData.name.trim()) {
       errors.name = "Name is required"
+    }
+
+    if (!formData.email.trim()) {
+      errors.email = "Email is required"
+    } else if (!emailRegex.test(formData.email)) {
+      errors.email = "Please enter a valid email address"
     }
 
     if (!formData.country.trim()) {
@@ -93,9 +102,12 @@ export default function FeedbackPage() {
     setError(null)
     setFieldErrors({})
 
-    // Validate form
     if (!validateForm()) {
-      setError("Please fix the errors in the form before submitting.")
+      toast({
+        title: "Validation Error",
+        description: "Please fix the errors in the form before submitting",
+        variant: "destructive"
+      })
       return
     }
 
@@ -114,16 +126,31 @@ export default function FeedbackPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to submit feedback. Please try again.")
+        if (response.status === 409) {
+          toast({
+            title: "Email Already Used",
+            description: data.error || "This email has already submitted feedback",
+            variant: "destructive"
+          })
+          setError(data.error)
+        } else {
+          throw new Error(data.error || "Failed to submit feedback. Please try again.")
+        }
+        return
       }
 
+      toast({
+        title: "Success!",
+        description: "Feedback submitted successfully! Thank you for your input.",
+        variant: "default"
+      })
       setSubmitted(true)
 
-      // Reset form after 3 seconds
       setTimeout(() => {
         setSubmitted(false)
         setFormData({
           name: "",
+          email: "",
           country: "",
           message: "",
           aiToolsExpectation: "",
@@ -135,11 +162,16 @@ export default function FeedbackPage() {
         setError(null)
       }, 3000)
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "An error occurred while submitting your feedback. Please try again."
-      )
+      const errorMessage = err instanceof Error
+        ? err.message
+        : "An error occurred while submitting your feedback. Please try again."
+      
+      toast({
+        title: "Submission Failed",
+        description: errorMessage,
+        variant: "destructive"
+      })
+      setError(errorMessage)
     } finally {
       setIsSubmitting(false)
     }
@@ -236,6 +268,30 @@ export default function FeedbackPage() {
                   />
                   {fieldErrors.name && (
                     <p className="mt-1 text-sm text-red-400">{fieldErrors.name}</p>
+                  )}
+                </div>
+
+                {/* Email Field */}
+                <div>
+                  <label htmlFor="email" className="block text-white font-semibold mb-2">
+                    Email <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className={`w-full px-4 py-3 bg-slate-900/50 border rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
+                      fieldErrors.email
+                        ? "border-red-500 focus:ring-red-500"
+                        : "border-slate-600"
+                    }`}
+                    placeholder="Enter your email"
+                  />
+                  {fieldErrors.email && (
+                    <p className="mt-1 text-sm text-red-400">{fieldErrors.email}</p>
                   )}
                 </div>
 

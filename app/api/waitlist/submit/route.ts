@@ -1,14 +1,60 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query } from '@/lib/db';
+import { waitlistLimiter, getClientIdentifier, formatTimeRemaining } from '@/lib/rate-limiter';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function sanitizeString(input: string | undefined | null): string {
-  if (!input) return '';
-  return String(input).trim().slice(0, 500);
+interface WaitlistData {
+  fullName: string;
+  email: string;
+  country?: string;
+  city?: string;
+  internetConnection?: string;
+  devices?: string[];
+  heardAbout?: string;
+  // Student specific
+  educationLevel?: string;
+  subjects?: string[];
+  learningPreference?: string;
+  takenOnlineCourses?: string;
+  whyInterested?: string[];
+  motivation?: string;
+  competitions?: string;
+  hoursPerWeek?: string;
+  willingToPay?: string;
+  referralCode?: string;
+  earlyAccess?: string[];
+  // Teacher specific
+  teachingLevel?: string;
+  yearsExperience?: string;
+  classTypePreference?: string;
+  taughtOnline?: string;
+  platformsUsed?: string;
+  curriculums?: string;
+  createStudyPacks?: string;
+  availabilityToStart?: string;
+  revenueSplit?: string;
+  paymentMethod?: string;
 }
 
-function validateWaitlistData(data: any): { valid: boolean; error?: string } {
+interface SubmitRequest {
+  type: 'student' | 'teacher';
+  data: WaitlistData;
+}
+
+function sanitizeString(input: string | string[] | undefined | null): string {
+  if (!input) return '';
+  // If input is an array, it will be JSON.stringified elsewhere
+  if (Array.isArray(input)) return '';
+  // Remove HTML tags and trim
+  const cleaned = String(input)
+    .replace(/<[^>]*>/g, '') // Remove HTML tags
+    .trim()
+    .slice(0, 500);
+  return cleaned;
+}
+
+function validateWaitlistData(data: WaitlistData): { valid: boolean; error?: string } {
   if (!data.fullName || sanitizeString(data.fullName).length < 2) {
     return { valid: false, error: 'Full name is required (minimum 2 characters)' };
   }
@@ -18,64 +64,39 @@ function validateWaitlistData(data: any): { valid: boolean; error?: string } {
   return { valid: true };
 }
 
-export async function POST(req: NextRequest) {
-  const studentTableSQL = `
-    CREATE TABLE IF NOT EXISTS students (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      full_name VARCHAR(100) NOT NULL,
-      email VARCHAR(100) UNIQUE NOT NULL,
-      country VARCHAR(100),
-      city VARCHAR(100),
-      internet_connection VARCHAR(100),
-      devices TEXT,
-      heard_about VARCHAR(100),
-      education_level VARCHAR(100),
-      subjects TEXT,
-      learning_preference VARCHAR(100),
-      taken_online_courses VARCHAR(100),
-      why_interested TEXT,
-      motivation TEXT,
-      competitions TEXT,
-      hours_per_week VARCHAR(50),
-      willing_to_pay VARCHAR(50),
-      referral_code VARCHAR(100),
-      early_access TEXT,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      INDEX idx_email (email),
-      INDEX idx_created_at (created_at)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-    `;
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '1mb',
+    },
+  },
+};
 
-    const teacherTableSQL = `
-    CREATE TABLE IF NOT EXISTS teachers (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      full_name VARCHAR(100) NOT NULL,
-      email VARCHAR(100) UNIQUE NOT NULL,
-      country VARCHAR(100),
-      city VARCHAR(100),
-      internet_connection VARCHAR(100),
-      devices TEXT,
-      heard_about VARCHAR(100),
-      subjects VARCHAR(200),
-      teaching_level VARCHAR(100),
-      years_experience VARCHAR(50),
-      class_type_preference VARCHAR(100),
-      taught_online VARCHAR(100),
-      platforms_used VARCHAR(200),
-      curriculums VARCHAR(200),
-      create_study_packs VARCHAR(100),
-      availability_to_start VARCHAR(100),
-      revenue_split VARCHAR(100),
-      payment_method VARCHAR(100),
-      early_access TEXT,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      INDEX idx_email (email),
-      INDEX idx_created_at (created_at)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-    `;
+export async function POST(req: NextRequest) {
   try {
-    // Parse request body
-    const body = await req.json();
+    const clientId = getClientIdentifier(req);
+    const rateLimit = waitlistLimiter.check(clientId);
+
+    if (!rateLimit.allowed) {
+      const timeRemaining = formatTimeRemaining(rateLimit.resetTime);
+      return NextResponse.json(
+        { 
+          error: `Too many requests. Please try again in ${timeRemaining}.`,
+          retryAfter: Math.ceil((rateLimit.resetTime - Date.now()) / 1000)
+        },
+        { 
+          status: 429,
+          headers: {
+            'Retry-After': String(Math.ceil((rateLimit.resetTime - Date.now()) / 1000)),
+            'X-RateLimit-Limit': '5',
+            'X-RateLimit-Remaining': '0',
+            'X-RateLimit-Reset': String(rateLimit.resetTime),
+          }
+        }
+      );
+    }
+
+    const body = await req.json() as SubmitRequest;
     const { type, data } = body;
 
     if (type !== 'student' && type !== 'teacher') {
@@ -96,8 +117,9 @@ export async function POST(req: NextRequest) {
 
     const sanitizedEmail = sanitizeString(data.email).toLowerCase();
 
+    // Tables are created once using: npm run db:init
+    
     if (type === 'student') {
-      await query(studentTableSQL);
       await query(
         `INSERT INTO students (
           full_name, email, country, city, internet_connection, devices, 
@@ -127,15 +149,14 @@ export async function POST(req: NextRequest) {
         ]
       );
     } else {
-      await query(teacherTableSQL);
       await query(
         `INSERT INTO teachers (
           full_name, email, country, city, internet_connection, devices, 
           heard_about, subjects, teaching_level, years_experience, 
           class_type_preference, taught_online, platforms_used, curriculums, 
           create_study_packs, availability_to_start, revenue_split, 
-          payment_method, early_access
-        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+          payment_method, referral_code, early_access
+        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
         [
           sanitizeString(data.fullName),
           sanitizedEmail,
@@ -155,6 +176,7 @@ export async function POST(req: NextRequest) {
           sanitizeString(data.availabilityToStart),
           sanitizeString(data.revenueSplit),
           sanitizeString(data.paymentMethod),
+          sanitizeString(data.referralCode),
           JSON.stringify(data.earlyAccess || [])
         ]
       );
@@ -167,6 +189,13 @@ export async function POST(req: NextRequest) {
 
   } catch (error: any) {
     console.error('Waitlist submission error:', error);
+
+    if (error.code === 'ER_NO_SUCH_TABLE') {
+      return NextResponse.json(
+        { error: 'Something went wrong, Please try again later' },
+        { status: 503 }
+      );
+    }
 
     if (error.code === 'ER_DUP_ENTRY') {
       return NextResponse.json(
