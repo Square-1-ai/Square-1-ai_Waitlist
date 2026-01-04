@@ -11,9 +11,19 @@ export default function EmailVerified() {
       
       {/* Main Content */}
       <section className="relative pt-32 pb-24 px-4 sm:px-6 lg:px-8">
+        {/* Grid Background Effect */}
+        <div
+          className="absolute inset-0 [background-size:40px_40px] dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)] [background-image:linear-gradient(to_right,rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.1)_1px,transparent_1px)]"
+        />
         
-
-
+        {/* Blurred mesh gradients in 4 corners */}
+        <div className="absolute top-10 left-0 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute top-10 right-0 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-10 left-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-10 right-0 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        
+        {/* Radial gradient overlay for faded look */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-slate-900 to-slate-800 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
         <div className="max-w-4xl mx-auto relative z-10">
           {/* Success Icon with Animation */}
           <div className="flex justify-center mb-8">

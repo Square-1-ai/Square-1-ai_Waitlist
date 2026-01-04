@@ -61,9 +61,7 @@ class RateLimiter {
     };
   }
 
-  /**
-   * Clean up expired entries to prevent memory leaks
-   */
+
   private cleanup() {
     const now = Date.now();
     for (const [key, entry] of this.requests.entries()) {
@@ -73,16 +71,12 @@ class RateLimiter {
     }
   }
 
-  /**
-   * Reset rate limit for a specific identifier (useful for testing)
-   */
+
   reset(identifier: string) {
     this.requests.delete(identifier);
   }
 
-  /**
-   * Get current stats (useful for monitoring)
-   */
+
   getStats() {
     return {
       totalTracked: this.requests.size,
@@ -92,8 +86,7 @@ class RateLimiter {
   }
 }
 
-// Create rate limiters for different endpoints
-// Adjust limits based on your needs
+
 
 // Waitlist submission: 5 requests per minute
 export const waitlistLimiter = new RateLimiter(5, 1);
@@ -101,7 +94,7 @@ export const waitlistLimiter = new RateLimiter(5, 1);
 // Email check: 10 requests per minute (more lenient)
 export const emailCheckLimiter = new RateLimiter(10, 1);
 
-// Newsletter: 3 requests per minute (stricter)
+// Newsletter: 5 requests per minute (stricter)
 export const newsletterLimiter = new RateLimiter(5, 1);
 
 /**
