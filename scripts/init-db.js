@@ -1,4 +1,14 @@
-import { query } from '../lib/db';
+require('dotenv').config();
+
+const mysql = require('mysql2/promise');
+
+const connectionUrl = process.env.RAILWAY_DB_URL;
+
+if (!connectionUrl) {
+  console.error('❌ RAILWAY_DB_URL environment variable is not set');
+  console.error('Please add RAILWAY_DB_URL to your .env file');
+  process.exit(1);
+}
 
 const studentTableSQL = `
 CREATE TABLE IF NOT EXISTS students (
@@ -48,6 +58,7 @@ CREATE TABLE IF NOT EXISTS teachers (
   availability_to_start VARCHAR(100),
   revenue_split VARCHAR(100),
   payment_method VARCHAR(100),
+  referral_code VARCHAR(100),
   early_access TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_email (email),
@@ -59,6 +70,7 @@ const feedbackTableSQL = `
 CREATE TABLE IF NOT EXISTS feedback (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
   country VARCHAR(100) NOT NULL,
   message TEXT NOT NULL,
   ai_tools_expectation TEXT,
@@ -66,29 +78,45 @@ CREATE TABLE IF NOT EXISTS feedback (
   course_types TEXT,
   favorite_courses TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_email (email),
   INDEX idx_created_at (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 `;
 
 async function initDatabase() {
+  let connection;
   try {
+    console.log('Connecting to database...');
+    connection = await mysql.createConnection({
+      uri: connectionUrl,
+    });
+
+    console.log('✓ Connected to database');
     console.log('Creating students table...');
-    await query(studentTableSQL);
-    console.log('Students table created');
+    await connection.query(studentTableSQL);
+    console.log('✓ Students table created');
 
     console.log('Creating teachers table...');
-    await query(teacherTableSQL);
-    console.log('Teachers table created');
+    await connection.query(teacherTableSQL);
+    console.log('✓ Teachers table created');
 
     console.log('Creating feedback table...');
-    await query(feedbackTableSQL);
-    console.log('Feedback table created');
+    await connection.query(feedbackTableSQL);
+    console.log('✓ Feedback table created');
 
-    console.log('\n Database initialized successfully!');
+    console.log('\nDatabase initialized successfully!');
     process.exit(0);
   } catch (error) {
-    console.error(' Database initialization failed:', error);
+    console.error('Database initialization failed:', error.message);
+    console.error('\nPlease check:');
+    console.error('1. Database connection string in .env (RAILWAY_DB_URL)');
+    console.error('2. Database server is running');
+    console.error('3. Database credentials are correct');
     process.exit(1);
+  } finally {
+    if (connection) {
+      await connection.end();
+    }
   }
 }
 

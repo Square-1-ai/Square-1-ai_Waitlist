@@ -76,8 +76,6 @@ export default function Navbar() {
   const mobileHoverBg = isOverWhite ? 'hover:bg-slate-100' : 'hover:bg-white/10'
 
   return (
-    // Fixed transparent navbar with blur effect and bottom border
-    // backdrop-blur-md creates a frosted glass effect
     <nav aria-label="Main navigation" className={`fixed top-0 left-0 right-0 z-50 w-full bg-transparent backdrop-blur-md border-b ${borderColor} transition-colors duration-300`}>
       <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
         <div className="flex items-center gap-3">
@@ -95,19 +93,19 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-6 lg:gap-8">
-          <Link href="/" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110 ${pathname === '/' ? 'border-b-2 border-blue-500 pb-1' : ''}`}>
+          <Link href="/" className={`${textColor} text-sm lg:text-base transition-colors ${pathname === '/' ? 'border-b-2 border-blue-500 pb-1' : ''}`}>
             Home
           </Link>
-          <Link href="/about" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110 ${pathname === '/about' ? 'border-b-2 border-blue-500 pb-1' : ''}`}>
+          <Link href="/about" className={`${textColor} text-sm lg:text-base transition-colors ${pathname === '/about' ? 'border-b-2 border-blue-500 pb-1' : ''}`}>
             About
           </Link>
-          <Link href="/courses" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110 ${pathname === '/courses' ? 'border-b-2 border-blue-500 pb-1' : ''}`}>
+          <Link href="/courses" className={`${textColor} text-sm lg:text-base transition-colors ${pathname === '/courses' ? 'border-b-2 border-blue-500 pb-1' : ''}`}>
             Courses
           </Link>
-          <Link href="/teachers-section" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110 ${pathname === '/teachers-section' ? 'border-b-2 border-blue-500 pb-1' : ''}`}>
+          <Link href="/teachers-section" className={`${textColor} text-sm lg:text-base transition-colors ${pathname === '/teachers-section' ? 'border-b-2 border-blue-500 pb-1' : ''}`}>
             Teachers
           </Link>
-          <Link href="/feedback" className={`${textColor} text-sm lg:text-base transition-all hover:scale-110 ${pathname === '/feedback' ? 'border-b-2 border-blue-500 pb-1' : ''}`}>
+          <Link href="/feedback" className={`${textColor} text-sm lg:text-base transition-colors ${pathname === '/feedback' ? 'border-b-2 border-blue-500 pb-1' : ''}`}>
             Feedback
           </Link>
         </div>
@@ -124,7 +122,7 @@ export default function Navbar() {
 
       {/* Mobile Navigation Menu */}
       {isMenuOpen && (
-        <div className={`md:hidden absolute top-full left-0 right-0 ${mobileMenuBg} backdrop-blur-lg border-b ${borderColor}`}>
+        <div className={`md:hidden absolute top-full left-0 right-0 ${mobileMenuBg} border-b ${borderColor}`}>
           <div className="flex flex-col px-4 py-4 space-y-4">
             <Link 
               href="/about" 

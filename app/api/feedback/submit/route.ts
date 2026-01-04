@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function sanitizeString(input: string | undefined | null): string {
   if (!input) return '';
   return String(input).trim().slice(0, 2000);
@@ -9,6 +11,9 @@ function sanitizeString(input: string | undefined | null): string {
 function validateFeedback(data: any): { valid: boolean; error?: string } {
   if (!data.name || sanitizeString(data.name).length < 2) {
     return { valid: false, error: 'Name is required (minimum 2 characters)' };
+  }
+  if (!data.email || !EMAIL_REGEX.test(data.email)) {
+    return { valid: false, error: 'Valid email is required' };
   }
   if (!data.country || sanitizeString(data.country).length < 2) {
     return { valid: false, error: 'Country is required' };
@@ -19,22 +24,15 @@ function validateFeedback(data: any): { valid: boolean; error?: string } {
   return { valid: true };
 }
 
-export async function POST(req: NextRequest) {
-  const feedbackTableSQL = `
-    CREATE TABLE IF NOT EXISTS feedback (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      name VARCHAR(100) NOT NULL,
-      country VARCHAR(100) NOT NULL,
-      message TEXT NOT NULL,
-      ai_tools_expectation TEXT,
-      learning_progress_tracking TEXT,
-      course_types TEXT,
-      favorite_courses TEXT,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      INDEX idx_created_at (created_at)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-  `;
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '500kb',
+    },
+  },
+};
 
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
@@ -46,10 +44,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    await query(feedbackTableSQL);
-
     const sanitizedData = {
       name: sanitizeString(body.name),
+      email: sanitizeString(body.email).toLowerCase(),
       country: sanitizeString(body.country),
       message: sanitizeString(body.message),
       aiToolsExpectation: sanitizeString(body.aiToolsExpectation),
@@ -60,11 +57,12 @@ export async function POST(req: NextRequest) {
 
     await query(
       `INSERT INTO feedback (
-        name, country, message, ai_tools_expectation, 
+        name, email, country, message, ai_tools_expectation, 
         learning_progress_tracking, course_types, favorite_courses
-      ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         sanitizedData.name,
+        sanitizedData.email,
         sanitizedData.country,
         sanitizedData.message,
         sanitizedData.aiToolsExpectation || null,
@@ -84,6 +82,20 @@ export async function POST(req: NextRequest) {
 
   } catch (error: any) {
     console.error('Feedback submission error:', error);
+
+    if (error.code === 'ER_NO_SUCH_TABLE') {
+      return NextResponse.json(
+        { error: 'Something went wrong, Please try again later' },
+        { status: 503 }
+      );
+    }
+
+    if (error.code === 'ER_DUP_ENTRY') {
+      return NextResponse.json(
+        { error: 'This email has already submitted feedback. ' },
+        { status: 409 }
+      );
+    }
     
     return NextResponse.json(
       { 

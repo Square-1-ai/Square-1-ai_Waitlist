@@ -16,7 +16,7 @@ export default function Hero() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-16 md:pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-900 to-slate-800">
+      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-16 md:pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-900 to-slate-800" suppressHydrationWarning>
         {/* Grid Background Effect */}
         <div
           className={cn(
@@ -98,7 +98,7 @@ export default function Hero() {
       </section>
 
       {/* Why Join Early Section - Separate Section */}
-      <section id="why-join" className="relative py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-800 to-slate-900">
+      <section id="why-join" className="relative py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-800 to-slate-900" suppressHydrationWarning>
         <div className="max-w-7xl mx-auto">
         <div className="mt-0">
           <div className="text-center mb-12 sm:mb-16 px-2">

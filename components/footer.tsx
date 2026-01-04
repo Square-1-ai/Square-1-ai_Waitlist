@@ -109,37 +109,9 @@ export default function Footer() {
           {/* Newsletter & Social */}
           <div>
             <h4 className="font-bold text-lg mb-4">Stay Updated</h4>
-            <p className="text-slate-300 text-sm mb-4">Subscribe to get the latest news and updates.</p>
+            <p className="text-slate-300 text-sm mb-4">Join the waitlist to subscribe for the latest news and updates.</p>
             
-            {/* Email Subscribe Form */}
-            <form onSubmit={handleSubscribe} className="flex flex-col gap-2 mb-4">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                required
-                disabled={isSubmitting}
-                className="px-4 py-2 rounded-lg bg-slate-700/50 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-              />
-              <button 
-                type="submit"
-                disabled={isSubmitting}
-                className="px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg font-semibold text-sm hover:shadow-lg hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
-              >
-                {isSubmitting ? (
-                  <>
-                    <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Subscribing...
-                  </>
-                ) : (
-                  'Subscribe'
-                )}
-              </button>
-            </form>
+
 
             {/* Success/Error Message */}
             {message && (
