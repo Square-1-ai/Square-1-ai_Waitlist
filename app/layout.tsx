@@ -15,7 +15,6 @@ const interTight = Inter_Tight({
 export const metadata: Metadata = {
   title: 'Square1',
   description: 'Square1 AI',
-  generator: 'v0.app',
   icons: {
     icon: [
       {
@@ -44,9 +43,6 @@ export default function RootLayout({
     <html lang="en">
 
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet" />
         <GoogleAnalytics gaId="G-3WS60EMJC2" />
       </head>
       <body className={`${interTight.variable} font-sans antialiased`} suppressHydrationWarning>

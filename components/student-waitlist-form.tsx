@@ -2,6 +2,7 @@
 
 import type React from "react"
 import { useState } from "react"
+import worldCountries from "world-countries"
 import { ChevronRight, ChevronLeft, ArrowLeft, AlertCircle, CheckCircle2 } from "lucide-react"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
@@ -391,17 +392,22 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="country" className="text-white">Country <span className="text-red-500">*</span></Label>
-                        <Input
-                          id="country"
-                          type="text"
-                          placeholder="Your country"
+                        <Select
                           value={formData.country}
-                          onChange={(e) => handleInputChange("country", e.target.value)}
-                          required
-                          className={`h-11 border-white/30 bg-white/20 text-white placeholder:text-white/60 ${
-                            errors.country ? "border-red-500" : ""
-                          }`}
-                        />
+                          onValueChange={(value) => handleInputChange("country", value)}
+                        >
+                          <SelectTrigger id="country" className={`h-11 w-full border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100 ${errors.country ? "border-red-500" : ""}`}>
+                            <SelectValue placeholder="Select your country" />
+                          </SelectTrigger>
+                          <SelectContent className="max-h-64 overflow-y-auto">
+                            {worldCountries
+                              .map((c) => c.name.common)
+                              .sort((a, b) => a.localeCompare(b))
+                              .map((name) => (
+                                <SelectItem key={name} value={name}>{name}</SelectItem>
+                              ))}
+                          </SelectContent>
+                        </Select>
                         {errors.country && (
                           <p className="text-sm text-red-400 flex items-center gap-1">
                             <AlertCircle className="w-4 h-4" />

@@ -64,14 +64,6 @@ function validateWaitlistData(data: WaitlistData): { valid: boolean; error?: str
   return { valid: true };
 }
 
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '1mb',
-    },
-  },
-};
-
 export async function POST(req: NextRequest) {
   try {
     const clientId = getClientIdentifier(req);
