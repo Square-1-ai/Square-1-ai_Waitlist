@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { waitlistLimiter, getClientIdentifier, formatTimeRemaining } from '@/lib/rate-limiter';
+import { verifyRecaptcha } from '@/lib/recaptcha';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -40,6 +41,7 @@ interface WaitlistData {
 interface SubmitRequest {
   type: 'student' | 'teacher';
   data: WaitlistData;
+  recaptchaToken?: string;
 }
 
 function sanitizeString(input: string | string[] | undefined | null): string {
@@ -89,7 +91,17 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json() as SubmitRequest;
-    const { type, data } = body;
+    const { type, data, recaptchaToken } = body;
+
+    // Verify reCAPTCHA v3 token
+    const recaptchaResult = await verifyRecaptcha(recaptchaToken || '', 'waitlist_submit');
+    if (!recaptchaResult.success) {
+      console.warn('reCAPTCHA verification failed:', recaptchaResult.error);
+      return NextResponse.json(
+        { error: 'Verification failed. Please try again.' },
+        { status: 403 }
+      );
+    }
 
     if (type !== 'student' && type !== 'teacher') {
       return NextResponse.json(
