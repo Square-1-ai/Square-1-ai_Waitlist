@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import worldCountries from "world-countries"
-import { ChevronRight, ChevronLeft, ArrowLeft, AlertCircle, CheckCircle2 } from "lucide-react"
+import { ChevronRight, ChevronLeft, ArrowLeft, AlertCircle, CheckCircle2, Loader2 } from "lucide-react"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -30,6 +30,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
   const [step, setStep] = useState(1)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [submitSuccess, setSubmitSuccess] = useState(false)
 
@@ -177,6 +178,8 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
   const nextStep = async () => {
     // On step 1, check if email is already registered
     if (step === 1 && formData.email) {
+      if (!validateStep(1)) return;
+      setIsCheckingEmail(true);
       try {
         // Check if email already exists using lightweight check endpoint
         const checkRes = await fetch('/api/waitlist/check-email', {
@@ -192,6 +195,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
             description: "Unable to verify email. Please try again.",
             variant: "destructive"
           });
+          setIsCheckingEmail(false);
           return;
         }
 
@@ -204,6 +208,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
             description: "This email is already registered. Redirecting to referral details.",
             variant: "default"
           });
+          setIsCheckingEmail(false);
           onSubmit(formData);
           return;
         }
@@ -215,8 +220,10 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
           description: "Unable to verify email. Please check your connection.",
           variant: "destructive"
         });
+        setIsCheckingEmail(false);
         return;
       }
+      setIsCheckingEmail(false);
     }
 
     if (validateStep(step)) {
@@ -912,10 +919,20 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
                     type="button"
                     variant="outline"
                     onClick={nextStep}
-                    className="flex items-center gap-2 ml-auto border-white/30 bg-white/10 text-white hover:bg-white hover:text-blue-900 transition-colors"
+                    disabled={isCheckingEmail}
+                    className="flex items-center gap-2 ml-auto border-white/30 bg-white/10 text-white hover:bg-white hover:text-blue-900 transition-colors disabled:opacity-50"
                   >
-                    Next
-                    <ChevronRight className="w-4 h-4" />
+                    {isCheckingEmail ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Checking...
+                      </>
+                    ) : (
+                      <>
+                        Next
+                        <ChevronRight className="w-4 h-4" />
+                      </>
+                    )}
                   </Button>
                 )}
 
