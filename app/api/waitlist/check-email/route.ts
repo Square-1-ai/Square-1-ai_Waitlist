@@ -2,14 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { emailCheckLimiter, getClientIdentifier, formatTimeRemaining } from '@/lib/rate-limiter';
 
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '100kb',
-    },
-  },
-};
-
 export async function POST(req: NextRequest) {
   try {
     const clientId = getClientIdentifier(req);
@@ -49,10 +41,7 @@ export async function POST(req: NextRequest) {
       const existsInTeachers = Array.isArray(teacherResults) && teacherResults.length > 0;
       const exists = existsInStudents || existsInTeachers;
 
-      return NextResponse.json({ 
-        exists,
-        email 
-      });
+      return NextResponse.json({ exists });
     } catch (dbError: any) {
       if (dbError.code === 'ER_NO_SUCH_TABLE') {
         console.error('Database tables not initialized. Run: npm run db:init');
@@ -61,7 +50,7 @@ export async function POST(req: NextRequest) {
           { status: 503 }
         );
       }
-      throw dbError; // Re-throw other errors to be caught by outer catch
+      throw dbError; 
     }
 
   } catch (error: any) {

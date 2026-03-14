@@ -102,22 +102,32 @@ export const newsletterLimiter = new RateLimiter(5, 1);
  * Falls back to a random ID if IP can't be determined
  */
 export function getClientIdentifier(request: Request): string {
-  // Try to get real IP from various headers
   const headers = request.headers;
-  
-  // Check common proxy headers
-  const forwardedFor = headers.get('x-forwarded-for');
-  if (forwardedFor) {
-    return forwardedFor.split(',')[0].trim();
+
+  // On Vercel, x-vercel-forwarded-for is set by the infrastructure and cannot be
+  // spoofed by clients — prefer it over the user-controllable x-forwarded-for.
+  const vercelIp = headers.get('x-vercel-forwarded-for');
+  if (vercelIp) {
+    return vercelIp.split(',')[0].trim();
   }
 
+  // x-real-ip is also set by the proxy layer on most platforms
   const realIp = headers.get('x-real-ip');
   if (realIp) {
-    return realIp;
+    return realIp.trim();
   }
 
-  // Fallback to a session-based identifier
-  return 'unknown-' + Math.random().toString(36).substring(7);
+  // Last resort: take only the last (most trustworthy) IP from x-forwarded-for.
+  // Do NOT take the first entry — clients control that slot.
+  const forwardedFor = headers.get('x-forwarded-for');
+  if (forwardedFor) {
+    const parts = forwardedFor.split(',');
+    return parts[parts.length - 1].trim();
+  }
+
+  // Hardcoded fallback so every unidentifiable request shares one bucket and
+  // still gets rate-limited, rather than bypassing limits with a random ID.
+  return 'unknown-client';
 }
 
 /**

@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query } from '@/lib/db';
+import { waitlistLimiter, getClientIdentifier, formatTimeRemaining } from '@/lib/rate-limiter';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function sanitizeString(input: string | undefined | null): string {
   if (!input) return '';
-  return String(input).trim().slice(0, 2000);
+  return String(input)
+    .replace(/<[^>]*>/g, '') 
+    .trim()
+    .slice(0, 2000);
 }
 
 function validateFeedback(data: any): { valid: boolean; error?: string } {
@@ -24,16 +28,25 @@ function validateFeedback(data: any): { valid: boolean; error?: string } {
   return { valid: true };
 }
 
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '500kb',
-    },
-  },
-};
-
 export async function POST(req: NextRequest) {
   try {
+    const clientId = getClientIdentifier(req);
+    const rateLimit = waitlistLimiter.check(clientId);
+    if (!rateLimit.allowed) {
+      const timeRemaining = formatTimeRemaining(rateLimit.resetTime);
+      return NextResponse.json(
+        { error: `Too many requests. Please try again in ${timeRemaining}.` },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': String(Math.ceil((rateLimit.resetTime - Date.now()) / 1000)),
+            'X-RateLimit-Limit': '5',
+            'X-RateLimit-Remaining': '0',
+          },
+        }
+      );
+    }
+
     const body = await req.json();
 
     const validation = validateFeedback(body);

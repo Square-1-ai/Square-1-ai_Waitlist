@@ -2,7 +2,8 @@
 
 import type React from "react"
 import { useState } from "react"
-import { ChevronRight, ChevronLeft, ArrowLeft, AlertCircle, CheckCircle2 } from "lucide-react"
+import worldCountries from "world-countries"
+import { ChevronRight, ChevronLeft, ArrowLeft, AlertCircle, CheckCircle2, Loader2 } from "lucide-react"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -29,6 +30,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
   const [step, setStep] = useState(1)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [submitSuccess, setSubmitSuccess] = useState(false)
 
@@ -176,6 +178,8 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
   const nextStep = async () => {
     // On step 1, check if email is already registered
     if (step === 1 && formData.email) {
+      if (!validateStep(1)) return;
+      setIsCheckingEmail(true);
       try {
         // Check if email already exists using lightweight check endpoint
         const checkRes = await fetch('/api/waitlist/check-email', {
@@ -191,6 +195,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
             description: "Unable to verify email. Please try again.",
             variant: "destructive"
           });
+          setIsCheckingEmail(false);
           return;
         }
 
@@ -203,6 +208,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
             description: "This email is already registered. Redirecting to referral details.",
             variant: "default"
           });
+          setIsCheckingEmail(false);
           onSubmit(formData);
           return;
         }
@@ -214,8 +220,10 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
           description: "Unable to verify email. Please check your connection.",
           variant: "destructive"
         });
+        setIsCheckingEmail(false);
         return;
       }
+      setIsCheckingEmail(false);
     }
 
     if (validateStep(step)) {
@@ -392,17 +400,22 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="country" className="text-white">Country <span className="text-red-500">*</span></Label>
-                        <Input
-                          id="country"
-                          type="text"
-                          placeholder="Your country"
+                        <Select
                           value={formData.country}
-                          onChange={(e) => handleInputChange("country", e.target.value)}
-                          required
-                          className={`h-11 border-white/30 bg-white/20 text-white placeholder:text-white/60 ${
-                            errors.country ? "border-red-500" : ""
-                          }`}
-                        />
+                          onValueChange={(value) => handleInputChange("country", value)}
+                        >
+                          <SelectTrigger id="country" className={`h-11 w-full border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100 ${errors.country ? "border-red-500" : ""}`}>
+                            <SelectValue placeholder="Select your country" />
+                          </SelectTrigger>
+                          <SelectContent className="max-h-64 overflow-y-auto">
+                            {worldCountries
+                              .map((c) => c.name.common)
+                              .sort((a, b) => a.localeCompare(b))
+                              .map((name) => (
+                                <SelectItem key={name} value={name}>{name}</SelectItem>
+                              ))}
+                          </SelectContent>
+                        </Select>
                         {errors.country && (
                           <p className="text-sm text-red-400 flex items-center gap-1">
                             <AlertCircle className="w-4 h-4" />
@@ -906,10 +919,20 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
                     type="button"
                     variant="outline"
                     onClick={nextStep}
-                    className="flex items-center gap-2 ml-auto border-white/30 bg-white/10 text-white hover:bg-white hover:text-blue-900 transition-colors"
+                    disabled={isCheckingEmail}
+                    className="flex items-center gap-2 ml-auto border-white/30 bg-white/10 text-white hover:bg-white hover:text-blue-900 transition-colors disabled:opacity-50"
                   >
-                    Next
-                    <ChevronRight className="w-4 h-4" />
+                    {isCheckingEmail ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Checking...
+                      </>
+                    ) : (
+                      <>
+                        Next
+                        <ChevronRight className="w-4 h-4" />
+                      </>
+                    )}
                   </Button>
                 )}
 

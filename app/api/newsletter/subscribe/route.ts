@@ -8,14 +8,6 @@ function sanitizeEmail(email: string | undefined | null): string {
   return String(email).trim().toLowerCase().slice(0, 254);
 }
 
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '100kb',
-    },
-  },
-};
-
 export async function POST(req: NextRequest) {
   try {
     const clientId = getClientIdentifier(req);
@@ -36,9 +28,9 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
     const email = sanitizeEmail(body.email);
-    const name = body.name;
-    const role = body.role;
-    const newsletter = body.newsletter || false;
+    const name = body.name ? String(body.name).replace(/<[^>]*>/g, '').trim().slice(0, 100) : undefined;
+    const role = ['student', 'teacher'].includes(body.role) ? body.role : undefined;
+    const newsletter = body.newsletter === true;
 
     
 
@@ -90,7 +82,6 @@ export async function POST(req: NextRequest) {
       console.log('Using form ID:', newsletter ? formId : nonSubFormId);
     }
 
-    // Use different form ID based on newsletter preference
     const selectedFormId = newsletter ? formId : nonSubFormId;
 
     const convertkitResponse = await fetch(
@@ -129,8 +120,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       { 
         message: 'Successfully subscribed to newsletter!',
-        success: true,
-        data: convertkitData
+        success: true
       },
       { status: 200 }
     );
