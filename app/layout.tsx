@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import { Inter_Tight } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import ConditionalNavbar from '@/components/conditional-navbar'
 import { Toaster } from '@/components/ui/toaster'
+import Script from 'next/script'
 import { GoogleAnalytics } from '@next/third-parties/google'
+import { Analytics } from '@vercel/analytics/next'
 
 
 const interTight = Inter_Tight({ 
@@ -41,8 +42,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-
       <head>
+        <Script
+          id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="3e2781af-7578-43ff-9509-50338ebf42b1"
+          data-blockingmode="auto"
+           type="text/javascript"
+        />
         <GoogleAnalytics gaId="G-3WS60EMJC2" />
       </head>
       <body className={`${interTight.variable} font-sans antialiased`} suppressHydrationWarning>
