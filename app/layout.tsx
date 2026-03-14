@@ -45,7 +45,7 @@ export default function RootLayout({
       <head>
         <Script
           id="gcm-default"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
@@ -69,9 +69,13 @@ export default function RootLayout({
           src="https://consent.cookiebot.com/uc.js"
           data-cbid="3e2781af-7578-43ff-9509-50338ebf42b1"
           data-blockingmode="auto"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
         />
         <GoogleAnalytics gaId="G-3WS60EMJC2" />
+        <Script
+          src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
+          strategy="afterInteractive"
+        />
       </head>
       <body className={`${interTight.variable} font-sans antialiased`} suppressHydrationWarning>
         <ConditionalNavbar />

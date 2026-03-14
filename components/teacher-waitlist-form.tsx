@@ -25,6 +25,32 @@ import TypingText from "@/components/ui/typing-text"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useToast } from "@/hooks/use-toast"
 
+declare global {
+  interface Window {
+    grecaptcha: {
+      ready: (callback: () => void) => void;
+      execute: (siteKey: string, options: { action: string }) => Promise<string>;
+    };
+  }
+}
+
+const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '';
+
+async function getRecaptchaToken(action: string): Promise<string | null> {
+  try {
+    if (!window.grecaptcha || !RECAPTCHA_SITE_KEY) return null;
+    return await new Promise((resolve) => {
+      window.grecaptcha.ready(async () => {
+        const token = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action });
+        resolve(token);
+      });
+    });
+  } catch {
+    console.error('Failed to get reCAPTCHA token');
+    return null;
+  }
+}
+
 export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: any) => void }) {
   const { toast } = useToast()
   const [step, setStep] = useState(1)
@@ -262,10 +288,13 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
     // On last step, submit the form
     setIsSubmitting(true);
     try {
+      // Get reCAPTCHA v3 token
+      const recaptchaToken = await getRecaptchaToken('waitlist_submit');
+
       const response = await fetch('/api/waitlist/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'teacher', data: formData }),
+        body: JSON.stringify({ type: 'teacher', data: formData, recaptchaToken }),
       });
 
       const result = await response.json();
