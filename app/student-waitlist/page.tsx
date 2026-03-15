@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import StudentWaitlistForm from "@/components/student-waitlist-form"
 import Footer from "@/components/footer"
-import { Share2, Clipboard, Loader, CheckCircle } from "lucide-react"
+import { Share2, Clipboard, Loader, CheckCircle, Gift, Tag, Zap } from "lucide-react"
 
 // === CONFIGURATION ===
 const WAITLIST_ID = process.env.NEXT_PUBLIC_WAITLIST_ID ; 
@@ -146,18 +146,15 @@ export default function StudentWaitlistPage() {
           <div className="max-w-4xl w-full animate-fade-in">
             {/* Success Icon */}
             <div className="flex justify-center mb-8">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full blur-2xl opacity-50 animate-pulse"></div>
-                <div className="relative bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full p-6">
-                  <CheckCircle className="w-20 h-20 text-white" strokeWidth={2.5} />
-                </div>
+              <div className="bg-white/10 p-4 rounded-3xl backdrop-blur-sm border border-white/20">
+                <CheckCircle className="w-12 h-12 text-blue-400" strokeWidth={2} />
               </div>
             </div>
 
             {/* Main Heading */}
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 text-center leading-tight">
               Welcome to{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+              <span className="text-blue-400 font-medium">
                 Square 1 Ai!
               </span>
             </h1>
@@ -284,19 +281,25 @@ export default function StudentWaitlistPage() {
 
                 {/* Benefits Grid */}
                 <div className="grid sm:grid-cols-3 gap-4 mb-8">
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-5 text-center hover:border-cyan-400/50 transition-all duration-300">
-                    <div className="text-3xl mb-2">🎁</div>
-                    <h3 className="text-white font-bold mb-1">Early Access</h3>
+                  <div className="bg-white/5 border border-white/10 rounded-xl p-5 text-center hover:bg-white/10 transition-all duration-300">
+                    <div className="flex justify-center mb-4 text-blue-400">
+                      <Gift className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-white font-medium mb-1">Early Access</h3>
                     <p className="text-slate-400 text-sm">Be first to try new features</p>
                   </div>
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-5 text-center hover:border-cyan-400/50 transition-all duration-300">
-                    <div className="text-3xl mb-2">💰</div>
-                    <h3 className="text-white font-bold mb-1">Exclusive Discounts</h3>
+                  <div className="bg-white/5 border border-white/10 rounded-xl p-5 text-center hover:bg-white/10 transition-all duration-300">
+                    <div className="flex justify-center mb-4 text-cyan-400">
+                      <Tag className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-white font-medium mb-1">Exclusive Discounts</h3>
                     <p className="text-slate-400 text-sm">Special pricing for early members</p>
                   </div>
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-5 text-center hover:border-cyan-400/50 transition-all duration-300">
-                    <div className="text-3xl mb-2">⚡</div>
-                    <h3 className="text-white font-bold mb-1">Priority Support</h3>
+                  <div className="bg-white/5 border border-white/10 rounded-xl p-5 text-center hover:bg-white/10 transition-all duration-300">
+                    <div className="flex justify-center mb-4 text-purple-400">
+                      <Zap className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-white font-medium mb-1">Priority Support</h3>
                     <p className="text-slate-400 text-sm">Get help when you need it</p>
                   </div>
                 </div>
