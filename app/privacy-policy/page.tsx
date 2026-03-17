@@ -34,7 +34,7 @@ export default function PrivacyPolicyPage() {
             </p>
             <p>
               Your use of Square1 Ai&rsquo;s Services is at all times subject to our{" "}
-              <a href="#" className="text-blue-600 hover:text-blue-800 underline underline-offset-2 transition-colors">
+              <a href="/terms-of-use" className="text-blue-600 hover:text-blue-800 underline underline-offset-2 transition-colors">
                 Terms of Service
               </a>
               , which incorporates this Privacy Policy. Any terms not defined here have
