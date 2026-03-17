@@ -172,7 +172,7 @@ export default function Footer() {
               <a href="/terms-of-use" className="hover:text-white transition-colors">
                 Terms of Use
               </a>
-              <a href="#" className="hover:text-white transition-colors">
+              <a href="/cookie-policy" className="hover:text-white transition-colors">
                 Cookie Policy
               </a>
             </div>
