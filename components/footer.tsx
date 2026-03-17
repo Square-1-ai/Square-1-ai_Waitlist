@@ -166,7 +166,7 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-slate-300 text-sm">
             <p>&copy; 2026 Square 1 Ai. All rights reserved.</p>
             <div className="flex gap-6">
-              <a href="#" className="hover:text-white transition-colors">
+              <a href="/privacy-policy" className="hover:text-white transition-colors">
                 Privacy Policy
               </a>
               <a href="#" className="hover:text-white transition-colors">
