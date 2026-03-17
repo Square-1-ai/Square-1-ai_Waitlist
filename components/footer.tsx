@@ -175,6 +175,9 @@ export default function Footer() {
               <a href="/cookie-policy" className="hover:text-white transition-colors">
                 Cookie Policy
               </a>
+              <a href="/acceptable-use-policy" className="hover:text-white transition-colors">
+                Acceptable Use Policy
+              </a>
             </div>
           </div>
         </div>
