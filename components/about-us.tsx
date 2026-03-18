@@ -31,6 +31,10 @@ export default function AboutUs() {
               while empowering teachers with powerful tools to inspire and guide their students more effectively 
               than ever before.
             </p>
+
+            <p className="text-slate-700 leading-relaxed">
+              To empower every learner through AI-personalised education, practical skill-building, and real-world pathways — transforming knowledge into careers and entrepreneurship.
+            </p>
           </div>
 
           <div>
