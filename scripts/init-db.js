@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const mysql = require('mysql2/promise');
 
-const connectionUrl = process.env.RAILWAY_DB_URL;
+const connectionUrl = "mysql://root:HCirUZgzIlvJSMrmKHEPUmtNFjjfQffy@metro.proxy.rlwy.net:41454/sq1ai_waitlist";
 
 if (!connectionUrl) {
   console.error('❌ RAILWAY_DB_URL environment variable is not set');
@@ -15,6 +15,8 @@ CREATE TABLE IF NOT EXISTS students (
   id INT AUTO_INCREMENT PRIMARY KEY,
   full_name VARCHAR(100) NOT NULL,
   email VARCHAR(100) UNIQUE NOT NULL,
+  dob DATE NOT NULL,
+  parent_name VARCHAR(100),
   country VARCHAR(100),
   city VARCHAR(100),
   internet_connection VARCHAR(100),

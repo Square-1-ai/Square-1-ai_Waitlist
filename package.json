@@ -7,10 +7,15 @@
     "dev": "next dev",
     "lint": "eslint .",
     "start": "next start",
-    "db:init": "node scripts/init-db.js"
+    "db:init": "node scripts/init-db.js",
+    "db:migrate": "node scripts/migrate-add-minor-fields.js",
+    "db:seed": "node scripts/seed-db.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
+    "@mantine/core": "^8.3.18",
+    "@mantine/dates": "^8.3.18",
+    "@mantine/hooks": "^8.3.18",
     "@next/third-parties": "^16.1.6",
     "@radix-ui/react-accordion": "1.2.2",
     "@radix-ui/react-alert-dialog": "1.1.4",
@@ -47,6 +52,7 @@
     "cmdk": "1.0.4",
     "cobe": "^0.6.5",
     "date-fns": "4.1.0",
+    "dayjs": "^1.11.20",
     "dotenv": "^17.2.3",
     "embla-carousel-react": "8.5.1",
     "framer-motion": "^12.23.24",

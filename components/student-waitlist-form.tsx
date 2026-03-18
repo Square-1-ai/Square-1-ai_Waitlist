@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import worldCountries from "world-countries"
-import { ChevronRight, ChevronLeft, ArrowLeft, AlertCircle, CheckCircle2, Loader2 } from "lucide-react"
+import { ChevronRight, ChevronLeft, ArrowLeft, AlertCircle, CheckCircle2, Loader2, CalendarIcon } from "lucide-react"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -24,6 +24,9 @@ import { Separator } from "@/components/ui/separator"
 import TypingText from "@/components/ui/typing-text"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useToast } from "@/hooks/use-toast"
+import { Calendar } from "@/components/ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { format } from "date-fns"
 
 declare global {
   interface Window {
@@ -64,6 +67,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
     return '';
   };
   
+  const [dobOpen, setDobOpen] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isCheckingEmail, setIsCheckingEmail] = useState(false)
@@ -72,12 +76,15 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
   const [formData, setFormData] = useState({
     // Common Sectionon
     fullName: "",
+    dob: "",
     email: "",
     country: "",
     city: "",
     internetConnection: "",
     devices: [] as string[],
     heardAbout: "",
+    // Parent info (for minors)
+    parentName: "",
     // Student Profile
     educationLevel: "",
     subjects: [] as string[],
@@ -92,6 +99,16 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
     earlyAccess: [] as string[],
     newsletter: false,
   })
+
+  const isMinor = (): boolean => {
+    if (!formData.dob) return false;
+    const today = new Date();
+    const birth = new Date(formData.dob);
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+    return age < 18;
+  }
 
   const totalSteps = 4
 
@@ -108,10 +125,16 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
       if (!formData.fullName.trim()) {
         newErrors.fullName = "Full name is required"
       }
+      if (!formData.dob) {
+        newErrors.dob = "Date of birth is required"
+      }
       if (!formData.email.trim()) {
-        newErrors.email = "Email is required"
+        newErrors.email = isMinor() ? "Parent email address is required" : "Email is required"
       } else if (!validateEmail(formData.email)) {
         newErrors.email = "Please enter a valid email address"
+      }
+      if (isMinor() && !formData.parentName.trim()) {
+        newErrors.parentName = "Parent name is required for students under 18"
       }
       if (!formData.country.trim()) {
         newErrors.country = "Country is required"
@@ -408,11 +431,56 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="email" className="text-white">Email Address <span className="text-red-500">*</span></Label>
+                      <Label htmlFor="dob-trigger" className="text-white">Date of Birth <span className="text-red-500">*</span></Label>
+                      <Popover open={dobOpen} onOpenChange={setDobOpen}>
+                        <PopoverTrigger asChild>
+                          <button
+                            id="dob-trigger"
+                            type="button"
+                            className={`h-11 w-full flex items-center justify-between rounded-md border px-3 text-sm transition-colors bg-white/20 text-white hover:bg-white/25 focus:outline-none focus:ring-2 focus:ring-white/30 ${errors.dob ? "border-red-500" : "border-white/30"} ${!formData.dob ? "text-white/60" : "text-white"}`}
+                          >
+                            <span>{formData.dob ? format(new Date(formData.dob + "T00:00:00"), "dd MMMM yyyy") : "Select your date of birth"}</span>
+                            <CalendarIcon className="w-4 h-4 shrink-0 opacity-70" />
+                          </button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0 bg-slate-900 border-white/20" align="start">
+                          <Calendar
+                            mode="single"
+                            captionLayout="dropdown"
+                            selected={formData.dob ? new Date(formData.dob + "T00:00:00") : undefined}
+                            onSelect={(date) => {
+                              if (date) {
+                                const y = date.getFullYear()
+                                const m = String(date.getMonth() + 1).padStart(2, "0")
+                                const d = String(date.getDate()).padStart(2, "0")
+                                handleInputChange("dob", `${y}-${m}-${d}`)
+                              }
+                              setDobOpen(false)
+                            }}
+                            disabled={(date) => date > new Date()}
+                            defaultMonth={formData.dob ? new Date(formData.dob + "T00:00:00") : new Date(new Date().getFullYear() - 15, 0)}
+                            startMonth={new Date(1950, 0)}
+                            endMonth={new Date()}
+                            className="bg-slate-900 text-white [&_.rdp-day]:text-white [&_.rdp-day_button:hover]:bg-white/20 [&_.rdp-day_button[aria-selected=true]]:bg-cyan-500 [&_.rdp-nav_button]:text-white [&_.rdp-nav_button:hover]:bg-white/20 [&_.rdp-head_cell]:text-white/50 [&_.rdp-caption_label]:text-white [&_select]:bg-slate-800 [&_select]:text-white [&_select]:border-white/20 [&_select]:rounded [&_select]:px-1"
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      {errors.dob && (
+                        <p className="text-sm text-red-400 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          {errors.dob}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-white">
+                        {isMinor() ? "Parent Email Address" : "Email Address"} <span className="text-red-500">*</span>
+                      </Label>
                       <Input
                         id="email"
                         type="email"
-                        placeholder="your@email.com"
+                        placeholder={isMinor() ? "parent@email.com" : "your@email.com"}
                         value={formData.email}
                         onChange={(e) => handleInputChange("email", e.target.value)}
                         required
@@ -420,6 +488,11 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
                           errors.email ? "border-red-500" : ""
                         }`}
                       />
+                      {isMinor() && (
+                        <p className="text-xs text-cyan-300/80">
+                          Since you are under 18, please provide your parent or guardian's email address.
+                        </p>
+                      )}
                       {errors.email && (
                         <p className="text-sm text-red-400 flex items-center gap-1">
                           <AlertCircle className="w-4 h-4" />
@@ -427,6 +500,29 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
                         </p>
                       )}
                     </div>
+
+                    {isMinor() && (
+                      <div className="space-y-2 animate-fade-in">
+                        <Label htmlFor="parentName" className="text-white">Parent / Guardian Name <span className="text-red-500">*</span></Label>
+                        <Input
+                          id="parentName"
+                          type="text"
+                          placeholder="Enter parent or guardian's full name"
+                          value={formData.parentName}
+                          onChange={(e) => handleInputChange("parentName", e.target.value)}
+                          required
+                          className={`h-11 border-white/30 bg-white/20 text-white placeholder:text-white/60 ${
+                            errors.parentName ? "border-red-500" : ""
+                          }`}
+                        />
+                        {errors.parentName && (
+                          <p className="text-sm text-red-400 flex items-center gap-1">
+                            <AlertCircle className="w-4 h-4" />
+                            {errors.parentName}
+                          </p>
+                        )}
+                      </div>
+                    )}
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">

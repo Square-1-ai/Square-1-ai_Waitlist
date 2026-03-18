@@ -8,6 +8,8 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 interface WaitlistData {
   fullName: string;
   email: string;
+  dob: string;
+  parentName?: string;
   country?: string;
   city?: string;
   internetConnection?: string;
@@ -56,9 +58,12 @@ function sanitizeString(input: string | string[] | undefined | null): string {
   return cleaned;
 }
 
-function validateWaitlistData(data: WaitlistData): { valid: boolean; error?: string } {
+function validateWaitlistData(data: WaitlistData, type: string): { valid: boolean; error?: string } {
   if (!data.fullName || sanitizeString(data.fullName).length < 2) {
     return { valid: false, error: 'Full name is required (minimum 2 characters)' };
+  }
+  if (type === 'student' && !data.dob) {
+    return { valid: false, error: 'Date of birth is required' };
   }
   if (!data.email || !EMAIL_REGEX.test(data.email)) {
     return { valid: false, error: 'Valid email is required' };
@@ -110,7 +115,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const validation = validateWaitlistData(data);
+    const validation = validateWaitlistData(data, type);
 
     if (!validation.valid) {
       return NextResponse.json(
@@ -126,14 +131,16 @@ export async function POST(req: NextRequest) {
     if (type === 'student') {
       await query(
         `INSERT INTO students (
-          full_name, email, country, city, internet_connection, devices, 
-          heard_about, education_level, subjects, learning_preference, 
-          taken_online_courses, why_interested, motivation, competitions, 
+          full_name, email, dob, parent_name, country, city, internet_connection, devices,
+          heard_about, education_level, subjects, learning_preference,
+          taken_online_courses, why_interested, motivation, competitions,
           hours_per_week, willing_to_pay, referral_code, early_access
-        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
         [
           sanitizeString(data.fullName),
           sanitizedEmail,
+          sanitizeString(data.dob),
+          sanitizeString(data.parentName) || null,
           sanitizeString(data.country),
           sanitizeString(data.city),
           sanitizeString(data.internetConnection),
