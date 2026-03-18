@@ -97,8 +97,22 @@ export function VisionSection() {
               staggerDelay={0.03}
             >
               Our Vision
+              
             </ScrollReveal>
+            
             <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-cyan-400 mb-8"></div>
+            <ScrollReveal
+              size="sm"
+              align="left"
+              variant="default"
+              textClassName="text-slate-700 leading-relaxed mb-6"
+              containerClassName="mb-6"
+              enableBlur={true}
+              baseOpacity={0.1}
+              staggerDelay={0.04}
+            >
+              "Learn Your Way. Build Real Skills. Launch Your Future."
+            </ScrollReveal>
             <ScrollReveal
               size="sm"
               align="left"
