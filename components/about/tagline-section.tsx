@@ -23,7 +23,7 @@ export function TaglineSection() {
           baseOpacity={0.1}
           staggerDelay={0.03}
         >
-          Learn Smarter. Build Faster. Launch Further.
+          Learn Your Way. Build Real Skills. Launch Your Future.
         </ScrollReveal>
       </div>
     </section>

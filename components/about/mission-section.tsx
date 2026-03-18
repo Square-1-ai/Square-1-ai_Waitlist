@@ -37,7 +37,7 @@ export function MissionSection() {
               baseOpacity={0.2}
               staggerDelay={0.04}
             >
-              To democratize access to world-class education through intelligent AI-driven systems that personalize learning, quantify progress, and bridge the gap between knowledge and real-world application.
+               To empower every learner through AI-personalised education, practical skill-building, and real-world pathways — transforming knowledge into careers and entrepreneurship.s
             </ScrollReveal>
             <ScrollReveal
               size="sm"
