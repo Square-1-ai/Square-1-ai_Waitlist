@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import worldCountries from "world-countries"
-import { ChevronRight, ChevronLeft, ArrowLeft, AlertCircle, CheckCircle2, Loader2 } from "lucide-react"
+import { ChevronRight, ChevronLeft, ArrowLeft, AlertCircle, CheckCircle2, Loader2, Check, ChevronsUpDown } from "lucide-react"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -18,6 +18,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Progress } from "@/components/ui/progress"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
@@ -55,6 +57,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
   const { toast } = useToast()
   const [step, setStep] = useState(1)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [countryOpen, setCountryOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isCheckingEmail, setIsCheckingEmail] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
@@ -429,22 +432,47 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="country" className="text-white">Country <span className="text-red-500">*</span></Label>
-                        <Select
-                          value={formData.country}
-                          onValueChange={(value) => handleInputChange("country", value)}
-                        >
-                          <SelectTrigger id="country" className={`h-11 w-full border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100 ${errors.country ? "border-red-500" : ""}`}>
-                            <SelectValue placeholder="Select your country" />
-                          </SelectTrigger>
-                          <SelectContent className="max-h-64 overflow-y-auto">
-                            {worldCountries
-                              .map((c) => c.name.common)
-                              .sort((a, b) => a.localeCompare(b))
-                              .map((name) => (
-                                <SelectItem key={name} value={name}>{name}</SelectItem>
-                              ))}
-                          </SelectContent>
-                        </Select>
+                        <Popover open={countryOpen} onOpenChange={setCountryOpen}>
+                          <PopoverTrigger asChild>
+                            <button
+                              id="country"
+                              type="button"
+                              aria-label="Select your country"
+                              className={`h-11 w-full flex items-center justify-between rounded-md border px-3 py-2 text-sm border-white/30 bg-white/20 ${errors.country ? "border-red-500" : ""}`}
+                            >
+                              <span className={formData.country ? "text-white" : "text-white/60"}>
+                                {formData.country || "Select your country"}
+                              </span>
+                              <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50 text-white" />
+                            </button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
+                            <Command>
+                              <CommandInput placeholder="Search country..." />
+                              <CommandList className="max-h-60">
+                                <CommandEmpty>No country found.</CommandEmpty>
+                                <CommandGroup>
+                                  {worldCountries
+                                    .map((c) => c.name.common)
+                                    .sort((a, b) => a.localeCompare(b))
+                                    .map((name) => (
+                                      <CommandItem
+                                        key={name}
+                                        value={name}
+                                        onSelect={(val) => {
+                                          handleInputChange("country", val === formData.country ? "" : val)
+                                          setCountryOpen(false)
+                                        }}
+                                      >
+                                        <Check className={`mr-2 h-4 w-4 ${formData.country === name ? "opacity-100" : "opacity-0"}`} />
+                                        {name}
+                                      </CommandItem>
+                                    ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
                         {errors.country && (
                           <p className="text-sm text-red-400 flex items-center gap-1">
                             <AlertCircle className="w-4 h-4" />
