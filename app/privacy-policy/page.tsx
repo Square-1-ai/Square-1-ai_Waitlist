@@ -4,10 +4,10 @@ import Footer from "@/components/footer"
 export const metadata: Metadata = {
   title: "Privacy Policy | Square1 AI",
   description:
-    "Learn how Square1 AI collects, uses, and protects your personal data. Our commitment to GDPR, CCPA, COPPA, FERPA, and Sri Lanka PDPA compliance.",
+    "Learn how Square1 AI collects, uses, and protects your personal data. Our commitment to GDPR, CCPA, COPPA, FERPA, Sri Lanka PDPA, and India's DPDP Act (including DPDP Rules 2025) compliance.",
 }
 
-const LAST_UPDATED = "March 17, 2026"
+const LAST_UPDATED = "March 20, 2026"
 
 export default function PrivacyPolicyPage() {
   return (
@@ -23,6 +23,14 @@ export default function PrivacyPolicyPage() {
             At Square1 Ai (&ldquo;Square1 Ai,&rdquo; &ldquo;we,&rdquo; &ldquo;our,&rdquo; or
             &ldquo;us&rdquo;), we take your privacy seriously. This Privacy Policy explains
             how we collect, use, disclose, and protect your information.
+            {" "}
+            This Privacy Policy also reflects our commitment to transparency and
+            compliance with the General Data Protection Regulation (GDPR), the
+            California Consumer Privacy Act as amended by the CPRA (CCPA), the
+            Children&rsquo;s Online Privacy Protection Act (COPPA), the Family
+            Educational Rights and Privacy Act (FERPA), India&rsquo;s Digital Personal
+            Data Protection Act, 2023 and DPDP Rules 2025 (DPDP Act), and Sri
+            Lanka&rsquo;s Personal Data Protection Act No. 9 of 2022 (PDPA).
           </p>
 
           <div className="border-l-2 border-slate-200 pl-6 my-8 space-y-4 text-slate-500 leading-relaxed">
@@ -141,7 +149,12 @@ export default function PrivacyPolicyPage() {
           </Section>
 
           <Section number="4" title="Legal Basis for Processing (GDPR)">
-            <p>Where the GDPR applies, we rely on the following legal bases:</p>
+            <p>
+              Where the GDPR applies, we rely on the following legal bases. Where
+              India&rsquo;s Digital Personal Data Protection Act, 2023 (DPDP Act)
+              applies, consent is required for processing of Indian users, and we do not
+              rely on “legitimate interest” as a legal basis under the DPDP Act.
+            </p>
             <ul>
               <li>
                 <strong>Consent</strong> — Marketing communications, non-essential
@@ -153,7 +166,8 @@ export default function PrivacyPolicyPage() {
               </li>
               <li>
                 <strong>Legitimate Interest</strong> — Analytics, product improvement,
-                fraud prevention, and security.
+                fraud prevention, and security (not relied upon for Indian users under
+                the DPDP Act).
               </li>
               <li>
                 <strong>Legal Obligation</strong> — Tax compliance, responding to
@@ -246,6 +260,41 @@ export default function PrivacyPolicyPage() {
               </ul>
             </SubSection>
 
+            <SubSection title="Under India DPDP Act (2023)">
+              <ul>
+                <li>
+                  <strong>Right to confirmation and access</strong> — Request confirmation
+                  of whether we process your personal data, and request a summary of the
+                  personal data and processing activities (including identities of data
+                  fiduciaries and data processors with whom data has been shared), where
+                  required by the DPDP Rules. Response within 90 days where required.
+                </li>
+                <li>
+                  <strong>Right to correction</strong> — Request correction of inaccurate
+                  or incomplete personal data.
+                </li>
+                <li>
+                  <strong>Right to erasure</strong> — Request deletion of personal data,
+                  where applicable under the DPDP Act.
+                </li>
+                <li>
+                  <strong>Right to grievance redressal</strong> — Submit grievances to us
+                  for handling and resolution. Our Grievance Officer will acknowledge and
+                  resolve your grievance within 7 working days; if you are unsatisfied
+                  with the resolution, you may escalate your complaint to the Data
+                  Protection Board of India.
+                </li>
+                <li>
+                  <strong>Right to nomination</strong> — Nominate a person to exercise
+                  specified rights on your behalf, where applicable under the DPDP Act.
+                </li>
+                <li>
+                  <strong>Right to withdraw consent</strong> — Where processing relies on
+                  consent, withdraw consent at any time (subject to applicable law).
+                </li>
+              </ul>
+            </SubSection>
+
             <p>
               To exercise any of these rights, please contact us at{" "}
               <a
@@ -254,7 +303,8 @@ export default function PrivacyPolicyPage() {
               >
                 privacy@square1ai.com
               </a>
-              . We will respond within 30 days (or as required by applicable law).
+              . We will respond within 30 days (or within other timeframes required
+              by applicable law).
             </p>
           </Section>
 
@@ -276,6 +326,31 @@ export default function PrivacyPolicyPage() {
               </li>
               <li>We do not serve targeted advertising to children under 13.</li>
             </ul>
+
+            <SubSection title="Under India DPDP Act (Children Under 18)">
+              <ul>
+                <li>
+                  For Indian users under 18, a “child” is defined as any individual under
+                  the age of 18, and verifiable parental consent is mandatory before
+                  any processing of personal data.
+                </li>
+                <li>
+                  Parental consent may be verified through government-authorised mechanisms
+                  including DigiLocker virtual tokens and Aadhaar-based OTP verification
+                  (or other methods prescribed by the Data Protection Board of India).
+                </li>
+                <li>
+                  Tracking and behavioural monitoring of children is prohibited (except
+                  where strictly necessary for educational purposes and child safety).
+                </li>
+                <li>
+                  Targeted advertising directed at children is categorically banned, and
+                  our AI personalisation for Indian users under 18 is designed to use
+                  session-based, non-longitudinal methods that do not constitute
+                  “tracking or behavioural monitoring.”
+                </li>
+              </ul>
+            </SubSection>
           </Section>
 
           <Section number="9" title="Student Data & FERPA">
@@ -314,6 +389,14 @@ export default function PrivacyPolicyPage() {
               <li>Standard Contractual Clauses (SCCs) approved by the European Commission.</li>
               <li>Adequacy decisions where applicable.</li>
               <li>Binding corporate rules or equivalent protections under the Sri Lanka PDPA.</li>
+              <li>
+                Where India&rsquo;s DPDP Act applies, international transfers are made only
+                where permitted under the DPDP Act and supported by appropriate safeguards,
+                including using the DPDP “blacklist model” (i.e., transfers are made only
+                to jurisdictions not identified as restricted/blacklisted by the Data
+                Protection Board of India). For clarity, Sri Lanka is not treated as a
+                restricted/blacklisted jurisdiction under this model.
+              </li>
             </ul>
           </Section>
 
@@ -349,7 +432,16 @@ export default function PrivacyPolicyPage() {
               <li>Encryption of data in transit (TLS 1.2+) and at rest (AES-256).</li>
               <li>Regular vulnerability assessments and penetration testing.</li>
               <li>Role-based access controls and multi-factor authentication for internal systems.</li>
-              <li>Incident response procedures with notification within 72 hours of a qualifying breach.</li>
+              <li>
+                Incident response procedures, including India&rsquo;s DPDP breach-notification
+                approach: CERT-In notification within 6 hours of detection of a cyber security
+                incident, Data Protection Board of India (DPBI) notification without delay,
+                and a detailed follow-up report within 72 hours. The report includes the
+                nature and extent of the breach, likely impact, root cause analysis, mitigation
+                measures, and a summary of individual notifications. Affected users will be
+                notified without applying a materiality threshold (and for breaches affecting
+                Indian users under 18, parents/guardians will also be notified directly).
+              </li>
             </ul>
             <p>
               While no system is 100% secure, we continuously review and improve our
@@ -408,6 +500,28 @@ export default function PrivacyPolicyPage() {
               your local Data Protection Authority. For Sri Lankan residents, complaints
               may be directed to the Data Protection Authority of Sri Lanka.
             </p>
+
+            <p className="mt-4 text-slate-400 text-sm">
+              For India&rsquo;s DPDP Act (2023), you may submit grievances and data requests
+              to our Grievance Officer at{" "}
+              <a
+                href="mailto:grievance.india@square1ai.com"
+                className="text-blue-600 hover:text-blue-800 underline underline-offset-2 transition-colors"
+              >
+                grievance.india@square1ai.com
+              </a>
+              . The Grievance Officer will acknowledge and resolve your grievance within
+              7 working days; if you are unsatisfied with the resolution, you may
+              escalate your complaint to the Data Protection Board of India.
+            </p>
+
+            <p className="mt-4 text-slate-400 text-sm">
+              DPDP Act penalty warning: non-compliance may lead to penalties under the
+              DPDP Act, including up to ₹200 crore for breach-notification failures and
+              children&rsquo;s data violations, and up to ₹250 crore for security failures.
+              Repeated penalty instances may result in the Data Protection Board of India
+              directing blocking of access to our services in India.
+            </p>
           </Section>
 
           {/* Compliance footer */}
@@ -417,7 +531,9 @@ export default function PrivacyPolicyPage() {
               Regulation (GDPR), the California Consumer Privacy Act as amended by the
               CPRA (CCPA), the Children&rsquo;s Online Privacy Protection Act (COPPA),
               the Family Educational Rights and Privacy Act (FERPA), and Sri
-              Lanka&rsquo;s Personal Data Protection Act No. 9 of 2022 (PDPA).
+              Lanka&rsquo;s Personal Data Protection Act No. 9 of 2022 (PDPA), and
+              India&rsquo;s Digital Personal Data Protection Act, 2023 and DPDP Rules 2025
+              (DPDP Act).
             </p>
             <p className="text-sm text-slate-400 mt-3">
               Last updated: {LAST_UPDATED}
