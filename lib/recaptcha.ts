@@ -2,7 +2,7 @@ const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY;
 const RECAPTCHA_VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify';
 
 // Minimum score to consider the request legitimate (0.0 = bot, 1.0 = human)
-const MIN_SCORE = 0.2;
+const MIN_SCORE = 0.4;
 
 interface RecaptchaVerifyResponse {
   success: boolean;

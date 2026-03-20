@@ -33,6 +33,10 @@ CREATE TABLE IF NOT EXISTS students (
   willing_to_pay VARCHAR(50),
   referral_code VARCHAR(100),
   early_access TEXT,
+  data_processing_consent BOOLEAN NOT NULL DEFAULT FALSE,
+  newsletter_consent BOOLEAN DEFAULT FALSE,
+  consent_timestamp TIMESTAMP NULL,
+  consent_ip_address VARCHAR(45) NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_email (email),
   INDEX idx_created_at (created_at)
@@ -62,6 +66,10 @@ CREATE TABLE IF NOT EXISTS teachers (
   payment_method VARCHAR(100),
   referral_code VARCHAR(100),
   early_access TEXT,
+  data_processing_consent BOOLEAN NOT NULL DEFAULT FALSE,
+  newsletter_consent BOOLEAN DEFAULT FALSE,
+  consent_timestamp TIMESTAMP NULL,
+  consent_ip_address VARCHAR(45) NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_email (email),
   INDEX idx_created_at (created_at)

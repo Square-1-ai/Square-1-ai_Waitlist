@@ -4,7 +4,6 @@ import './globals.css'
 import ConditionalNavbar from '@/components/conditional-navbar'
 import { Toaster } from '@/components/ui/toaster'
 import Script from 'next/script'
-import { GoogleAnalytics } from '@next/third-parties/google'
 import { Analytics } from '@vercel/analytics/next'
 
 
@@ -43,9 +42,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Google Consent Mode - Load FIRST to set defaults */}
         <Script
           id="gcm-default"
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
@@ -64,14 +64,56 @@ export default function RootLayout({
             `,
           }}
         />
+
+        {/* Cookiebot - Load BEFORE other scripts to block tracking */}
         <Script
           id="Cookiebot"
           src="https://consent.cookiebot.com/uc.js"
           data-cbid="3e2781af-7578-43ff-9509-50338ebf42b1"
           data-blockingmode="auto"
-          strategy="afterInteractive"
+          data-gcm-enabled="true"
+          strategy="beforeInteractive"
         />
-        <GoogleAnalytics gaId="G-3WS60EMJC2" />
+
+        {/* Cookiebot Consent Callbacks - Update GCM and load GA only after consent */}
+        <Script
+          id="cookiebot-consent-bridge"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.addEventListener('CookiebotOnAccept', function() {
+                if (Cookiebot.consent.statistics) {
+                  // Update Google Consent Mode to granted
+                  gtag('consent', 'update', {
+                    'analytics_storage': 'granted'
+                  });
+
+                  // Dynamically load Google Analytics script
+                  const gaScript = document.createElement('script');
+                  gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-3WS60EMJC2';
+                  gaScript.async = true;
+                  document.head.appendChild(gaScript);
+
+                  gaScript.onload = function() {
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', 'G-3WS60EMJC2');
+                  };
+                }
+              });
+
+              window.addEventListener('CookiebotOnDecline', function() {
+                // Keep analytics denied
+                gtag('consent', 'update', {
+                  'analytics_storage': 'denied'
+                });
+              });
+            `,
+          }}
+        />
+
+        {/* reCAPTCHA v3 - Security-essential (GDPR Article 6(1)(f) allows for legitimate security interests) */}
         <Script
           src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
           strategy="afterInteractive"

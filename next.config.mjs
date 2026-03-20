@@ -6,7 +6,7 @@ const nextConfig = {
   async headers() {
     const allowedOrigin =
       process.env.ALLOWED_ORIGIN ||
-      (process.env.NODE_ENV === 'production' ? 'same-origin' : '*');
+      (process.env.NODE_ENV === 'production' ? 'https://www.square1ai.com' : 'http://localhost:3000');
 
     const csp = [
       "default-src 'self'",

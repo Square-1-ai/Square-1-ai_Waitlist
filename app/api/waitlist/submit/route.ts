@@ -3,7 +3,7 @@ import { query } from '@/lib/db';
 import { waitlistLimiter, getClientIdentifier, formatTimeRemaining } from '@/lib/rate-limiter';
 import { verifyRecaptcha } from '@/lib/recaptcha';
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/;
 
 interface WaitlistData {
   fullName: string;
@@ -38,6 +38,9 @@ interface WaitlistData {
   availabilityToStart?: string;
   revenueSplit?: string;
   paymentMethod?: string;
+  // GDPR Consent fields
+  dataProcessingConsent: boolean;
+  newsletterConsent: boolean;
 }
 
 interface SubmitRequest {
@@ -59,11 +62,23 @@ function sanitizeString(input: string | string[] | undefined | null): string {
 }
 
 function validateWaitlistData(data: WaitlistData, type: string): { valid: boolean; error?: string } {
+  // GDPR Compliance: Data processing consent must be given
+  if (!data.dataProcessingConsent) {
+    return { valid: false, error: 'You must consent to data processing to continue' };
+  }
+
   if (!data.fullName || sanitizeString(data.fullName).length < 2) {
     return { valid: false, error: 'Full name is required (minimum 2 characters)' };
   }
   if (type === 'student' && !data.dob) {
     return { valid: false, error: 'Date of birth is required' };
+  }
+  if (type === 'student' && data.dob) {
+    const dob = new Date(data.dob);
+    const age = Math.floor((Date.now() - dob.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+    if (age < 18 && !sanitizeString(data.parentName)) {
+      return { valid: false, error: 'Parent or guardian name is required for students under 18' };
+    }
   }
   if (!data.email || !EMAIL_REGEX.test(data.email)) {
     return { valid: false, error: 'Valid email is required' };
@@ -126,16 +141,22 @@ export async function POST(req: NextRequest) {
 
     const sanitizedEmail = sanitizeString(data.email).toLowerCase();
 
+    // Get IP address for consent audit trail
+    const ipAddress = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+                      req.headers.get('x-real-ip') ||
+                      'unknown';
+
     // Tables are created once using: npm run db:init
-    
+
     if (type === 'student') {
       await query(
         `INSERT INTO students (
           full_name, email, dob, parent_name, country, city, internet_connection, devices,
           heard_about, education_level, subjects, learning_preference,
           taken_online_courses, why_interested, motivation, competitions,
-          hours_per_week, willing_to_pay, referral_code, early_access
-        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+          hours_per_week, willing_to_pay, referral_code, early_access,
+          data_processing_consent, newsletter_consent, consent_timestamp, consent_ip_address
+        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW(),?)`,
         [
           sanitizeString(data.fullName),
           sanitizedEmail,
@@ -156,18 +177,22 @@ export async function POST(req: NextRequest) {
           sanitizeString(data.hoursPerWeek),
           sanitizeString(data.willingToPay),
           sanitizeString(data.referralCode),
-          JSON.stringify(data.earlyAccess || [])
+          JSON.stringify(data.earlyAccess || []),
+          data.dataProcessingConsent,
+          data.newsletterConsent || false,
+          ipAddress
         ]
       );
     } else {
       await query(
         `INSERT INTO teachers (
-          full_name, email, country, city, internet_connection, devices, 
-          heard_about, subjects, teaching_level, years_experience, 
-          class_type_preference, taught_online, platforms_used, curriculums, 
-          create_study_packs, availability_to_start, revenue_split, 
-          payment_method, referral_code, early_access
-        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+          full_name, email, country, city, internet_connection, devices,
+          heard_about, subjects, teaching_level, years_experience,
+          class_type_preference, taught_online, platforms_used, curriculums,
+          create_study_packs, availability_to_start, revenue_split,
+          payment_method, referral_code, early_access,
+          data_processing_consent, newsletter_consent, consent_timestamp, consent_ip_address
+        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW(),?)`,
         [
           sanitizeString(data.fullName),
           sanitizedEmail,
@@ -188,7 +213,10 @@ export async function POST(req: NextRequest) {
           sanitizeString(data.revenueSplit),
           sanitizeString(data.paymentMethod),
           sanitizeString(data.referralCode),
-          JSON.stringify(data.earlyAccess || [])
+          JSON.stringify(data.earlyAccess || []),
+          data.dataProcessingConsent,
+          data.newsletterConsent || false,
+          ipAddress
         ]
       );
     }

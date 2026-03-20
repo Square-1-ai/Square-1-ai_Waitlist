@@ -50,7 +50,6 @@ async function getRecaptchaToken(action: string): Promise<string | null> {
       });
     });
   } catch {
-    console.error('Failed to get reCAPTCHA token');
     return null;
   }
 }
@@ -99,6 +98,8 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
     willingToPay: "",
     referralCode: getRefIdFromUrl(),
     earlyAccess: [] as string[],
+    // GDPR Consent
+    dataProcessingConsent: false,
     newsletter: false,
   })
 
@@ -152,6 +153,9 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
       }
       if (!formData.heardAbout) {
         newErrors.heardAbout = "Please select how you heard about us"
+      }
+      if (!formData.dataProcessingConsent) {
+        newErrors.dataProcessingConsent = "You must consent to data processing to continue"
       }
     } else if (stepNumber === 2) {
       if (!formData.educationLevel) {
@@ -235,7 +239,6 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
         });
 
         if (!checkRes.ok) {
-          console.error('Email check failed with status:', checkRes.status);
           toast({
             title: "Connection Error",
             description: "Unable to verify email. Please try again.",
@@ -257,8 +260,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
           onSubmit(formData, 'duplicate');
           return;
         }
-      } catch (err) {
-        console.error('Email check error:', err);
+      } catch {
         toast({
           title: "Connection Error",
           description: "Unable to verify email. Please check your connection.",
@@ -296,7 +298,14 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
       const res = await fetch('/api/waitlist/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'student', data: formData, recaptchaToken }),
+        body: JSON.stringify({
+          type: 'student',
+          data: {
+            ...formData,
+            newsletterConsent: formData.newsletter
+          },
+          recaptchaToken
+        }),
       });
       
       const result = await res.json();
@@ -314,8 +323,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
           variant: "destructive"
         });
       }
-    } catch (err) {
-      console.error('Submission error:', err);
+    } catch {
       toast({
         title: "Network Error",
         description: 'Please check your connection and try again.',
@@ -684,6 +692,41 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
                         </p>
                       )}
                     </div>
+
+                    {/* GDPR Consent - Mandatory */}
+                    <div className="space-y-2">
+                      <div className={`flex items-start gap-3 p-4 rounded-lg border ${errors.dataProcessingConsent ? "border-red-500" : "border-white/10"}`}>
+                        <Checkbox
+                          id="dataProcessingConsent"
+                          checked={formData.dataProcessingConsent}
+                          onCheckedChange={(checked) => {
+                            setFormData((prev) => ({ ...prev, dataProcessingConsent: checked === true }))
+                            if (errors.dataProcessingConsent) {
+                              setErrors((prev) => {
+                                const newErrors = { ...prev }
+                                delete newErrors.dataProcessingConsent
+                                return newErrors
+                              })
+                            }
+                          }}
+                          className="mt-0.5 shrink-0 border-white/30 data-[state=checked]:bg-white data-[state=checked]:border-white data-[state=checked]:text-purple-900"
+                        />
+                        <label htmlFor="dataProcessingConsent" className="text-sm font-normal cursor-pointer leading-relaxed text-white">
+                          I consent to Square 1 Ai collecting and processing my personal data as described in the{" "}
+                          <Link href="/privacy-policy" target="_blank" className="text-cyan-300 hover:text-cyan-200 underline">Privacy Policy</Link>
+                          {" "}and{" "}
+                          <Link href="/terms-of-use" target="_blank" className="text-cyan-300 hover:text-cyan-200 underline">Terms of Use</Link>
+                          . <span className="text-red-400">*</span>
+                        </label>
+                      </div>
+                      {errors.dataProcessingConsent && (
+                        <p className="text-sm text-red-400 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          {errors.dataProcessingConsent}
+                        </p>
+                      )}
+                    </div>
+
                   </div>
                 </div>
               )}
@@ -990,30 +1033,35 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
                 </div>
               )}
 
-              {/* Step 4: Consent */}
+              {/* Step 4: Confirmation */}
               {step === 4 && (
-                <div className="space-y-6 animate-fade-in text-center">
-                  <div className="text-6xl mb-6">🎉</div>
-                  <h3 className="text-2xl font-bold text-white mb-4">
-                    You're All Set!
-                  </h3>
-                  <p className="text-white/80 mb-8">
-                    Thank you for joining the Square 1 Ai student waitlist. You'll receive early access updates and
-                    exclusive beta invites soon. Keep an eye on your inbox! 
-                  </p>
-                  <Separator className="bg-white/20" />
-                  <div className="flex items-start space-x-3 p-4 bg-white/10 rounded-lg border border-white/20">
+                <div className="space-y-6 animate-fade-in">
+                  <div className="text-center">
+                    <div className="text-6xl mb-6">🎉</div>
+                    <h3 className="text-2xl font-bold text-white mb-4">
+                      You're All Set!
+                    </h3>
+                    <p className="text-white/80 mb-8">
+                      Thank you for joining the Square 1 Ai student waitlist. You'll receive early access updates and
+                      exclusive beta invites soon. Keep an eye on your inbox!
+                    </p>
+                  </div>
+
+                  {/* Newsletter Consent - Optional */}
+                  <div className="flex items-start gap-3 p-4 rounded-lg border border-white/10">
                     <Checkbox
                       id="newsletter"
                       checked={formData.newsletter}
                       onCheckedChange={(checked) => {
                         setFormData((prev) => ({ ...prev, newsletter: checked === true }))
                       }}
-                      className="mt-1 border-white/30 data-[state=checked]:bg-white data-[state=checked]:text-purple-900"
+                      className="mt-0.5 shrink-0 border-white/30 data-[state=checked]:bg-white data-[state=checked]:border-white data-[state=checked]:text-purple-900"
                     />
-                    <Label htmlFor="newsletter" className="text-sm font-normal cursor-pointer leading-relaxed text-white">
-                      I agree to receive updates, early access info, and beta invites from Square 1 Ai.
-                    </Label>
+                    <label htmlFor="newsletter" className="text-sm font-normal cursor-pointer leading-relaxed text-white">
+                      I agree to receive updates from Square 1 Ai. View our{" "}
+                      <Link href="/privacy-policy" target="_blank" className="text-cyan-300 hover:text-cyan-200 underline">Privacy Policy</Link>
+                      . <span className="text-white/60">(Optional)</span>
+                    </label>
                   </div>
                 </div>
               )}

@@ -59,14 +59,7 @@ export default function StudentWaitlistPage() {
         }),
       });
       
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Newsletter subscription failed:', errorData);
-      } else {
-        console.log('Newsletter subscription successful');
-      }
-    } catch (err) {
-      console.error('Newsletter subscription error:', err);
+    } catch {
     }
   };
 
@@ -95,8 +88,6 @@ export default function StudentWaitlistPage() {
         });
         
         if (!postRes.ok) {
-          const errorText = await postRes.text();
-          console.error('Waitlist API error:', errorText);
           throw new Error(`Waitlist signup failed: ${postRes.status}`);
         }
         
@@ -107,16 +98,14 @@ export default function StudentWaitlistPage() {
         const getRes = await fetch(`${WAITLIST_BASE_API_URL}signup?waitlist_id=${WAITLIST_ID}&email=${studentEmail}`);
         
         if (!getRes.ok) {
-          console.error('Failed to fetch referral stats');
         }
         
         const getData = await getRes.json();
         const amount_referred = getData.amount_referred || 0;
 
         setWaitlistResults({ referral_link, priority, amount_referred });
-      } catch (err:any) {
-        console.error('Waitlist error:', err);
-        setError(err.message || 'Referral system error.');
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Referral system error.');
       } finally {
         setLoading(false);
       }
