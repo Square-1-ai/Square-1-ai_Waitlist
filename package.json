@@ -12,6 +12,7 @@
     "db:seed": "node scripts/seed-db.js"
   },
   "dependencies": {
+    "@google-cloud/cloud-sql-connector": "^1.9.2",
     "@hookform/resolvers": "^3.10.0",
     "@mantine/core": "^8.3.18",
     "@mantine/dates": "^8.3.18",

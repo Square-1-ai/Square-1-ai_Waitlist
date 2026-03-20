@@ -1,4 +1,4 @@
-import { Connector } from '@google-cloud/cloud-sql-connector';
+import { Connector, IpAddressTypes } from '@google-cloud/cloud-sql-connector';
 import mysql from 'mysql2/promise';
 
 let pool: mysql.Pool | null = null;
@@ -19,11 +19,12 @@ async function getPool(): Promise<mysql.Pool> {
 
   connector = new Connector();
 
+  // authOptions is supported at runtime but missing from v1.9.2 type definitions
   const clientOpts = await connector.getOptions({
     instanceConnectionName: process.env.GCP_INSTANCE_CONNECTION_NAME,
-    ipType: 'PUBLIC',
+    ipType: IpAddressTypes.PUBLIC,
     authOptions: { credentials },
-  });
+  } as any);
 
   pool = mysql.createPool({
     ...clientOpts,
