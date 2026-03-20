@@ -1,12 +1,47 @@
 require('dotenv').config();
 
+const { Connector } = require('@google-cloud/cloud-sql-connector');
 const mysql = require('mysql2/promise');
 
-const connectionUrl = "mysql://root:HCirUZgzIlvJSMrmKHEPUmtNFjjfQffy@metro.proxy.rlwy.net:41454/sq1ai_waitlist";
+delete process.env.GOOGLE_APPLICATION_CREDENTIALS;
 
-if (!connectionUrl) {
-  console.error('❌ RAILWAY_DB_URL environment variable is not set');
-  console.error('Please add RAILWAY_DB_URL to your .env file');
+const connector = new Connector();
+
+const getPool = async () => {
+  try {
+    const credentials = JSON.parse(process.env.GCP_SERVICE_ACCOUNT_KEY);
+
+    console.log('📋 Using service account:', credentials.client_email);
+    console.log('📋 Instance:', process.env.GCP_INSTANCE_CONNECTION_NAME);
+
+    const clientOpts = await connector.getOptions({
+      instanceConnectionName: process.env.GCP_INSTANCE_CONNECTION_NAME,
+      ipType: 'PUBLIC',
+      authOptions: {
+        credentials, 
+      },
+    });
+
+    return mysql.createPool({
+      ...clientOpts,
+      user: process.env.GCP_DB_USER || 'root',
+      password: process.env.GCP_DB_PASSWORD,
+      database: process.env.GCP_DB_NAME,
+    });
+  } catch (error) {
+    console.error('❌ Error creating connection pool:', error.message);
+    throw error;
+  }
+};
+
+if (!process.env.GCP_SERVICE_ACCOUNT_KEY || !process.env.GCP_DB_PASSWORD || !process.env.GCP_DB_NAME || !process.env.GCP_INSTANCE_CONNECTION_NAME) {
+  console.error('❌ Missing required environment variables');
+  console.error('Please add these to your .env file:');
+  console.error('  GCP_INSTANCE_CONNECTION_NAME=project:region:instance');
+  console.error('  GCP_SERVICE_ACCOUNT_KEY={"type":"service_account",...}');
+  console.error('  GCP_DB_USER=root (optional, defaults to root)');
+  console.error('  GCP_DB_PASSWORD=your-db-password');
+  console.error('  GCP_DB_NAME=your-db-name');
   process.exit(1);
 }
 
@@ -96,10 +131,9 @@ CREATE TABLE IF NOT EXISTS feedback (
 async function initDatabase() {
   let connection;
   try {
-    console.log('Connecting to database...');
-    connection = await mysql.createConnection({
-      uri: connectionUrl,
-    });
+    console.log('Connecting to GCP Cloud SQL database...');
+
+    connection = await getPool();
 
     console.log('✓ Connected to database');
     console.log('Creating students table...');
@@ -118,15 +152,12 @@ async function initDatabase() {
     process.exit(0);
   } catch (error) {
     console.error('Database initialization failed:', error.message);
-    console.error('\nPlease check:');
-    console.error('1. Database connection string in .env (RAILWAY_DB_URL)');
-    console.error('2. Database server is running');
-    console.error('3. Database credentials are correct');
     process.exit(1);
   } finally {
     if (connection) {
       await connection.end();
     }
+    connector.close();
   }
 }
 

@@ -105,7 +105,7 @@ export default function FeedbackPage() {
     if (!validateForm()) {
       toast({
         title: "Validation Error",
-        description: "Please fix the errors in the form before submitting",
+        description: "Please fill mandatory fields before submitting",
         variant: "destructive"
       })
       return
