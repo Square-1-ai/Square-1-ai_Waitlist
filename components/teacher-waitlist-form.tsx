@@ -1,9 +1,9 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import worldCountries from "world-countries"
-import { ChevronRight, ChevronLeft, ArrowLeft, AlertCircle, CheckCircle2, Loader2, Check, ChevronsUpDown } from "lucide-react"
+import { ChevronRight, ChevronLeft, ArrowLeft, AlertCircle, CheckCircle2, Loader2, Check, ChevronsUpDown, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -26,6 +26,7 @@ import { Separator } from "@/components/ui/separator"
 import TypingText from "@/components/ui/typing-text"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useToast } from "@/hooks/use-toast"
+import { trackFormStepView, trackFormStepComplete, trackFormSubmit, trackFormError } from "@/lib/analytics"
 
 declare global {
   interface Window {
@@ -76,8 +77,6 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
     email: "",
     country: "",
     city: "",
-    internetConnection: "",
-    devices: [] as string[],
     heardAbout: "",
   // Teacher Profile
   subjects: "",
@@ -87,18 +86,28 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
   taughtOnline: "",
   platformsUsed: "",
   curriculums: "",
-  createStudyPacks: "",
   availabilityToStart: "",
   revenueSplit: "",
   paymentMethod: "",
   referralCode: getRefIdFromUrl(),
-  earlyAccess: [] as string[],
   // GDPR Consent
   dataProcessingConsent: false,
   newsletter: false,
   })
 
-  const totalSteps = 4
+  const totalSteps = 3
+
+  // Step names for analytics tracking
+  const stepNames: Record<number, string> = {
+    1: 'Basic Information',
+    2: 'Teaching Experience & Business Details',
+    3: 'Confirmation'
+  }
+
+  // Track step views when step changes
+  useEffect(() => {
+    trackFormStepView('teacher', step, stepNames[step] || `Step ${step}`);
+  }, [step]);
 
   // Validation functions
   const validateEmail = (email: string): boolean => {
@@ -126,12 +135,6 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
       if (!formData.city.trim()) {
         newErrors.city = "City is required"
       }
-      if (!formData.internetConnection) {
-        newErrors.internetConnection = "Internet connection quality is required"
-      }
-      if (formData.devices.length === 0) {
-        newErrors.devices = "Please select at least one device"
-      }
       if (!formData.heardAbout) {
         newErrors.heardAbout = "Please select how you heard about us"
       }
@@ -157,10 +160,6 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
       if (!formData.curriculums.trim()) {
         newErrors.curriculums = "Curriculums are required"
       }
-      if (!formData.createStudyPacks) {
-        newErrors.createStudyPacks = "Please select an option"
-      }
-    } else if (stepNumber === 3) {
       if (!formData.availabilityToStart) {
         newErrors.availabilityToStart = "Please select availability"
       }
@@ -170,12 +169,15 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
       if (!formData.paymentMethod.trim()) {
         newErrors.paymentMethod = "Payment method is required"
       }
-      if (formData.earlyAccess.length === 0) {
-        newErrors.earlyAccess = "Please select at least one early access option"
-      }
     }
 
     setErrors(newErrors)
+
+    // Track validation errors if any
+    if (Object.keys(newErrors).length > 0) {
+      trackFormError('teacher', stepNumber, Object.keys(newErrors));
+    }
+
     return Object.keys(newErrors).length === 0
   }
 
@@ -193,19 +195,6 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
       })
     }
   }
-
-  // Helper to toggle array fields (devices, earlyAccess)
-  const handleArrayChange = (field: string, value: string) => {
-    setFormData((prev: typeof formData) => {
-      const arr = Array.isArray(prev[field as keyof typeof prev]) ? prev[field as keyof typeof prev] as string[] : [];
-      return {
-        ...prev,
-        [field]: arr.includes(value)
-          ? arr.filter((v) => v !== value)
-          : [...arr, value],
-      };
-    });
-  };
 
   // Navigation helpers for multi-step form
   const nextStep = async () => {
@@ -257,6 +246,9 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
     }
 
     if (validateStep(step)) {
+      // Track step completion
+      trackFormStepComplete('teacher', step, stepNames[step] || `Step ${step}`);
+
       setStep((s: number) => Math.min(s + 1, totalSteps));
       setErrors({});
     }
@@ -266,13 +258,6 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
   const getProgressPercentage = () => {
     return (step / totalSteps) * 100
   }
-
-  const earlyAccessOptions = [
-    "Teacher dashboard preview",
-    "AI Study Pack generator",
-    "Marketing tools for teachers",
-    "Revenue insights",
-  ]
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -302,6 +287,11 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
           type: 'teacher',
           data: {
             ...formData,
+            // Pass defaults for removed fields (DB columns still exist)
+            internetConnection: null,
+            devices: [],
+            createStudyPacks: null,
+            earlyAccess: [],
             newsletterConsent: formData.newsletter
           },
           recaptchaToken
@@ -309,10 +299,14 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
       });
 
       const result = await response.json();
-      
+
       if (response.ok) {
+        // Track successful submission
+        trackFormSubmit('teacher', true);
         onSubmit(formData);
       } else if (result.error && result.error.includes('already registered')) {
+        // Track duplicate email submission
+        trackFormSubmit('teacher', false, 'duplicate_email');
         toast({
           title: "Email Already Registered",
           description: "This email is already registered on the waitlist.",
@@ -320,6 +314,8 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
         });
         onSubmit(formData);
       } else {
+        // Track failed submission
+        trackFormSubmit('teacher', false, result.error || 'unknown_error');
         toast({
           title: "Submission Failed",
           description: result.error || 'Submission failed. Please try again.',
@@ -327,6 +323,8 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
         });
       }
     } catch {
+      // Track network error
+      trackFormSubmit('teacher', false, 'network_error');
       toast({
         title: "Network Error",
         description: 'Please check your connection and try again.',
@@ -357,17 +355,20 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
                 <TypingText text="Become a Teacher of Square 1 Ai" typingSpeed={50} showCursor={false} />
               </h2>
-              <p className="text-sm text-muted-foreground mb-4">Step {step} of {totalSteps}</p>
-              <Progress value={getProgressPercentage()} className="h-2 [&_[data-slot=progress-indicator]]:bg-cyan-400" />
+              {step !== totalSteps && (
+                <>
+                  <p className="text-sm text-muted-foreground mb-4">Step {step} of {totalSteps - 1}</p>
+                  <Progress value={getProgressPercentage()} className="h-2 [&_[data-slot=progress-indicator]]:bg-cyan-400" />
+                </>
+              )}
             </div>
 
             <Card className="border border-white/20 shadow-2xl bg-white/10 backdrop-blur-xl backdrop-saturate-150">
           <CardHeader className="pb-4">
             <CardTitle className="text-2xl text-white">
               {step === 1 && "Basic Information"}
-              {step === 2 && "Teaching Experience"}
-              {step === 3 && "Business Details"}
-              {step === 4 && "Almost There!"}
+              {step === 2 && "Teaching Experience & Business Details"}
+              {step === 3 && "Almost There!"}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -510,62 +511,6 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="internetConnection" className="text-white">Internet Connection Quality <span className="text-red-500">*</span></Label>
-                      <Select
-                        value={formData.internetConnection}
-                        onValueChange={(value) => handleInputChange("internetConnection", value)}
-                        required
-                      >
-                        <SelectTrigger id="internetConnection" className={`h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100 ${
-                          errors.internetConnection ? "border-red-500" : ""
-                        }`}>
-                          <SelectValue placeholder="Select your connection quality" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-slate-800 border-white/30">
-                          <SelectItem value="strong" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Strong (fiber or 4G/5G)</SelectItem>
-                          <SelectItem value="moderate" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Moderate (3G or shared Wi-Fi)</SelectItem>
-                          <SelectItem value="weak" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Weak (limited access or unstable connection)</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      {errors.internetConnection && (
-                        <p className="text-sm text-red-400 flex items-center gap-1">
-                          <AlertCircle className="w-4 h-4" />
-                          {errors.internetConnection}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="space-y-3">
-                      <Label className="text-white">Preferred Device for Joining Square 1 Ai <span className="text-red-500">*</span></Label>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {["Smartphone", "Laptop / Desktop", "Tablet", "Shared school or community computer"].map(
-                          (device) => (
-                            <div key={device} className="flex items-center space-x-2">
-                              <Checkbox
-                                id={`device-${device}`}
-                                checked={formData.devices.includes(device)}
-                                onCheckedChange={() => handleArrayChange("devices", device)}
-                                className="border-white/30 data-[state=checked]:bg-white data-[state=checked]:text-purple-900"
-                              />
-                              <Label
-                                htmlFor={`device-${device}`}
-                                className="text-sm font-normal cursor-pointer text-white"
-                              >
-                                {device}
-                              </Label>
-                            </div>
-                          ),
-                        )}
-                      </div>
-                      {errors.devices && (
-                        <p className="text-sm text-red-400 flex items-center gap-1">
-                          <AlertCircle className="w-4 h-4" />
-                          {errors.devices}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="space-y-2">
                       <Label htmlFor="heardAbout" className="text-white">How did you hear about Square 1 Ai? <span className="text-red-500">*</span></Label>
                       <Select
                         value={formData.heardAbout}
@@ -633,7 +578,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
                 </div>
               )}
 
-              {/* Step 2: Teaching Experience */}
+              {/* Step 2: Teaching Experience & Business Details */}
               {step === 2 && (
                 <div className="space-y-6 animate-fade-in">
                   <div className="grid gap-6">
@@ -815,41 +760,6 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="createStudyPacks" className="text-white">
-                        Would you be interested in creating your own AI Study Pack content (notes, quizzes, etc.)? <span className="text-red-500">*</span>
-                      </Label>
-                      <Select
-                        value={formData.createStudyPacks}
-                        onValueChange={(value) => handleInputChange("createStudyPacks", value)}
-                        required
-                      >
-                        <SelectTrigger id="createStudyPacks" className={`h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100 ${
-                          errors.createStudyPacks ? "border-red-500" : ""
-                        }`}>
-                          <SelectValue placeholder="Select an option" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-slate-800 border-white/30">
-                          <SelectItem value="yes" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Yes</SelectItem>
-                          <SelectItem value="no" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">No</SelectItem>
-                          <SelectItem value="maybe" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Maybe later</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      {errors.createStudyPacks && (
-                        <p className="text-sm text-red-400 flex items-center gap-1">
-                          <AlertCircle className="w-4 h-4" />
-                          {errors.createStudyPacks}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Step 3: Business Details */}
-              {step === 3 && (
-                <div className="space-y-6 animate-fade-in">
-                  <div className="grid gap-6">
-                    <div className="space-y-2">
                       <Label htmlFor="availabilityToStart" className="text-white">When are you available to start teaching on Square 1 Ai? <span className="text-red-500">*</span></Label>
                       <Select
                         value={formData.availabilityToStart}
@@ -940,42 +850,19 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
                       </p>
                     </div>
 
-                    <div className="space-y-3">
-                      <Label className="text-white">Would you like to receive early access to: <span className="text-red-500">*</span></Label>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {earlyAccessOptions.map((option) => (
-                          <div key={option} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={`early-${option}`}
-                              checked={formData.earlyAccess.includes(option)}
-                              onCheckedChange={() => handleArrayChange("earlyAccess", option)}
-                              className="border-white/30 data-[state=checked]:bg-white data-[state=checked]:text-purple-900"
-                            />
-                            <Label
-                              htmlFor={`early-${option}`}
-                              className="text-sm font-normal cursor-pointer text-white"
-                            >
-                              {option}
-                            </Label>
-                          </div>
-                        ))}
-                      </div>
-                      {errors.earlyAccess && (
-                        <p className="text-sm text-red-400 flex items-center gap-1">
-                          <AlertCircle className="w-4 h-4" />
-                          {errors.earlyAccess}
-                        </p>
-                      )}
-                    </div>
                   </div>
                 </div>
               )}
 
-              {/* Step 4: Confirmation */}
-              {step === 4 && (
+              {/* Step 3: Confirmation */}
+              {step === 3 && (
                 <div className="space-y-6 animate-fade-in">
                   <div className="text-center">
-                    <div className="text-6xl mb-6">🎉</div>
+                    <div className="mb-6 flex justify-center">
+                      <div className="rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 p-6">
+                        <Sparkles className="w-16 h-16 text-white" />
+                      </div>
+                    </div>
                     <h3 className="text-2xl font-bold text-white mb-4">
                       You're All Set!
                     </h3>
@@ -1033,7 +920,7 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
                       </>
                     ) : (
                       <>
-                        Next
+                        {step === 2 ? 'Submit' : 'Next'}
                         <ChevronRight className="w-4 h-4" />
                       </>
                     )}

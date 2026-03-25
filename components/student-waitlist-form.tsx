@@ -1,13 +1,12 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import worldCountries from "world-countries"
-import { ChevronRight, ChevronLeft, ArrowLeft, AlertCircle, CheckCircle2, Loader2, CalendarIcon, Check, ChevronsUpDown } from "lucide-react"
+import { ChevronRight, ChevronLeft, ArrowLeft, AlertCircle, CheckCircle2, Loader2, CalendarIcon, Check, ChevronsUpDown, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -28,6 +27,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { format } from "date-fns"
+import { trackFormStepView, trackFormStepComplete, trackFormSubmit, trackFormError } from "@/lib/analytics"
 
 declare global {
   interface Window {
@@ -75,14 +75,12 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [formData, setFormData] = useState({
-    // Common Sectionon
+    // Common Section
     fullName: "",
     dob: "",
     email: "",
     country: "",
     city: "",
-    internetConnection: "",
-    devices: [] as string[],
     heardAbout: "",
     // Parent info (for minors)
     parentName: "",
@@ -92,12 +90,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
     learningPreference: "",
     takenOnlineCourses: "",
     whyInterested: [] as string[],
-    motivation: "",
-    competitions: "",
-    hoursPerWeek: "",
-    willingToPay: "",
     referralCode: getRefIdFromUrl(),
-    earlyAccess: [] as string[],
     // GDPR Consent
     dataProcessingConsent: false,
     newsletter: false,
@@ -113,7 +106,19 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
     return age < 18;
   }
 
-  const totalSteps = 4
+  const totalSteps = 3
+
+  // Step names for analytics tracking
+  const stepNames: Record<number, string> = {
+    1: 'Basic Information',
+    2: 'Student Profile',
+    3: 'Confirmation'
+  }
+
+  // Track step views when step changes
+  useEffect(() => {
+    trackFormStepView('student', step, stepNames[step] || `Step ${step}`);
+  }, [step]);
 
   // Validation functions
   const validateEmail = (email: string): boolean => {
@@ -145,12 +150,6 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
       if (!formData.city.trim()) {
         newErrors.city = "City is required"
       }
-      if (!formData.internetConnection) {
-        newErrors.internetConnection = "Internet connection quality is required"
-      }
-      if (formData.devices.length === 0) {
-        newErrors.devices = "Please select at least one device"
-      }
       if (!formData.heardAbout) {
         newErrors.heardAbout = "Please select how you heard about us"
       }
@@ -173,25 +172,15 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
       if (formData.whyInterested.length === 0) {
         newErrors.whyInterested = "Please select at least one reason"
       }
-      if (!formData.motivation.trim()) {
-        newErrors.motivation = "Please share what motivates you to learn"
-      }
-    } else if (stepNumber === 3) {
-      if (!formData.competitions) {
-        newErrors.competitions = "Please select an option"
-      }
-      if (!formData.hoursPerWeek) {
-        newErrors.hoursPerWeek = "Please select hours per week"
-      }
-      if (!formData.willingToPay) {
-        newErrors.willingToPay = "Please select a payment range"
-      }
-      if (formData.earlyAccess.length === 0) {
-        newErrors.earlyAccess = "Please select at least one early access option"
-      }
     }
 
     setErrors(newErrors)
+
+    // Track validation errors if any
+    if (Object.keys(newErrors).length > 0) {
+      trackFormError('student', stepNumber, Object.keys(newErrors));
+    }
+
     return Object.keys(newErrors).length === 0
   }
 
@@ -210,7 +199,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
     }
   }
 
-  const handleArrayChange = (name: "devices" | "subjects" | "whyInterested" | "earlyAccess", value: string) => {
+  const handleArrayChange = (name: "subjects" | "whyInterested", value: string) => {
     setFormData((prev) => ({
       ...prev,
       [name]: prev[name].includes(value)
@@ -273,6 +262,9 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
     }
 
     if (validateStep(step)) {
+      // Track step completion
+      trackFormStepComplete('student', step, stepNames[step] || `Step ${step}`);
+
       if (step < totalSteps) {
         setStep(step + 1);
         setErrors({});
@@ -302,6 +294,14 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
           type: 'student',
           data: {
             ...formData,
+            // Pass defaults for removed fields (DB columns still exist)
+            internetConnection: null,
+            devices: [],
+            motivation: null,
+            competitions: null,
+            hoursPerWeek: null,
+            willingToPay: null,
+            earlyAccess: [],
             newsletterConsent: formData.newsletter
           },
           recaptchaToken
@@ -309,13 +309,19 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
       });
       
       const result = await res.json();
-      
+
       if (res.ok) {
+        // Track successful submission
+        trackFormSubmit('student', true);
         onSubmit(formData);
       } else if (result.error && result.error.includes('already registered')) {
+        // Track duplicate email submission
+        trackFormSubmit('student', false, 'duplicate_email');
         // Pass errorType to parent for duplicate
         onSubmit(formData, 'duplicate');
       } else {
+        // Track failed submission
+        trackFormSubmit('student', false, result.error || 'unknown_error');
         // Show specific error message from server
         toast({
           title: "Submission Failed",
@@ -324,6 +330,8 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
         });
       }
     } catch {
+      // Track network error
+      trackFormSubmit('student', false, 'network_error');
       toast({
         title: "Network Error",
         description: 'Please check your connection and try again.',
@@ -355,13 +363,6 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
     "Explore AI & technology",
   ]
 
-  const earlyAccessOptions = [
-    "AI Study Packs",
-    "Live class demos",
-    "Competitions",
-    "Student community",
-  ]
-
   return (
     <section className="py-8 md:py-12 px-4 bg-gradient-to-b from-slate-900 to-slate-800 min-h-screen relative overflow-hidden">
       <div className="max-w-7xl mx-auto relative z-10">
@@ -382,8 +383,12 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
                 <TypingText text="Become a Student of Square 1 Ai" typingSpeed={50} showCursor={false} />
               </h2>
-              <p className="text-sm text-muted-foreground mb-4">Step {step} of {totalSteps}</p>
-              <Progress value={getProgressPercentage()} className="h-2 [&_[data-slot=progress-indicator]]:bg-cyan-400" />
+              {step !== totalSteps && (
+                <>
+                  <p className="text-sm text-muted-foreground mb-4">Step {step} of {totalSteps - 1}</p>
+                  <Progress value={getProgressPercentage()} className="h-2 [&_[data-slot=progress-indicator]]:bg-cyan-400" />
+                </>
+              )}
             </div>
 
             <Card className="border border-white/20 shadow-2xl bg-white/10 backdrop-blur-xl backdrop-saturate-150">
@@ -391,8 +396,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
             <CardTitle className="text-2xl text-white">
               {step === 1 && "Basic Information"}
               {step === 2 && "Student Profile"}
-              {step === 3 && "Learning Preferences"}
-              {step === 4 && "Almost There!"}
+              {step === 3 && "Almost There!"}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -605,62 +609,6 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
                           </p>
                         )}
                       </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="internetConnection" className="text-white">Internet Connection Quality <span className="text-red-500">*</span></Label>
-                      <Select
-                        value={formData.internetConnection}
-                        onValueChange={(value) => handleInputChange("internetConnection", value)}
-                        required
-                      >
-                        <SelectTrigger id="internetConnection" className={`h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100 ${
-                          errors.internetConnection ? "border-red-500" : ""
-                        }`}>
-                          <SelectValue placeholder="Select your connection quality" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-slate-800 border-white/30">
-                          <SelectItem value="strong" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Strong (fiber or 4G/5G)</SelectItem>
-                          <SelectItem value="moderate" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Moderate (3G or shared Wi-Fi)</SelectItem>
-                          <SelectItem value="weak" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Weak (limited access or unstable connection)</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      {errors.internetConnection && (
-                        <p className="text-sm text-red-400 flex items-center gap-1">
-                          <AlertCircle className="w-4 h-4" />
-                          {errors.internetConnection}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="space-y-3">
-                      <Label className="text-white">Preferred Device for Joining Square 1 Ai <span className="text-red-500">*</span></Label>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {["Smartphone", "Laptop / Desktop", "Tablet", "Shared school or community computer"].map(
-                          (device) => (
-                            <div key={device} className="flex items-center space-x-2">
-                              <Checkbox
-                                id={`device-${device}`}
-                                checked={formData.devices.includes(device)}
-                                onCheckedChange={() => handleArrayChange("devices", device)}
-                                className="border-white/30 data-[state=checked]:bg-white data-[state=checked]:text-purple-900"
-                              />
-                              <Label
-                                htmlFor={`device-${device}`}
-                                className="text-sm font-normal cursor-pointer text-white"
-                              >
-                                {device}
-                              </Label>
-                            </div>
-                          ),
-                        )}
-                      </div>
-                      {errors.devices && (
-                        <p className="text-sm text-red-400 flex items-center gap-1">
-                          <AlertCircle className="w-4 h-4" />
-                          {errors.devices}
-                        </p>
-                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -879,115 +827,6 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="motivation" className="text-white">What motivates you to learn? <span className="text-red-500">*</span></Label>
-                      <Textarea
-                        id="motivation"
-                        placeholder="Share what drives your learning journey..."
-                        value={formData.motivation}
-                        onChange={(e) => handleInputChange("motivation", e.target.value)}
-                        required
-                        rows={4}
-                        className={`resize-none border-white/30 bg-white/20 text-white placeholder:text-white/60 ${
-                          errors.motivation ? "border-red-500" : ""
-                        }`}
-                      />
-                      {errors.motivation && (
-                        <p className="text-sm text-red-400 flex items-center gap-1">
-                          <AlertCircle className="w-4 h-4" />
-                          {errors.motivation}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Step 3: Learning Preferences */}
-              {step === 3 && (
-                <div className="space-y-6 animate-fade-in">
-                  <div className="grid gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="competitions" className="text-white">Would you like to join competitions or community challenges? <span className="text-red-500">*</span></Label>
-                      <Select
-                        value={formData.competitions}
-                        onValueChange={(value) => handleInputChange("competitions", value)}
-                        required
-                      >
-                        <SelectTrigger id="competitions" className={`h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100 ${
-                          errors.competitions ? "border-red-500" : ""
-                        }`}>
-                          <SelectValue placeholder="Select an option" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-slate-800 border-white/30">
-                          <SelectItem value="yes" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Yes, absolutely</SelectItem>
-                          <SelectItem value="maybe" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Maybe later</SelectItem>
-                          <SelectItem value="no" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">No</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      {errors.competitions && (
-                        <p className="text-sm text-red-400 flex items-center gap-1">
-                          <AlertCircle className="w-4 h-4" />
-                          {errors.competitions}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="hoursPerWeek" className="text-white">How many hours per week do you plan to dedicate to learning? <span className="text-red-500">*</span></Label>
-                      <Select
-                        value={formData.hoursPerWeek}
-                        onValueChange={(value) => handleInputChange("hoursPerWeek", value)}
-                        required
-                      >
-                        <SelectTrigger id="hoursPerWeek" className={`h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100 ${
-                          errors.hoursPerWeek ? "border-red-500" : ""
-                        }`}>
-                          <SelectValue placeholder="Select hours per week" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-slate-800 border-white/30">
-                          <SelectItem value="<3" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Less than 3 hours</SelectItem>
-                          <SelectItem value="3-6" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">3–6 hours</SelectItem>
-                          <SelectItem value="6-10" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">6–10 hours</SelectItem>
-                          <SelectItem value="10+" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">10+ hours</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      {errors.hoursPerWeek && (
-                        <p className="text-sm text-red-400 flex items-center gap-1">
-                          <AlertCircle className="w-4 h-4" />
-                          {errors.hoursPerWeek}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="willingToPay" className="text-white">How much would you roughly be willing to pay for monthly access? <span className="text-red-500">*</span></Label>
-                      <Select
-                        value={formData.willingToPay}
-                        onValueChange={(value) => handleInputChange("willingToPay", value)}
-                        required
-                      >
-                        <SelectTrigger id="willingToPay" className={`h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100 ${
-                          errors.willingToPay ? "border-red-500" : ""
-                        }`}>
-                          <SelectValue placeholder="Select a range" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-slate-800 border-white/30">
-                          <SelectItem value="free" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Free only</SelectItem>
-                          <SelectItem value="under2500" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Under LKR 2,500</SelectItem>
-                          <SelectItem value="2500-5000" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">LKR 2,500–5,000/month</SelectItem>
-                          <SelectItem value="5000-7500" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">LKR 5,000–7,500/month</SelectItem>
-                          <SelectItem value="above10000" className="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white">Above LKR 10,000</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      {errors.willingToPay && (
-                        <p className="text-sm text-red-400 flex items-center gap-1">
-                          <AlertCircle className="w-4 h-4" />
-                          {errors.willingToPay}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="space-y-2">
                       <Label htmlFor="referralCode" className="text-white">Referral Code (Optional)</Label>
                       <Input
                         id="referralCode"
@@ -1001,43 +840,19 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
                         Invite your friends! Get up to 20% off on first course.
                       </p>
                     </div>
-
-                    <div className="space-y-3">
-                      <Label className="text-white">Would you like early access to: <span className="text-red-500">*</span></Label>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {earlyAccessOptions.map((option) => (
-                          <div key={option} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={`early-${option}`}
-                              checked={formData.earlyAccess.includes(option)}
-                              onCheckedChange={() => handleArrayChange("earlyAccess", option)}
-                              className="border-white/30 data-[state=checked]:bg-white data-[state=checked]:text-purple-900"
-                            />
-                            <Label
-                              htmlFor={`early-${option}`}
-                              className="text-sm font-normal cursor-pointer text-white"
-                            >
-                              {option}
-                            </Label>
-                          </div>
-                        ))}
-                      </div>
-                      {errors.earlyAccess && (
-                        <p className="text-sm text-red-400 flex items-center gap-1">
-                          <AlertCircle className="w-4 h-4" />
-                          {errors.earlyAccess}
-                        </p>
-                      )}
-                    </div>
                   </div>
                 </div>
               )}
 
-              {/* Step 4: Confirmation */}
-              {step === 4 && (
+              {/* Step 3: Confirmation */}
+              {step === 3 && (
                 <div className="space-y-6 animate-fade-in">
                   <div className="text-center">
-                    <div className="text-6xl mb-6">🎉</div>
+                    <div className="mb-6 flex justify-center">
+                      <div className="rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 p-6">
+                        <Sparkles className="w-16 h-16 text-white" />
+                      </div>
+                    </div>
                     <h3 className="text-2xl font-bold text-white mb-4">
                       You're All Set!
                     </h3>
@@ -1095,7 +910,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
                       </>
                     ) : (
                       <>
-                        Next
+                        {step === 2 ? 'Submit' : 'Next'}
                         <ChevronRight className="w-4 h-4" />
                       </>
                     )}
