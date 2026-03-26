@@ -25,14 +25,25 @@ export const trackFormStepView = (
   step: number,
   stepName: string
 ) => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'form_step_view', {
+  if (typeof window === 'undefined' || !step || !stepName) return;
+
+  const fireEvent = () => {
+    window.gtag?.('event', 'form_step_view', {
       form_type: formType,
       step_number: step,
       step_name: stepName,
       event_category: 'waitlist_form',
       event_label: `${formType}_step_${step}`,
     });
+  };
+
+  // If gtag is ready, fire immediately; otherwise wait for it
+  if (window.gtag) {
+    fireEvent();
+  } else {
+    // Retry after a short delay to handle race condition on initial page load
+    const timer = setTimeout(fireEvent, 500);
+    return () => clearTimeout(timer);
   }
 };
 
