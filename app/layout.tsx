@@ -81,30 +81,36 @@ export default function RootLayout({
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
-              window.addEventListener('CookiebotOnAccept', function() {
+              var gaLoaded = false;
+
+              function loadGoogleAnalytics() {
+                if (gaLoaded) return;
+                gaLoaded = true;
+
+                gtag('consent', 'update', {
+                  'analytics_storage': 'granted'
+                });
+
+                var gaScript = document.createElement('script');
+                gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-3WS60EMJC2';
+                gaScript.async = true;
+                document.head.appendChild(gaScript);
+
+                gaScript.onload = function() {
+                  window.gtag('js', new Date());
+                  window.gtag('config', 'G-3WS60EMJC2'${process.env.NODE_ENV === 'development' ? ", { debug_mode: true }" : ""});
+                  window.dispatchEvent(new Event('ga:ready'));
+                };
+              }
+
+              // Fires on every page load once consent data is ready (new decision OR stored from previous visit)
+              window.addEventListener('CookiebotOnConsentReady', function() {
                 if (Cookiebot.consent.statistics) {
-                  // Update Google Consent Mode to granted
-                  gtag('consent', 'update', {
-                    'analytics_storage': 'granted'
-                  });
-
-                  // Dynamically load Google Analytics script
-                  const gaScript = document.createElement('script');
-                  gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-3WS60EMJC2';
-                  gaScript.async = true;
-                  document.head.appendChild(gaScript);
-
-                  gaScript.onload = function() {
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){dataLayer.push(arguments);}
-                    gtag('js', new Date());
-                    gtag('config', 'G-3WS60EMJC2');
-                  };
+                  loadGoogleAnalytics();
                 }
               });
 
               window.addEventListener('CookiebotOnDecline', function() {
-                // Keep analytics denied
                 gtag('consent', 'update', {
                   'analytics_storage': 'denied'
                 });
