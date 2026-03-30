@@ -10,15 +10,40 @@
 declare global {
   interface Window {
     gtag?: (
-      command: 'event' | 'config' | 'consent',
-      targetOrAction: string,
+      command: 'event' | 'config' | 'consent' | 'js' | 'set',
+      targetOrAction: string | Date,
       params?: Record<string, any>
     ) => void;
   }
 }
 
+// Queue for events that fire before the GA SDK is initialized with consent granted.
+// Flushed when 'ga:ready' is dispatched from layout.tsx after gaScript.onload.
+type EventFn = () => void;
+const pendingEvents: EventFn[] = [];
+let gaIsReady = false;
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('ga:ready', () => {
+    gaIsReady = true;
+    pendingEvents.splice(0).forEach(fn => fn());
+  });
+}
+
+function fireOrQueue(fn: EventFn): void {
+  if (typeof window === 'undefined') return;
+  if (gaIsReady && window.gtag) {
+    fn();
+  } else {
+    pendingEvents.push(fn);
+  }
+}
+
 /**
- * Track when a user views a form step
+ * Track when a user views a form step.
+ * Uses a queue because this fires on component mount — before the GA SDK
+ * has loaded and consent has been granted. Without queuing, step 1 events
+ * are silently dropped by GA Consent Mode and never reach reports.
  */
 export const trackFormStepView = (
   formType: 'student' | 'teacher',
@@ -27,7 +52,7 @@ export const trackFormStepView = (
 ) => {
   if (typeof window === 'undefined' || !step || !stepName) return;
 
-  const fireEvent = () => {
+  fireOrQueue(() => {
     window.gtag?.('event', 'form_step_view', {
       form_type: formType,
       step_number: step,
@@ -35,16 +60,7 @@ export const trackFormStepView = (
       event_category: 'waitlist_form',
       event_label: `${formType}_step_${step}`,
     });
-  };
-
-  // If gtag is ready, fire immediately; otherwise wait for it
-  if (window.gtag) {
-    fireEvent();
-  } else {
-    // Retry after a short delay to handle race condition on initial page load
-    const timer = setTimeout(fireEvent, 500);
-    return () => clearTimeout(timer);
-  }
+  });
 };
 
 /**
