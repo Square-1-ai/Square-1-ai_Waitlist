@@ -151,12 +151,6 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
       if (!formData.yearsExperience) {
         newErrors.yearsExperience = "Years of experience is required"
       }
-      if (!formData.classTypePreference) {
-        newErrors.classTypePreference = "Please select a class type preference"
-      }
-      if (!formData.taughtOnline) {
-        newErrors.taughtOnline = "Please select an option"
-      }
       if (!formData.curriculums.trim()) {
         newErrors.curriculums = "Curriculums are required"
       }
@@ -659,11 +653,10 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
                     </div>
 
                     <div className="space-y-3">
-                      <Label className="text-white">What kind of classes are you open to teaching? <span className="text-red-500">*</span></Label>
+                      <Label className="text-white">What kind of classes are you open to teaching? <span className="text-white/60">(Optional)</span></Label>
                       <RadioGroup
                         value={formData.classTypePreference}
                         onValueChange={(value) => handleInputChange("classTypePreference", value)}
-                        required
                       >
                         <div className="flex items-center space-x-2">
                           <RadioGroupItem value="live" id="live" className="border-white/30 text-white" />
@@ -693,11 +686,10 @@ export default function TeacherWaitlistForm({ onSubmit }: { onSubmit: (data?: an
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="taughtOnline" className="text-white">Have you taught online before? <span className="text-red-500">*</span></Label>
+                      <Label htmlFor="taughtOnline" className="text-white">Have you taught online before? <span className="text-white/60">(Optional)</span></Label>
                       <Select
                         value={formData.taughtOnline}
                         onValueChange={(value) => handleInputChange("taughtOnline", value)}
-                        required
                       >
                         <SelectTrigger id="taughtOnline" className={`h-11 border-white/30 bg-white/20 text-white [&>span]:text-white data-[placeholder]:text-white/60 [&_svg]:!text-white [&_svg]:!opacity-100 ${
                           errors.taughtOnline ? "border-red-500" : ""

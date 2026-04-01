@@ -163,14 +163,8 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
       if (formData.subjects.length === 0) {
         newErrors.subjects = "Please select at least one subject"
       }
-      if (!formData.learningPreference) {
-        newErrors.learningPreference = "Please select a learning preference"
-      }
       if (!formData.takenOnlineCourses) {
         newErrors.takenOnlineCourses = "Please select an option"
-      }
-      if (formData.whyInterested.length === 0) {
-        newErrors.whyInterested = "Please select at least one reason"
       }
     }
 
@@ -740,11 +734,10 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
                     </div>
 
                     <div className="space-y-3">
-                      <Label className="text-white">Do you prefer: <span className="text-red-500">*</span></Label>
+                      <Label className="text-white">Do you prefer: <span className="text-white/60">(Optional)</span></Label>
                       <RadioGroup
                         value={formData.learningPreference}
                         onValueChange={(value) => handleInputChange("learningPreference", value)}
-                        required
                       >
                         <div className="flex items-center space-x-2">
                           <RadioGroupItem value="live" id="live" className="border-white/30 text-white" />
@@ -799,7 +792,7 @@ export default function StudentWaitlistForm({ onSubmit }: { onSubmit: (data: any
                     </div>
 
                     <div className="space-y-3">
-                      <Label className="text-white">Why are you interested in joining Square 1 Ai? <span className="text-red-500">*</span></Label>
+                      <Label className="text-white">Why are you interested in joining Square 1 Ai? <span className="text-white/60">(Optional)</span></Label>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {whyInterestedOptions.map((option) => (
                           <div key={option} className="flex items-center space-x-2">
