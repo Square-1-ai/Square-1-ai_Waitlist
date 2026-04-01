@@ -21,7 +21,6 @@ function getReferrerToken() {
 
 type WaitlistResults = {
   referral_link: string;
-  priority: number;
   amount_referred: number;
 } | null;
 
@@ -92,7 +91,7 @@ export default function StudentWaitlistPage() {
         }
         
         const postData = await postRes.json();
-        const { referral_link, priority } = postData;
+        const { referral_link } = postData;
 
         // GET referral stats
         const getRes = await fetch(`${WAITLIST_BASE_API_URL}signup?waitlist_id=${WAITLIST_ID}&email=${studentEmail}`);
@@ -103,7 +102,7 @@ export default function StudentWaitlistPage() {
         const getData = await getRes.json();
         const amount_referred = getData.amount_referred || 0;
 
-        setWaitlistResults({ referral_link, priority, amount_referred });
+        setWaitlistResults({ referral_link, amount_referred });
       } catch (err: unknown) {
         setError(err instanceof Error ? err.message : 'Referral system error.');
       } finally {
@@ -167,20 +166,8 @@ export default function StudentWaitlistPage() {
 
             {waitlistResults && !loading && (
               <>
-                {/* Position and Referral Count - Inline */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                  {/* Priority Position Card */}
-                  <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 hover:border-blue-400/50 transition-all duration-300">
-                    <div className="text-center">
-                      <p className="text-slate-400 text-xs uppercase tracking-wider mb-2">Your Position</p>
-                      <div className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 mb-1">
-                        #{waitlistResults.priority}
-                      </div>
-                      <p className="text-slate-300 text-sm">in the waitlist</p>
-                    </div>
-                  </div>
-
-                  {/* Referral Count Card */}
+                {/* Referral Count */}
+                <div className="mb-6">
                   <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-blue-400/30 rounded-2xl p-6 hover:border-cyan-400/50 transition-all duration-300">
                     <div className="text-center">
                       <p className="text-slate-400 text-xs uppercase tracking-wider mb-2">Referrals</p>
